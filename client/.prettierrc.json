@@ -1,7 +1,10 @@
 {
-	"useTabs": true,
-	"trailingComma": "es5",
-	"tabWidth": 4,
-	"semi": true,
-	"singleQuote": false
+    "useTabs": true,
+    "tabWidth": 4,
+    "trailingComma": "es5",
+    "semi": true,
+    "singleQuote": false,
+    "plugins": [
+        "prettier-plugin-tailwindcss"
+    ]
 }
