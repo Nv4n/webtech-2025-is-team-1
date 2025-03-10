@@ -8,9 +8,13 @@ import reactX from "eslint-plugin-react-x";
 import reactDom from "eslint-plugin-react-dom";
 
 export default tseslint.config(
-    { ignores: ["dist"] },
+    { ignores: ["dist", "vite.config.*", "tsconfig.*"] },
     {
-        extends: [js.configs.recommended, eslintPluginPrettierRecommended, ...tseslint.configs.recommendedTypeChecked],
+        extends: [
+            js.configs.recommended,
+            eslintPluginPrettierRecommended,
+            ...tseslint.configs.recommendedTypeChecked,
+        ],
         files: ["**/*.{ts,tsx}"],
         languageOptions: {
             ecmaVersion: 2020,
@@ -33,9 +37,9 @@ export default tseslint.config(
             "prettier/prettier": [
                 "error",
                 {
-                    "endOfLine": "auto"
+                    endOfLine: "auto",
                 },
-            ]
+            ],
         },
         languageOptions: {
             parserOptions: {
