@@ -12,8 +12,9 @@ export default tseslint.config(
     {
         extends: [
             js.configs.recommended,
-            eslintPluginPrettierRecommended,
             ...tseslint.configs.recommendedTypeChecked,
+            eslintPluginPrettierRecommended,
+            "prettier"
         ],
         files: ["**/*.{ts,tsx}"],
         languageOptions: {
