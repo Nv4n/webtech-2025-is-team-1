@@ -11,8 +11,12 @@ export const Route = createRootRoute({
 				<Link to="/profile" className="[&.active]:font-bold">
 					Profile
 				</Link>
-				<Link to="/tickets" className="[&.active]:font-bold">
-					Tickets
+				<Link
+					to="/tickets/$ticketId"
+					className="[&.active]:font-bold"
+					params={{ ticketId: "1" }}
+				>
+					Tickets/1
 				</Link>
 			</div>
 			<hr />
