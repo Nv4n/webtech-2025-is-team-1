@@ -7,8 +7,6 @@ import {
 } from "@tanstack/react-router";
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
-
-// Import the generated route tree
 import { routeTree } from "./routeTree.gen";
 
 export const homeToTicketsMask = createRouteMask({
@@ -27,7 +25,13 @@ declare module "@tanstack/react-router" {
 	}
 }
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			staleTime: 20_000,
+		},
+	},
+});
 
 // Render the app
 const rootElement = document.getElementById("root")!;
