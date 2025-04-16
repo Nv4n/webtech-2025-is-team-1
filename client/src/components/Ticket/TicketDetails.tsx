@@ -7,9 +7,15 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import { useQuery } from "@tanstack/react-query";
 import { BellRing, Check } from "lucide-react";
 
-export const TicketDetails = () => {
+const MockupApi = () => {
+	return new Promise();
+};
+
+export const TicketDetails = (id: string) => {
+	const { data } = useQuery({ queryKey: ["tickets", id] });
 	return (
 		<Card>
 			<CardHeader>
