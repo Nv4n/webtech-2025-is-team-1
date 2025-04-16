@@ -1,32 +1,6 @@
-import React from "react";
-import { Card, CardHeader, CardContent, CardFooter } from "../ui/card";
-import { cn } from "@/lib/utils";
 import { badgeVariants } from "@/components/ui/badge";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "@tanstack/react-router";
-
-const CardTitle = React.forwardRef<
-	HTMLDivElement,
-	React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-	<div
-		ref={ref}
-		className={cn("leading-none font-semibold tracking-tight", className)}
-		{...props}
-	/>
-));
-CardTitle.displayName = "CardTitle";
-
-const CardDescription = React.forwardRef<
-	HTMLDivElement,
-	React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-	<div
-		ref={ref}
-		className={cn("text-muted-foreground text-sm", className)}
-		{...props}
-	/>
-));
-CardDescription.displayName = "CardDescription";
 
 function TicketCard() {
 	return (
@@ -39,6 +13,8 @@ function TicketCard() {
 					Assigned To
 				</Link>
 				<CardDescription>Ticket Description</CardDescription>
+				<CardTitle>Card Title</CardTitle>
+				<CardDescription>Card Description</CardDescription>
 			</CardHeader>
 			<CardContent>
 				<p>Card Content</p>
@@ -62,6 +38,7 @@ function TicketCard() {
 				>
 					Modified By
 				</Link>
+				<p>Card Footer</p>
 			</CardFooter>
 		</Card>
 	);
@@ -75,3 +52,4 @@ export function TicketsList() {
 		</div>
 	);
 }
+

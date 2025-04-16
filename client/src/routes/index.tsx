@@ -1,13 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { TicketList } from "./tickets.index";
 
 export const Route = createFileRoute("/")({
-	component: Index,
+	component: TicketList,
 });
-
-function Index() {
-	return (
-		<div className="p-2">
-			<h3>Welcome Home!</h3>
-		</div>
-	);
-}
