@@ -1,7 +1,6 @@
 import { badgeVariants } from "@/components/ui/badge";
 import {
 	Card,
-	CardContent,
 	CardDescription,
 	CardFooter,
 	CardHeader,
@@ -11,7 +10,8 @@ import { Link } from "@tanstack/react-router";
 
 function TicketCard() {
 	return (
-		<Card>
+		// TODO: to set smaller width
+		<Card className="min-w-sm w-fit"> 
 			<CardHeader>
 				{/* TODO: do not use link */}
 				<Link
@@ -23,7 +23,7 @@ function TicketCard() {
 				<CardTitle>Ticket Title</CardTitle>
 				<CardDescription>Ticket Description</CardDescription>
 			</CardHeader>
-			<CardFooter className="flex flex-col gap-4">
+			<CardFooter className="flex flex-col gap-4 items-start">
 				<div>
 					<label>Created At</label>
 					{/* TODO: do not use link, use badge */}
