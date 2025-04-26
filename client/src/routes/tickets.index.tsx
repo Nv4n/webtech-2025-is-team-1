@@ -1,4 +1,4 @@
-import { TicketsListComponent } from "@/components/Ticket/ticket-group";
+import { TicketsListComponent } from "@/components/ticket/ticket-group";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/tickets/")({
