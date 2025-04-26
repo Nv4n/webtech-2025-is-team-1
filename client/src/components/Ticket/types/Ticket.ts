@@ -7,7 +7,7 @@ export const TicketSchema = z.object({
 	title: z.string().min(3),
 	status: z.string().min(3),
 	description: z.string().min(10),
-	asignees: z.array(UserSchema.shape.id),
+	asignedTo: UserSchema.shape.id,
 	createdAt: z.date(),
 	updatedAt: z.date(),
 	updatedBy: UserSchema.shape.id,

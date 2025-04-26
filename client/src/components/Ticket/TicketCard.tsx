@@ -23,12 +23,12 @@ export function TicketCard({
 	createdAt,
 	updatedAt,
 	updatedBy,
-	asignees,
+	asignedTo,
 	project,
 	status,
 	usersById,
 }: TicketCardProps) {
-	const assignedUser = asignees[0] ? usersById[asignees[0]] : "";
+	const assignedUser = asignedTo ? usersById[asignedTo] : "";
 	const updatedUser = updatedBy ? usersById[updatedBy] : "";
 
 	const getInitials = (user: Profile | undefined) =>

@@ -1,5 +1,5 @@
 import { ProfileHoverCard } from "@/components/Profile/ProfileHoverCard";
-import { Ticket } from "@/components/Ticket/types/Ticket";
+import { FakeTicketApi } from "@/components/Ticket/service/ticketApi";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -18,27 +18,6 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
 
-
-const FakeTicketApi = () => {
-	const getTicketDetails = () => {
-		const ticket: Ticket = {
-			title: "Issue 01",
-			description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia, repellat. Tempore corporis hic nulla odit sit voluptates ut exercitationem excepturi eaque eligendi earum quidem iusto doloribus nostrum, voluptas, voluptatem error.",
-			asignees: ["2691c583-74b5-5e2c-a359-b6715beec586"],
-			createdAt: new Date(),
-			updatedAt: new Date(),
-			updatedBy: "2691c583-74b5-5e2c-a359-b6715beec586",
-			status: "TO DO",
-			project: ""
-		};
-		return new Promise<Ticket>((resolve) => {
-			setTimeout(() => {
-				resolve(ticket);
-			}, 1000);
-		});
-	};
-	return { getTicketDetails };
-};
 
 export const TicketDetails = (id: string) => {
 	const { data: ticket, isLoading } = useQuery({
