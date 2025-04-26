@@ -1,5 +1,5 @@
 import { Button } from "../ui/button";
-import { TicketCard, TicketCardProps } from "@/components/Ticket/_ticket";
+import { TicketCard, TicketCardProps } from "@/components/Ticket/TicketCard";
 import {
 	Tooltip,
 	TooltipContent,

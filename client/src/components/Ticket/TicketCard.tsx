@@ -5,8 +5,8 @@ import {
 	CardTitle,
 	CardFooter,
 } from "../ui/card";
-import { _Date } from "../_date";
-import { UserHoverCard } from "../Profile/user-hover-card";
+import { _Date } from "./TicketDateBadge";
+import { UserHoverCard } from "../Profile/UserHoverCard";
 import { Badge } from "@/components/ui/badge";
 import { Ticket } from "./types/Ticket";
 import { Profile } from "@/components/Profile/types/Profile";

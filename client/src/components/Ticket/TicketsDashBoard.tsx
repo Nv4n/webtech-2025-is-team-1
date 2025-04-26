@@ -1,4 +1,4 @@
-import { TicketsGroup } from "@/components/Ticket/tickets-group";
+import { TicketsGroup } from "@/components/Ticket/TicketsGroup";
 
 export function TicketsDashboard() {
 	return (
