@@ -13,7 +13,6 @@ import { Profile } from "@/components/Profile/types/Profile";
 import { _Date } from "@/components/Ticket/TicketDateBadge";
 import { Ticket } from "@/components/Ticket/types/Ticket";
 
-
 export type TicketCardProps = Ticket & {
 	usersById: Record<string, Profile>;
 };
@@ -29,8 +28,8 @@ export function TicketCard({
 	status,
 	usersById,
 }: TicketCardProps) {
-	const assignedUser = usersById[asignees[0]];
-	const updatedUser = usersById[updatedBy];
+	const assignedUser = asignees[0] ? usersById[asignees[0]] : "";
+	const updatedUser = updatedBy ? usersById[updatedBy] : "";
 
 	const getInitials = (user: Profile | undefined) =>
 		user ? `${user.fname[0]}${user.lname[0]}`.toUpperCase() : "";
@@ -96,4 +95,4 @@ export function TicketCard({
 			</CardFooter>
 		</Card>
 	);
-};
+}
