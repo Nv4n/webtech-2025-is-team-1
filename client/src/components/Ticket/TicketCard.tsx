@@ -1,15 +1,18 @@
 import {
 	Card,
-	CardHeader,
 	CardContent,
-	CardTitle,
 	CardFooter,
-} from "../ui/card";
-import { _Date } from "./TicketDateBadge";
-import { UserHoverCard } from "../Profile/UserHoverCard";
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+
+import { UserHoverCard } from "@/components/Profile/UserHoverCard";
 import { Badge } from "@/components/ui/badge";
-import { Ticket } from "./types/Ticket";
+
 import { Profile } from "@/components/Profile/types/Profile";
+import { _Date } from "@/components/Ticket/TicketDateBadge";
+import { Ticket } from "@/components/Ticket/types/Ticket";
+
 
 export type TicketCardProps = Ticket & {
 	usersById: Record<string, Profile>;

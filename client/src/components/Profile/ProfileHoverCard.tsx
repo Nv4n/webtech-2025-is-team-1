@@ -1,12 +1,12 @@
+import { Profile } from "@/components/Profile/types/Profile";
+import { getInitials } from "@/components/Profile/utils/getInitials";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
 import { CalendarIcon } from "lucide-react";
-import { Profile } from "./types/Profile";
-import { Skeleton } from "../ui/skeleton";
-import { getInitials } from "./utils/getInitials";
 
 const FakeUserApi = () => {
-	const getProfile = (id: string) => {
+	const getProfile = (_id: string) => {
 		const profile: Profile = {
 			fname: "Georgi",
 			lname: "Petranov",

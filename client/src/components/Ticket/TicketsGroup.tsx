@@ -1,26 +1,29 @@
-import { Button } from "../ui/button";
+
 import { TicketCard, TicketCardProps } from "@/components/Ticket/TicketCard";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipProvider,
 	TooltipTrigger,
-} from "@radix-ui/react-tooltip";
+} from "@/components/ui/tooltip";
 import { CirclePlus } from "lucide-react";
-import { User, UserSchema } from "../Profile/types/Profile";
+
+import { User, UserSchema } from "@/components/Profile/types/Profile";
+import { Button } from "@/components/ui/button";
+import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
-import { v4 as uuidv4 } from 'uuid';
 
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-const passwordValidChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
+const passwordValidChars =
+	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
 
 const generateRandomString = (length: number, chars: string): string => {
 	let result = "";
 	for (let i = 0; i < length; i++) {
-	  result += chars.charAt(Math.floor(Math.random() * chars.length));
+		result += chars.charAt(Math.floor(Math.random() * chars.length));
 	}
 	return result;
-  };
+};
 
 function getUser(): z.infer<typeof UserSchema> {
 	const firstName = generateRandomString(5, alphabet);
@@ -28,52 +31,56 @@ function getUser(): z.infer<typeof UserSchema> {
 	const username = `${firstName.toLowerCase()}_${lastName.toLowerCase()}${Math.floor(Math.random() * 1000)}`;
 	const password = generateRandomString(8, passwordValidChars);
 	const id = uuidv4();
-  
+
 	const user = {
-	  id,
-	  fname: firstName,
-	  lname: lastName,
-	  username,
-	  password,
+		id,
+		fname: firstName,
+		lname: lastName,
+		username,
+		password,
 	};
-  
-	UserSchema.parse(user); 
-  
+
+	UserSchema.parse(user);
+
 	return user;
-};
-  
+}
+
 const generateRandomProjectName = (): string => {
 	const projects = ["Apollo", "Zeus", "Hermes", "Athena", "Hera"];
 	return projects[Math.floor(Math.random() * projects.length)];
 };
-  
+
 export const getTicketCard = (status: string): TicketCardProps => {
 	const numberOfUsers = Math.floor(Math.random() * 5) + 1; // 1-5 users
 	const users: Record<string, User> = {};
 	for (let i = 0; i < numberOfUsers; i++) {
-	  const user = getUser();
-	  users[user.id] = user;
+		const user = getUser();
+		users[user.id] = user;
 	}
-  
+
 	const allUserIds = Object.keys(users);
-  
+
 	const asignees = allUserIds.filter(() => Math.random() > 0.5); // randomly pick some
-  
-	const createdAt = new Date(Date.now() - Math.floor(Math.random() * 1000000000)); // Random past date
-	const updatedAt = new Date(createdAt.getTime() + Math.floor(Math.random() * 500000000)); // After createdAt
-  
+
+	const createdAt = new Date(
+		Date.now() - Math.floor(Math.random() * 1000000000)
+	); // Random past date
+	const updatedAt = new Date(
+		createdAt.getTime() + Math.floor(Math.random() * 500000000)
+	); // After createdAt
+
 	const updatedBy = allUserIds[Math.floor(Math.random() * allUserIds.length)];
-  
+
 	return {
-	  title: generateRandomString(10, alphabet),
-	  description: generateRandomString(50, alphabet),
-	  createdAt,
-	  updatedAt,
-	  updatedBy,
-	  asignees,
-	  project: generateRandomProjectName(),
-	  status: status,
-	  usersById: users,
+		title: generateRandomString(10, alphabet),
+		description: generateRandomString(50, alphabet),
+		createdAt,
+		updatedAt,
+		updatedBy,
+		asignees,
+		project: generateRandomProjectName(),
+		status: status,
+		usersById: users,
 	};
 };
 
@@ -99,7 +106,7 @@ export function TicketsGroup({ status }: TicketStatus) {
 								<CirclePlus />
 							</Button>
 						</TooltipTrigger>
-						<TooltipContent className="border bg-gray-100 text-gray-800 p-2 rounded-md shadow-md">
+						<TooltipContent className="rounded-md border bg-gray-100 p-2 text-gray-800 shadow-md">
 							<pre>Add Ticket</pre>
 						</TooltipContent>
 					</Tooltip>
@@ -114,4 +121,4 @@ export function TicketsGroup({ status }: TicketStatus) {
 			</Button>
 		</div>
 	);
-};
+}

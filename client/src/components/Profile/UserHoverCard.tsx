@@ -1,11 +1,11 @@
+import { LabelSpan } from "@/components/LabelSpan";
+import { UserHoverCardProps } from "@/components/Profile/types/UserHoverCardProps";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
 	HoverCard,
 	HoverCardContent,
 	HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { UserHoverCardProps } from "@/components/Profile/types/UserHoverCardProps";
-import { LabelSpan } from "@/components/LabelSpan";
 
 export function UserHoverCard({
 	labelContent,

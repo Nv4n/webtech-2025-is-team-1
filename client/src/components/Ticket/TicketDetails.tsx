@@ -1,3 +1,4 @@
+import { ProfileHoverCard } from "@/components/Profile/ProfileHoverCard";
 import { Ticket } from "@/components/Ticket/types/Ticket";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -16,7 +17,7 @@ import {
 } from "@/components/ui/hover-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
-import { ProfileHoverCard } from "../Profile/ProfileHoverCard";
+
 
 const FakeTicketApi = () => {
 	const getTicketDetails = () => {

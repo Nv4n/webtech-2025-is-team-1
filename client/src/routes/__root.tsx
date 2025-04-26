@@ -1,10 +1,10 @@
 import { ThemeButton } from "@/components/ThemeButton";
 import {
-	navigationMenuTriggerStyle,
+	NavigationMenu,
 	NavigationMenuItem,
 	NavigationMenuLink,
 	NavigationMenuList,
-	NavigationMenu,
+	navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
