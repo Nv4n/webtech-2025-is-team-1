@@ -1,15 +1,14 @@
 import { Badge } from "@/components/ui/badge";
+import {TicketDate} from "@/components/Ticket/types/TicketDate"
 
-type DateComponentProps = {
-  labelContent: string;
-  date: string;
-};
 
-export function _Date({ labelContent, date }: DateComponentProps) {
-  return (
-    <div className="flex items-center space-x-2">
-      <label>{labelContent}</label>
-      <Badge variant="outline">{date}</Badge>
-    </div>
-  );
+export function _Date({ labelContent, date }: TicketDate) {
+	return (
+		<div className="flex items-center space-x-2">
+			<label>{labelContent}</label>
+			<Badge variant="outline">
+				<pre>{date.getMonth()}/{date.getDate()}/{date.getFullYear()}</pre>
+			</Badge>
+		</div>
+	);
 }

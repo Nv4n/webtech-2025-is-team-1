@@ -1,4 +1,4 @@
-import { TicketsGroup } from "./tickets-group";
+import { TicketsGroup } from "@/components/Ticket/tickets-group";
 
 export function TicketsDashboard() {
 	return (
@@ -8,4 +8,4 @@ export function TicketsDashboard() {
 			<TicketsGroup status="completed" />
 		</div>
 	);
-}
+};

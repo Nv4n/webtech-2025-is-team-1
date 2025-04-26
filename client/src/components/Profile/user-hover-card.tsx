@@ -4,20 +4,14 @@ import {
 	HoverCardContent,
 	HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import { UserHoverCardProps } from "@/components/Profile/types/UserHoverCardProps";
 
-type UserComponentProps = {
-	labelContent: string;
-	initials: string;
-	fullName: string;
-	email: string;
-};
-
-export function User({
+export function UserHoverCard({
 	labelContent,
 	initials,
 	fullName,
 	email,
-}: UserComponentProps) {
+}: UserHoverCardProps) {
 	return (
 		<div className="flex items-center space-x-2">
 			<label>{labelContent}</label>
