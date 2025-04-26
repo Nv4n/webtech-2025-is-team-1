@@ -1,0 +1,117 @@
+import { Button } from "../ui/button";
+import { TicketCard, TicketCardProps } from "@/components/Ticket/TicketCard";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@radix-ui/react-tooltip";
+import { CirclePlus } from "lucide-react";
+import { User, UserSchema } from "../Profile/types/Profile";
+import { z } from "zod";
+import { v4 as uuidv4 } from 'uuid';
+
+const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+const passwordValidChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
+
+const generateRandomString = (length: number, chars: string): string => {
+	let result = "";
+	for (let i = 0; i < length; i++) {
+	  result += chars.charAt(Math.floor(Math.random() * chars.length));
+	}
+	return result;
+  };
+
+function getUser(): z.infer<typeof UserSchema> {
+	const firstName = generateRandomString(5, alphabet);
+	const lastName = generateRandomString(5, alphabet);
+	const username = `${firstName.toLowerCase()}_${lastName.toLowerCase()}${Math.floor(Math.random() * 1000)}`;
+	const password = generateRandomString(8, passwordValidChars);
+	const id = uuidv4();
+  
+	const user = {
+	  id,
+	  fname: firstName,
+	  lname: lastName,
+	  username,
+	  password,
+	};
+  
+	UserSchema.parse(user); 
+  
+	return user;
+};
+  
+const generateRandomProjectName = (): string => {
+	const projects = ["Apollo", "Zeus", "Hermes", "Athena", "Hera"];
+	return projects[Math.floor(Math.random() * projects.length)];
+};
+  
+export const getTicketCard = (status: string): TicketCardProps => {
+	const numberOfUsers = Math.floor(Math.random() * 5) + 1; // 1-5 users
+	const users: Record<string, User> = {};
+	for (let i = 0; i < numberOfUsers; i++) {
+	  const user = getUser();
+	  users[user.id] = user;
+	}
+  
+	const allUserIds = Object.keys(users);
+  
+	const asignees = allUserIds.filter(() => Math.random() > 0.5); // randomly pick some
+  
+	const createdAt = new Date(Date.now() - Math.floor(Math.random() * 1000000000)); // Random past date
+	const updatedAt = new Date(createdAt.getTime() + Math.floor(Math.random() * 500000000)); // After createdAt
+  
+	const updatedBy = allUserIds[Math.floor(Math.random() * allUserIds.length)];
+  
+	return {
+	  title: generateRandomString(10, alphabet),
+	  description: generateRandomString(50, alphabet),
+	  createdAt,
+	  updatedAt,
+	  updatedBy,
+	  asignees,
+	  project: generateRandomProjectName(),
+	  status: status,
+	  usersById: users,
+	};
+};
+
+type TicketStatus = {
+	status: string;
+};
+
+export function TicketsGroup({ status }: TicketStatus) {
+	const firstTicket = getTicketCard(status);
+	const secondTicket = getTicketCard(status);
+	const thirdTicket = getTicketCard(status);
+
+	return (
+		<div className="flex w-1/3 flex-col space-y-4">
+			<div className="flex w-2xs items-center justify-between">
+				{status === "not-started" && <h1>Not Started</h1>}
+				{status === "in-progress" && <h1>In Progress</h1>}
+				{status === "completed" && <h1>Completed</h1>}
+				<TooltipProvider>
+					<Tooltip>
+						<TooltipTrigger asChild>
+							<Button variant="ghost" className="cursor-pointer">
+								<CirclePlus />
+							</Button>
+						</TooltipTrigger>
+						<TooltipContent className="border bg-gray-100 text-gray-800 p-2 rounded-md shadow-md">
+							<pre>Add Ticket</pre>
+						</TooltipContent>
+					</Tooltip>
+				</TooltipProvider>
+			</div>
+			<TicketCard {...firstTicket} />
+			<TicketCard {...secondTicket} />
+			<TicketCard {...thirdTicket} />
+
+			<Button variant="ghost" className="w-2xs cursor-pointer">
+				<pre>Add Ticket</pre>
+			</Button>
+		</div>
+	);
+};

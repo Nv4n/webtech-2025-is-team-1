@@ -9,6 +9,7 @@ export const TicketSchema = z.object({
 	createdAt: z.date(),
 	updatedAt: z.date(),
 	updatedBy: UserSchema.shape.id,
+	project: z.string().min(3) // in future this will be connected with the project schema
 });
 
 export type Ticket = z.infer<typeof TicketSchema>;
