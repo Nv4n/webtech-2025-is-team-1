@@ -28,7 +28,14 @@ function getUser() {
 	];
 
 	let index = Math.floor(Math.random() * 10);
-	return { initials: initials[index], fullName: fullNames[index], email:  fullNames[index].toLowerCase().replace(" ", ".").concat("@gmail.com")};
+	return {
+		initials: initials[index],
+		fullName: fullNames[index],
+		email: fullNames[index]
+			.toLowerCase()
+			.replace(" ", ".")
+			.concat("@gmail.com"),
+	};
 }
 
 function getTicketCard(status: string) {
@@ -123,15 +130,9 @@ export function TicketsGroup({ status }: TicketStatus) {
 	return (
 		<div className="flex w-1/3 flex-col space-y-4">
 			<div className="flex h-full w-2xs items-center justify-between">
-				{status === "not-started" && (
-					<h1>Not Started</h1>
-				)}
-				{status === "in-progress" && (
-					<h1>In Progress</h1>
-				)}
-				{status === "completed" && (
-					<h1>Completed</h1>
-				)}
+				{status === "not-started" && <h1>Not Started</h1>}
+				{status === "in-progress" && <h1>In Progress</h1>}
+				{status === "completed" && <h1>Completed</h1>}
 				<Button variant="ghost">+</Button>
 			</div>
 			<TicketCard {...firstTicket} />

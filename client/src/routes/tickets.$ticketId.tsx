@@ -1,9 +1,6 @@
+import { TicketDetails } from "@/components/Ticket/TicketDetails";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/tickets/$ticketId")({
-	component: TicketsDetails,
+	component: TicketDetails,
 });
-
-function TicketsDetails() {
-	return <div>Hello "/tickets/$ticketId"!</div>;
-}

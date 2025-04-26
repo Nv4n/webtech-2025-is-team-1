@@ -1,23 +1,61 @@
+import { ThemeButton } from "@/components/ThemeButton";
+import {
+	navigationMenuTriggerStyle,
+	NavigationMenuItem,
+	NavigationMenuLink,
+	NavigationMenuList,
+	NavigationMenu,
+} from "@/components/ui/navigation-menu";
 import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
 export const Route = createRootRoute({
-	component: () => (
-		<>
-			<div className="flex gap-2 p-2">
-				<Link to="/" className="[&.active]:font-bold">
-					Home
-				</Link>{" "}
-				<Link to="/profile" className="[&.active]:font-bold">
-					Profile
-				</Link>
-				<Link to="/tickets" className="[&.active]:font-bold">
-					Tickets
-				</Link>
-			</div>
-			<hr />
-			<Outlet />
-			<TanStackRouterDevtools />
-		</>
-	),
+	component: () => {
+		return (
+			<>
+				<NavigationMenu>
+					<NavigationMenuList>
+						<NavigationMenuItem>
+							<Link to="/">
+								<NavigationMenuLink
+									className={navigationMenuTriggerStyle()}
+								>
+									{" "}
+									Home
+								</NavigationMenuLink>
+							</Link>
+						</NavigationMenuItem>
+						<NavigationMenuItem>
+							<Link to="/profile">
+								<NavigationMenuLink
+									className={navigationMenuTriggerStyle()}
+								>
+									Profile
+								</NavigationMenuLink>
+							</Link>
+						</NavigationMenuItem>
+						<NavigationMenuItem>
+							<Link
+								to="/tickets/$ticketId"
+								params={{ ticketId: "1" }}
+							>
+								<NavigationMenuLink
+									className={navigationMenuTriggerStyle()}
+								>
+									Tickets/1
+								</NavigationMenuLink>
+							</Link>
+						</NavigationMenuItem>
+						<NavigationMenuItem>
+							{" "}
+							<ThemeButton />
+						</NavigationMenuItem>
+					</NavigationMenuList>
+				</NavigationMenu>
+				<hr className="mb-4" />
+				<Outlet />
+				<TanStackRouterDevtools />
+			</>
+		);
+	},
 });
