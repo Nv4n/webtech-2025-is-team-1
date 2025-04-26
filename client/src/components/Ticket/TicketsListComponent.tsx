@@ -1,32 +1,5 @@
-import {
-	Card,
-	CardContent,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import {
-	HoverCard,
-	HoverCardContent,
-	HoverCardTrigger,
-} from "@/components/ui/hover-card";
 import { Button } from "../ui/button";
-
-type User = {
-	initials: string;
-	fullName: string;
-};
-
-type Ticket = {
-	title: string;
-	description: string;
-	createdAt: string;
-	updatedAt: string;
-	updatedBy: User;
-	assignedTo: User;
-};
+import { TicketCardComponent } from "./TicketComponent";
 
 function getUser() {
 	const initials = [
@@ -123,72 +96,6 @@ function getTicketCard() {
 	};
 }
 
-function TicketCard({
-	title,
-	description,
-	createdAt,
-	updatedAt,
-	updatedBy,
-	assignedTo,
-}: Ticket) {
-	return (
-		<Card className="flex h-[300px] w-2xs flex-col">
-			<CardHeader>
-				<div className="flex items-center space-x-2">
-					<label>Assigned To</label>
-					<Avatar>
-						<AvatarFallback>
-							<HoverCard>
-								<HoverCardTrigger>
-									{assignedTo.initials}
-								</HoverCardTrigger>
-								<HoverCardContent>
-									{assignedTo.fullName}
-								</HoverCardContent>
-							</HoverCard>
-						</AvatarFallback>
-					</Avatar>
-				</div>
-			</CardHeader>
-
-			<CardContent className="flex flex-1 flex-col">
-				<CardTitle className="pb-4">{title}</CardTitle>
-				<div className="text-muted-foreground max-h-[200px] overflow-y-auto pr-2 text-sm whitespace-pre-wrap">
-					{description}
-				</div>
-			</CardContent>
-
-			<CardFooter className="flex flex-col items-start gap-4">
-				<div className="flex items-center space-x-2">
-					<label>Created At</label>
-					<Badge variant="outline">{createdAt}</Badge>
-				</div>
-				<div className="flex items-center space-x-2">
-					<label>Updated At</label>
-					<Badge variant="outline">{updatedAt}</Badge>
-				</div>
-				<div>
-					<div className="flex items-center space-x-2">
-						<label>Updated By</label>
-						<Avatar>
-							<AvatarFallback>
-								<HoverCard>
-									<HoverCardTrigger>
-										{updatedBy.initials}
-									</HoverCardTrigger>
-									<HoverCardContent>
-										{updatedBy.fullName}
-									</HoverCardContent>
-								</HoverCard>
-							</AvatarFallback>
-						</Avatar>
-					</div>
-				</div>
-			</CardFooter>
-		</Card>
-	);
-}
-
 type TicketStatus = {
 	status: string;
 };
@@ -204,15 +111,15 @@ function TicketsGroup({ status }: TicketStatus) {
 				<h1>{status}</h1>
 				<Button variant="ghost" className="ml-auto">+</Button>
 			</div>
-			<TicketCard {...firstTicket}></TicketCard>
-			<TicketCard {...secondTicket}></TicketCard>
-			<TicketCard {...thirdTicket}></TicketCard>
+			<TicketCardComponent {...firstTicket} />
+			<TicketCardComponent {...secondTicket} />
+			<TicketCardComponent {...thirdTicket} />
 			<Button variant="ghost" className="w-2xs">Add Ticket</Button>
 		</div>
 	);
 }
 
-export function TicketsList() {
+export function TicketsListComponent() {
 	return (
 		<div className="flex h-full items-center justify-between">
 			<TicketsGroup status="Not started" />
