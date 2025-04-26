@@ -1,11 +1,11 @@
-import { LabelSpan } from "@/components/LabelSpan";
-import { UserHoverCardProps } from "@/components/Profile/types/UserHoverCardProps";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
 	HoverCard,
 	HoverCardContent,
 	HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import { UserHoverCardProps } from "@/components/Profile/types/UserHoverCardProps";
+import { LabelSpan } from "@/components/LabelSpan";
 
 export function UserHoverCard({
 	labelContent,
@@ -15,7 +15,7 @@ export function UserHoverCard({
 }: UserHoverCardProps) {
 	return (
 		<div className="flex items-center space-x-2">
-			<LabelSpan content={labelContent}/>
+			<LabelSpan content={labelContent} />
 			<Avatar>
 				<AvatarFallback>
 					<HoverCard>
@@ -31,8 +31,8 @@ export function UserHoverCard({
 							<hr className="my-2 border-t-3" />
 
 							<div className="flex items-center space-x-2">
-							<LabelSpan content="Email:"/>
-								<pre>{email}</pre>
+								<LabelSpan content="Email:" />
+								<span>{email}</span>
 							</div>
 						</HoverCardContent>
 					</HoverCard>
