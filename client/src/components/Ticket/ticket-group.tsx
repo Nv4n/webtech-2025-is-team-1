@@ -1,5 +1,5 @@
 import { Button } from "../ui/button";
-import { TicketCardComponent } from "./TicketComponent";
+import { TicketCard } from "./_ticket";
 
 function getUser() {
 	const initials = [
@@ -100,7 +100,7 @@ type TicketStatus = {
 	status: string;
 };
 
-function TicketsGroup({ status }: TicketStatus) {
+export function TicketsGroup({ status }: TicketStatus) {
 	const firstTicket = getTicketCard();
 	const secondTicket = getTicketCard();
 	const thirdTicket = getTicketCard();
@@ -111,20 +111,10 @@ function TicketsGroup({ status }: TicketStatus) {
 				<h1>{status}</h1>
 				<Button variant="ghost" className="ml-auto">+</Button>
 			</div>
-			<TicketCardComponent {...firstTicket} />
-			<TicketCardComponent {...secondTicket} />
-			<TicketCardComponent {...thirdTicket} />
+			<TicketCard {...firstTicket} />
+			<TicketCard {...secondTicket} />
+			<TicketCard {...thirdTicket} />
 			<Button variant="ghost" className="w-2xs">Add Ticket</Button>
-		</div>
-	);
-}
-
-export function TicketsListComponent() {
-	return (
-		<div className="flex h-full items-center justify-between">
-			<TicketsGroup status="Not started" />
-			<TicketsGroup status="In Progress" />
-			<TicketsGroup status="Completed" />
 		</div>
 	);
 }

@@ -11,7 +11,7 @@ type UserComponentProps = {
 	fullName: string;
 };
 
-function _User({
+export function User({
 	labelContent,
 	initials,
 	fullName,
@@ -28,19 +28,5 @@ function _User({
 				</AvatarFallback>
 			</Avatar>
 		</div>
-	);
-}
-
-export function UserComponent({
-	labelContent,
-	initials,
-	fullName,
-}: UserComponentProps) {
-	return (
-		<_User
-			labelContent={labelContent}
-			initials={initials}
-			fullName={fullName}
-		/>
 	);
 }
