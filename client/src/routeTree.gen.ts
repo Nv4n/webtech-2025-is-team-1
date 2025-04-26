@@ -15,6 +15,7 @@ import { Route as ProfileImport } from './routes/profile'
 import { Route as IndexImport } from './routes/index'
 import { Route as TicketsIndexImport } from './routes/tickets.index'
 import { Route as TicketsTicketIdImport } from './routes/tickets.$ticketId'
+import { Route as TicketsTicketIdEditImport } from './routes/tickets_.$ticketId.edit'
 
 // Create/Update Routes
 
@@ -39,6 +40,12 @@ const TicketsIndexRoute = TicketsIndexImport.update({
 const TicketsTicketIdRoute = TicketsTicketIdImport.update({
   id: '/tickets/$ticketId',
   path: '/tickets/$ticketId',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const TicketsTicketIdEditRoute = TicketsTicketIdEditImport.update({
+  id: '/tickets_/$ticketId/edit',
+  path: '/tickets/$ticketId/edit',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -74,6 +81,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TicketsIndexImport
       parentRoute: typeof rootRoute
     }
+    '/tickets_/$ticketId/edit': {
+      id: '/tickets_/$ticketId/edit'
+      path: '/tickets/$ticketId/edit'
+      fullPath: '/tickets/$ticketId/edit'
+      preLoaderRoute: typeof TicketsTicketIdEditImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -84,6 +98,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProfileRoute
   '/tickets/$ticketId': typeof TicketsTicketIdRoute
   '/tickets': typeof TicketsIndexRoute
+  '/tickets/$ticketId/edit': typeof TicketsTicketIdEditRoute
 }
 
 export interface FileRoutesByTo {
@@ -91,6 +106,7 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileRoute
   '/tickets/$ticketId': typeof TicketsTicketIdRoute
   '/tickets': typeof TicketsIndexRoute
+  '/tickets/$ticketId/edit': typeof TicketsTicketIdEditRoute
 }
 
 export interface FileRoutesById {
@@ -99,14 +115,31 @@ export interface FileRoutesById {
   '/profile': typeof ProfileRoute
   '/tickets/$ticketId': typeof TicketsTicketIdRoute
   '/tickets/': typeof TicketsIndexRoute
+  '/tickets_/$ticketId/edit': typeof TicketsTicketIdEditRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/profile' | '/tickets/$ticketId' | '/tickets'
+  fullPaths:
+    | '/'
+    | '/profile'
+    | '/tickets/$ticketId'
+    | '/tickets'
+    | '/tickets/$ticketId/edit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/profile' | '/tickets/$ticketId' | '/tickets'
-  id: '__root__' | '/' | '/profile' | '/tickets/$ticketId' | '/tickets/'
+  to:
+    | '/'
+    | '/profile'
+    | '/tickets/$ticketId'
+    | '/tickets'
+    | '/tickets/$ticketId/edit'
+  id:
+    | '__root__'
+    | '/'
+    | '/profile'
+    | '/tickets/$ticketId'
+    | '/tickets/'
+    | '/tickets_/$ticketId/edit'
   fileRoutesById: FileRoutesById
 }
 
@@ -115,6 +148,7 @@ export interface RootRouteChildren {
   ProfileRoute: typeof ProfileRoute
   TicketsTicketIdRoute: typeof TicketsTicketIdRoute
   TicketsIndexRoute: typeof TicketsIndexRoute
+  TicketsTicketIdEditRoute: typeof TicketsTicketIdEditRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -122,6 +156,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfileRoute: ProfileRoute,
   TicketsTicketIdRoute: TicketsTicketIdRoute,
   TicketsIndexRoute: TicketsIndexRoute,
+  TicketsTicketIdEditRoute: TicketsTicketIdEditRoute,
 }
 
 export const routeTree = rootRoute
@@ -137,7 +172,8 @@ export const routeTree = rootRoute
         "/",
         "/profile",
         "/tickets/$ticketId",
-        "/tickets/"
+        "/tickets/",
+        "/tickets_/$ticketId/edit"
       ]
     },
     "/": {
@@ -151,6 +187,9 @@ export const routeTree = rootRoute
     },
     "/tickets/": {
       "filePath": "tickets.index.tsx"
+    },
+    "/tickets_/$ticketId/edit": {
+      "filePath": "tickets_.$ticketId.edit.tsx"
     }
   }
 }

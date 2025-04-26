@@ -28,10 +28,6 @@ export const Route = createRootRoute({
 								data-slot="navigation-menu-link"
 							>
 								Home
-								{/* <NavigationMenuLink
-									className={navigationMenuTriggerStyle()}
-								>
-								</NavigationMenuLink> */}
 							</Link>
 						</NavigationMenuItem>
 						<NavigationMenuItem>
@@ -44,8 +40,6 @@ export const Route = createRootRoute({
 								data-slot="navigation-menu-link"
 							>
 								Profile
-								{/* <NavigationMenuLink className={}>
-								</NavigationMenuLink> */}
 							</Link>
 						</NavigationMenuItem>
 						<NavigationMenuItem>
@@ -59,9 +53,22 @@ export const Route = createRootRoute({
 								data-slot="navigation-menu-link"
 							>
 								Tickets/1
-								{/* <NavigationMenuLink></NavigationMenuLink> */}
 							</Link>
 						</NavigationMenuItem>
+						<NavigationMenuItem>
+							<Link
+								to="/tickets/$ticketId/edit"
+								params={{ ticketId: "1" }}
+								className={cn(
+									NavMenuLinkStyles,
+									navigationMenuTriggerStyle()
+								)}
+								data-slot="navigation-menu-link"
+							>
+								Tickets/1/edit
+							</Link>
+						</NavigationMenuItem>
+
 						<NavigationMenuItem>
 							<ThemeButton />
 						</NavigationMenuItem>

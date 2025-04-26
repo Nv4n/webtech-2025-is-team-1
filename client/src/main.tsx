@@ -8,6 +8,7 @@ import {
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import { routeTree } from "./routeTree.gen";
+import { Toaster } from "@/components/ui/sonner";
 
 export const homeToTicketsMask = createRouteMask({
 	routeTree,
@@ -46,6 +47,7 @@ if (!rootElement.innerHTML) {
 					position="top"
 					buttonPosition="top-right"
 				/>
+				<Toaster />
 			</QueryClientProvider>
 		</StrictMode>
 	);
