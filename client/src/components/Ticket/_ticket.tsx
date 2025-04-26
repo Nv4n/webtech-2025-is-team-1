@@ -7,10 +7,12 @@ import {
 } from "../ui/card";
 import { _Date } from "../_date";
 import { User } from "../user";
+import { Badge } from "@/components/ui/badge";
 
 type User = {
 	initials: string;
 	fullName: string;
+	email: string;
 };
 
 type Ticket = {
@@ -20,6 +22,8 @@ type Ticket = {
 	updatedAt: string;
 	updatedBy: User;
 	assignedTo: User;
+	project: string;
+	status: string;
 };
 
 export function TicketCard({
@@ -29,15 +33,34 @@ export function TicketCard({
 	updatedAt,
 	updatedBy,
 	assignedTo,
+	project,
+	status,
 }: Ticket) {
 	return (
-		<Card className="flex h-[300px] w-2xs flex-col">
+		<Card className="flex h-[350px] w-2xs flex-col">
 			<CardHeader>
+				<Badge variant="default">{project}</Badge>
 				<User
 					labelContent="Assigned To"
 					initials={assignedTo.initials}
 					fullName={assignedTo.fullName}
+					email={assignedTo.email}
 				/>
+				{status === "not-started" && (
+					<Badge variant="default" className="bg-red-700">
+						{status}
+					</Badge>
+				)}
+				{status === "in-progress" && (
+					<Badge variant="default" className="bg-amber-300">
+						{status}
+					</Badge>
+				)}
+				{status === "completed" && (
+					<Badge variant="default" className="bg-green-900">
+						{status}
+					</Badge>
+				)}
 			</CardHeader>
 
 			<CardContent className="flex flex-1 flex-col">
@@ -54,6 +77,7 @@ export function TicketCard({
 					labelContent="Upadated By"
 					initials={updatedBy.initials}
 					fullName={updatedBy.fullName}
+					email={updatedBy.email}
 				/>
 			</CardFooter>
 		</Card>

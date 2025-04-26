@@ -28,10 +28,10 @@ function getUser() {
 	];
 
 	let index = Math.floor(Math.random() * 10);
-	return { initials: initials[index], fullName: fullNames[index] };
+	return { initials: initials[index], fullName: fullNames[index], email:  fullNames[index].toLowerCase().replace(" ", ".").concat("@gmail.com")};
 }
 
-function getTicketCard() {
+function getTicketCard(status: string) {
 	const ticketTitles = [
 		"Fix login bug",
 		"Update dashboard UI",
@@ -84,6 +84,19 @@ function getTicketCard() {
 		"2025-04-12",
 	];
 
+	const projects = [
+		"CloudPulse",
+		"DataNest",
+		"PixelForge",
+		"NeuroLink",
+		"QuantumCanvas",
+		"CodeVoyager",
+		"SynthWave",
+		"AetherSync",
+		"NovaStream",
+		"CircuitHive",
+	];
+
 	let index = Math.floor(Math.random() * 10);
 
 	return {
@@ -93,6 +106,8 @@ function getTicketCard() {
 		updatedAt: updatedDates[index],
 		updatedBy: getUser(),
 		assignedTo: getUser(),
+		project: projects[index],
+		status: status,
 	};
 }
 
@@ -101,20 +116,30 @@ type TicketStatus = {
 };
 
 export function TicketsGroup({ status }: TicketStatus) {
-	const firstTicket = getTicketCard();
-	const secondTicket = getTicketCard();
-	const thirdTicket = getTicketCard();
+	const firstTicket = getTicketCard(status);
+	const secondTicket = getTicketCard(status);
+	const thirdTicket = getTicketCard(status);
 
 	return (
-		<div>
-			<div className="flex h-full items-center justify-between">
-				<h1>{status}</h1>
-				<Button variant="ghost" className="ml-auto">+</Button>
+		<div className="flex w-1/3 flex-col space-y-4">
+			<div className="flex h-full w-2xs items-center justify-between">
+				{status === "not-started" && (
+					<h1>Not Started</h1>
+				)}
+				{status === "in-progress" && (
+					<h1>In Progress</h1>
+				)}
+				{status === "completed" && (
+					<h1>Completed</h1>
+				)}
+				<Button variant="ghost">+</Button>
 			</div>
 			<TicketCard {...firstTicket} />
 			<TicketCard {...secondTicket} />
 			<TicketCard {...thirdTicket} />
-			<Button variant="ghost" className="w-2xs">Add Ticket</Button>
+			<Button variant="ghost" className="w-2xs">
+				Add Ticket
+			</Button>
 		</div>
 	);
 }
