@@ -103,6 +103,9 @@ export const TicketDetails = (id: string) => {
 							date={ticket.updatedAt}
 						/>
 					)}
+					<span className="text-muted-foreground text-sm">
+						Created at {ticket.createdAt.toLocaleDateString()}
+					</span>
 				</CardFooter>
 			</Card>
 		</>
