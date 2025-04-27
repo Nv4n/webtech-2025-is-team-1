@@ -50,8 +50,12 @@ const users: Record<string, Profile> = {
 };
 
 export const FakeProfileApi = () => {
-	const getProfileList = (): Record<string, Profile> => {
-		return users;
+	const getProfileList = () => {
+		return new Promise<Record<string, Profile>>((resolve) => {
+			setTimeout(() => {
+				resolve(users);
+			}, 250);
+		});
 	};
 	return { getProfileList };
 };

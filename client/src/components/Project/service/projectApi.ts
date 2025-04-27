@@ -10,8 +10,12 @@ const projects: Record<string, Project> = {
 };
 
 export const FakeProjectApi = () => {
-	const getProjectList = (): Record<string, Project> => {
-		return projects;
+	const getProjectList = () => {
+		return new Promise<Record<string, Project>>((resolve) => {
+			setTimeout(() => {
+				resolve(projects);
+			}, 250);
+		});
 	};
 	return { getProjectList };
 };
