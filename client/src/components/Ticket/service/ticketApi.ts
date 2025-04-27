@@ -1,6 +1,6 @@
 import { Ticket } from "@/components/Ticket/types/Ticket";
 
-const tickets: Record<string, Ticket> = {
+let tickets: Record<string, Ticket> = {
 	"1": {
 		id: "1",
 		title: "Fix login bug",
@@ -174,7 +174,12 @@ export const FakeTicketApi = () => {
 			}, 250);
 		});
 	};
-	const updateTicket = (ticket: Ticket) => {};
+	const updateTicket = (ticket: Ticket) => {
+		if (!ticket.id) {
+			return;
+		}
+		tickets[ticket.id] = ticket;
+	};
 	return { getTicketDetails, updateTicket };
 };
 
