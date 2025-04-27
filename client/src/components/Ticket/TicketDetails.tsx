@@ -1,4 +1,7 @@
-import { Button } from "@/components/ui/button";
+import { ProfileHoverCard } from "@/components/Profile/ProfileHoverCard";
+import { FakeTicketApi } from "@/components/Ticket/service/ticketApi";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import {
 	Card,
 	CardContent,
@@ -7,40 +10,20 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { useQuery } from "@tanstack/react-query";
-import { BellRing, Check } from "lucide-react";
-import { Ticket } from "@/components/Ticket/types/Ticket";
+import {
+	HoverCard,
+	HoverCardContent,
+	HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Badge } from "@/components/ui/badge";
+import { useQuery } from "@tanstack/react-query";
 
-const FakeTicketApi = () => {
-	const getTicketDetails = () => {
-		const ticket: Ticket = {
-			title: "Issue 01",
-			description:
-				"Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia, repellat. Tempore corporis hic nulla odit sit voluptates ut exercitationem excepturi eaque eligendi earum quidem iusto doloribus nostrum, voluptas, voluptatem error.",
-			asignees: ["2691c583-74b5-5e2c-a359-b6715beec586"],
-			createdAt: new Date(),
-			updatedAt: new Date(),
-			updatedBy: "2691c583-74b5-5e2c-a359-b6715beec586",
-			status: "TO DO",
-		};
-		return new Promise<Ticket>((resolve) => {
-			setTimeout(() => {
-				resolve(ticket);
-			}, 10000);
-		});
-	};
-	return { getTicketDetails };
-};
 
 export const TicketDetails = (id: string) => {
 	const { data: ticket, isLoading } = useQuery({
 		queryKey: ["tickets", id],
 		queryFn: () => FakeTicketApi().getTicketDetails(),
 	});
-	console.log(isLoading);
-	console.log(ticket);
 
 	if (isLoading) {
 		return (
@@ -59,7 +42,7 @@ export const TicketDetails = (id: string) => {
 	return (
 		!!ticket && (
 			<>
-				<Card className="mx-auto mt-4 mb-0 w-fit px-4">
+				<Card className="mx-auto mt-4 mb-0 w-fit max-w-lg px-4">
 					<CardHeader>
 						<CardTitle>{ticket.title}</CardTitle>
 						<CardDescription>
@@ -67,22 +50,63 @@ export const TicketDetails = (id: string) => {
 						</CardDescription>
 					</CardHeader>
 					<CardContent className="grid gap-4">
-						<div className="flex items-center space-x-4 rounded-md border p-4">
-							<BellRing />
-							<div className="flex-1 space-y-1">
-								<p className="text-sm leading-none font-medium">
-									Push Notifications
+						<p>
+							Lorem ipsum dolor sit amet consectetur adipisicing
+							elit. Cupiditate dignissimos tempore hic ratione
+							placeat quis, repudiandae doloribus, tenetur illo id
+							rerum ut, inventore rem expedita. Saepe harum quasi
+							dolorum fugit!
+						</p>
+					</CardContent>
+					<CardFooter className="flex flex-col items-start gap-4">
+						<div className="flex gap-2">
+							<HoverCard>
+								<HoverCardTrigger>
+									<Avatar>
+										<AvatarFallback>CN</AvatarFallback>
+									</Avatar>
+								</HoverCardTrigger>
+								<HoverCardContent className="w-80">
+									<ProfileHoverCard
+										id={
+											"dd51cc4a-1240-524d-bee1-6b9a11d20ab7"
+										}
+									></ProfileHoverCard>
+								</HoverCardContent>
+							</HoverCard>
+							<div className="flex flex-col">
+								<p className="leading-7">
+									Coco Nitro created issue
 								</p>
-								<p className="text-muted-foreground text-sm">
-									Send notifications to device.
-								</p>
+								<span className="text-muted-foreground text-sm">
+									{new Date().toLocaleDateString()}
+								</span>
 							</div>
 						</div>
-					</CardContent>
-					<CardFooter>
-						<Button className="w-full">
-							<Check /> Mark all as read
-						</Button>
+						<div className="flex gap-2">
+							<HoverCard>
+								<HoverCardTrigger>
+									<Avatar>
+										<AvatarFallback>CN</AvatarFallback>
+									</Avatar>
+								</HoverCardTrigger>
+								<HoverCardContent className="w-80">
+									<ProfileHoverCard
+										id={
+											"8dbc03bf-524d-5613-b980-cf53ed53f14b"
+										}
+									></ProfileHoverCard>
+								</HoverCardContent>
+							</HoverCard>
+							<div className="flex flex-col">
+								<p className="leading-7">
+									Coco Nitro modified issue
+								</p>
+								<span className="text-muted-foreground text-sm">
+									{new Date().toLocaleDateString()}
+								</span>
+							</div>
+						</div>
 					</CardFooter>
 				</Card>
 			</>

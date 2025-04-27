@@ -24,8 +24,6 @@ export function useMediaQuery(
 ): boolean {
 	const [matches, setMatches] = useState<boolean>(() => {
 		if (initializeWithValue) {
-			console.log(getMatches(query, defaultValue));
-
 			return getMatches(query, defaultValue);
 		}
 		return defaultValue;

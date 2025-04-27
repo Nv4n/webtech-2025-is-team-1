@@ -1,13 +1,16 @@
 import { ThemeButton } from "@/components/ThemeButton";
 import {
-	navigationMenuTriggerStyle,
-	NavigationMenuItem,
-	NavigationMenuLink,
-	NavigationMenuList,
 	NavigationMenu,
+	NavigationMenuItem,
+	NavigationMenuList,
+	navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import { cn } from "@/lib/utils";
 import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+
+const NavMenuLinkStyles =
+	"data-[active=true]:focus:bg-accent data-[active=true]:hover:bg-accent data-[active=true]:bg-accent/50 data-[active=true]:text-accent-foreground hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:ring-ring/50 [&_svg:not([class*='text-'])]:text-muted-foreground flex flex-col gap-1 rounded-sm p-2 text-sm transition-all outline-none focus-visible:ring-[3px] focus-visible:outline-1 [&_svg:not([class*='size-'])]:size-4";
 
 export const Route = createRootRoute({
 	component: () => {
@@ -16,38 +19,57 @@ export const Route = createRootRoute({
 				<NavigationMenu>
 					<NavigationMenuList>
 						<NavigationMenuItem>
-							<Link to="/">
-								<NavigationMenuLink
-									className={navigationMenuTriggerStyle()}
-								>
-									{" "}
-									Home
-								</NavigationMenuLink>
+							<Link
+								to="/"
+								className={cn(
+									NavMenuLinkStyles,
+									navigationMenuTriggerStyle()
+								)}
+								data-slot="navigation-menu-link"
+							>
+								Home
 							</Link>
 						</NavigationMenuItem>
 						<NavigationMenuItem>
-							<Link to="/profile">
-								<NavigationMenuLink
-									className={navigationMenuTriggerStyle()}
-								>
-									Profile
-								</NavigationMenuLink>
+							<Link
+								to="/profile"
+								className={cn(
+									NavMenuLinkStyles,
+									navigationMenuTriggerStyle()
+								)}
+								data-slot="navigation-menu-link"
+							>
+								Profile
 							</Link>
 						</NavigationMenuItem>
 						<NavigationMenuItem>
 							<Link
 								to="/tickets/$ticketId"
 								params={{ ticketId: "1" }}
+								className={cn(
+									NavMenuLinkStyles,
+									navigationMenuTriggerStyle()
+								)}
+								data-slot="navigation-menu-link"
 							>
-								<NavigationMenuLink
-									className={navigationMenuTriggerStyle()}
-								>
-									Tickets/1
-								</NavigationMenuLink>
+								Tickets/1
 							</Link>
 						</NavigationMenuItem>
 						<NavigationMenuItem>
-							{" "}
+							<Link
+								to="/tickets/$ticketId/edit"
+								params={{ ticketId: "1" }}
+								className={cn(
+									NavMenuLinkStyles,
+									navigationMenuTriggerStyle()
+								)}
+								data-slot="navigation-menu-link"
+							>
+								Tickets/1/edit
+							</Link>
+						</NavigationMenuItem>
+
+						<NavigationMenuItem>
 							<ThemeButton />
 						</NavigationMenuItem>
 					</NavigationMenuList>

@@ -15,7 +15,7 @@ export function UserHoverCard({
 }: UserHoverCardProps) {
 	return (
 		<div className="flex items-center space-x-2">
-			<LabelSpan content={labelContent}/>
+			<LabelSpan content={labelContent} />
 			<Avatar>
 				<AvatarFallback>
 					<HoverCard>
@@ -31,8 +31,8 @@ export function UserHoverCard({
 							<hr className="my-2 border-t-3" />
 
 							<div className="flex items-center space-x-2">
-							<LabelSpan content="Email:"/>
-								<pre>{email}</pre>
+								<LabelSpan content="Email:" />
+								<span>{email}</span>
 							</div>
 						</HoverCardContent>
 					</HoverCard>
