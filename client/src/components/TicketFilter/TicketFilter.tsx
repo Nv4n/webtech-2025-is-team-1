@@ -1,90 +1,68 @@
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuGroup,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from "@radix-ui/react-dropdown-menu";
-import { Button } from "../ui/button";
-import { LabelSpan } from "../LabelSpan";
-import { Input } from "../ui/input";
+"use client";
+
 import { useState } from "react";
-import { Checkbox } from "../ui/checkbox";
+import { MultiSelect } from "@/components/ui/multi-select";
+import { Cat, Dog, FolderDot, Turtle } from "lucide-react";
+import { Button } from "../ui/button";
+import { FakeProjectApi } from "../Project/service/projectApi";
+import { useQuery } from "@tanstack/react-query";
+
+const statusFiltersList = [
+	{ value: "not-started", label: "Not Started", icon: Turtle },
+	{ value: "in-progress", label: "In Progress", icon: Cat },
+	{ value: "completed", label: "Completed", icon: Dog },
+];
 
 export function TicketFilter() {
-	const [isOpen, setIsOpen] = useState(false);
+	const [selectedStatusFilters, setSelectedFrameworks] = useState<string[]>(
+		[]
+	);
+	const { data: projectFiltersList, isLoading: isPorjectFiltersLoading } =
+		useQuery({
+			queryKey: ["projects"],
+			queryFn: async () => {
+				return FakeProjectApi().getProjectList();
+			},
+			select: (data) => {
+				return Object.entries(data).map(([_, value]) => {
+					return {
+						value: value.name.toLowerCase(),
+						label: value.name,
+						icon: FolderDot,
+					};
+				});
+			},
+		});
 
-	const handleOpenChange = (open: boolean) => {
-		setIsOpen(open);
-	};
-
-	const handleApplyFilters = () => {
-		console.log("Filters applied");
-		setIsOpen(false);
-	};
-
+	if (projectFiltersList) {
+	}
 	return (
-		<DropdownMenu open={isOpen} onOpenChange={handleOpenChange}>
-			<DropdownMenuTrigger asChild>
-				<Button variant="outline" className="cursor-pointer">
-					Filter By
-				</Button>
-			</DropdownMenuTrigger>
-			<DropdownMenuContent className="bg-accent dark:bg-accent z-10 rounded-lg border border-gray-300 px-3 py-2 transition-all dark:border-gray-600">
-				<DropdownMenuLabel>Filter by</DropdownMenuLabel>
-				<DropdownMenuSeparator />
-				<DropdownMenuGroup>
-					<DropdownMenuItem>
-						<Input placeholder="Keyword/s..." />
-					</DropdownMenuItem>
-					<div className="py-3">
-						<LabelSpan content={"Status"} />
-					</div>
-					<DropdownMenuItem className="py-1">
-						<div className="flex items-center space-x-2">
-							<Checkbox id="not-started" />
-							<label
-								htmlFor="not-started"
-								className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-							>
-								not-started
-							</label>
-						</div>
-					</DropdownMenuItem>
-					<DropdownMenuItem className="py-1">
-						<div className="flex items-center space-x-2">
-							<Checkbox id="in-progress" />
-							<label
-								htmlFor="in-progress"
-								className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-							>
-								in-progress
-							</label>
-						</div>
-					</DropdownMenuItem>
-					<DropdownMenuItem className="pt-1 pb-3">
-						<div className="flex items-center space-x-2">
-							<Checkbox id="completed" />
-							<label
-								htmlFor="completed"
-								className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-							>
-								completed
-							</label>
-						</div>
-					</DropdownMenuItem>
-				</DropdownMenuGroup>
-				<DropdownMenuSeparator />
-				<Button
-					variant="outline"
-					className="cursor-pointer bg-primary/70 dark:bg-primary/70"
-					onClick={handleApplyFilters}
-				>
-					Apply filters
-				</Button>
-			</DropdownMenuContent>
-		</DropdownMenu>
+		<div>
+			<h1 className="mb-4 text-2xl font-bold">Tickets Filter</h1>
+
+			<div className="flex max-w-4xl flex-wrap items-center gap-4 p-4">
+				{projectFiltersList && !isPorjectFiltersLoading && (
+					<MultiSelect
+						options={projectFiltersList}
+						onValueChange={setSelectedFrameworks}
+						defaultValue={selectedStatusFilters}
+						placeholder="Select Filters By Projects"
+						variant="inverted"
+						animation={2}
+						maxCount={3}
+					/>
+				)}
+				<MultiSelect
+					options={statusFiltersList}
+					onValueChange={setSelectedFrameworks}
+					defaultValue={selectedStatusFilters}
+					placeholder="Select Filters By Status"
+					variant="inverted"
+					animation={2}
+					maxCount={3}
+				/>
+				<Button>Apply Filters</Button>
+			</div>
+		</div>
 	);
 }
