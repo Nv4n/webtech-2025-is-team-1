@@ -20,33 +20,33 @@ type TicketStatus = {
 };
 
 function fetchTicketDetails() {
-  const { data: ticketList, isLoading: isLoadingTickets } = useQuery({
-    queryKey: ["tickets"],
-    queryFn: () => {
-      return FakeTicketApi().getTicketDetails();
-    },
-    select: (data) => {
-      return Object.values(data);
-    },
-  });
-  const { data: userList, isLoading: isLoadingUsers } = useQuery({
-    queryKey: ["users"],
-    queryFn: () => {
-      return FakeProfileApi().getProfileList();
-    },
-    select: (data) => {
-      return Object.values(data);
-    },
-  });
-  const { data: projectList, isLoading: isLoadingProjects } = useQuery({
-    queryKey: ["projects"],
-    queryFn: () => {
-      return FakeProjectApi().getProjectList();
-    },
-    select: (data) => {
-      return Object.values(data);
-    },
-  });
+	const { data: ticketList, isLoading: isLoadingTickets } = useQuery({
+		queryKey: ["tickets"],
+		queryFn: () => {
+			return FakeTicketApi().getTicketDetails();
+		},
+		select: (data) => {
+			return Object.values(data);
+		},
+	});
+	const { data: userList, isLoading: isLoadingUsers } = useQuery({
+		queryKey: ["users"],
+		queryFn: () => {
+			return FakeProfileApi().getProfileList();
+		},
+		select: (data) => {
+			return Object.values(data);
+		},
+	});
+	const { data: projectList, isLoading: isLoadingProjects } = useQuery({
+		queryKey: ["projects"],
+		queryFn: () => {
+			return FakeProjectApi().getProjectList();
+		},
+		select: (data) => {
+			return Object.values(data);
+		},
+	});
 	if (isLoadingProjects || isLoadingTickets || isLoadingUsers) {
 		return [];
 	}
@@ -62,12 +62,8 @@ function fetchTicketDetails() {
 
 		return {
 			...ticket,
-			updatedBy: updatedBy
-				? `${updatedBy.fname} ${updatedBy.lname}`
-				: "Unknown",
-			assignedTo: assignedTo
-				? `${assignedTo.fname} ${assignedTo.lname}`
-				: "Unassigned",
+			updatedBy: updatedBy ? updatedBy : {},
+			assignedTo: assignedTo ? assignedTo : {},
 			project,
 		};
 	});
@@ -95,16 +91,16 @@ export function TicketsGroup({ status }: TicketStatus) {
 					</Tooltip>
 				</TooltipProvider>
 			</div>
-    
+
 			{tickets.length > 0 ? (
 				tickets
 					.filter((ticket) => ticket.status === status)
 					.map((ticket) =>
 						ticket.id && ticket.project?.id ? (
 							<TicketCard
-                updatedAt={ticket.updatedAt}
+								updatedAt={ticket.updatedAt}
 								updatedBy={ticket.updatedBy}
-								project={ticket.project.id}
+								project={ticket.project.name}
 								id={ticket.id}
 								title={ticket.title}
 								status={ticket.status}
