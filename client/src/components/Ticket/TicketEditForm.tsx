@@ -1,6 +1,10 @@
 "use client";
 
-import { fetchUsers, fetchProjects, createTicket } from "@/components/Ticket/service/ticketApi";
+import {
+	fetchUsers,
+	fetchProjects,
+	createTicket,
+} from "@/components/Ticket/service/ticketApi";
 import { Ticket, TicketSchema } from "@/components/Ticket/types/Ticket";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,8 +28,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-
-
 
 export function TicketForm() {
 	const form = useForm<Ticket>({
@@ -120,29 +122,27 @@ export function TicketForm() {
 					name="asignedTo"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Asignees</FormLabel>
-							<FormControl>
-								<Select
-									value={field.value[0]}
-									onValueChange={(value) =>
-										field.onChange(value)
-									}
-								>
+							<FormLabel>Asignee</FormLabel>
+							<Select
+								onValueChange={field.onChange}
+								defaultValue={field.value}
+							>
+								<FormControl>
 									<SelectTrigger>
 										<SelectValue placeholder="Select asignees" />
 									</SelectTrigger>
-									<SelectContent>
-										{users?.map((user) => (
-											<SelectItem
-												key={user.id}
-												value={user.id}
-											>
-												{user.name}
-											</SelectItem>
-										))}
-									</SelectContent>
-								</Select>
-							</FormControl>
+								</FormControl>
+								<SelectContent>
+									{users?.map((user) => (
+										<SelectItem
+											key={user.id}
+											value={user.id}
+										>
+											{user.name}
+										</SelectItem>
+									))}
+								</SelectContent>
+							</Select>
 							<FormMessage />
 						</FormItem>
 					)}
@@ -153,26 +153,27 @@ export function TicketForm() {
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Updated By</FormLabel>
-							<FormControl>
-								<Select
-									value={field.value}
-									onValueChange={field.onChange}
-								>
+							<Select
+								defaultValue={field.value}
+								onValueChange={field.onChange}
+							>
+								<FormControl>
 									<SelectTrigger>
 										<SelectValue placeholder="Select user" />
 									</SelectTrigger>
-									<SelectContent>
-										{users?.map((user) => (
-											<SelectItem
-												key={user.id}
-												value={user.id}
-											>
-												{user.name}
-											</SelectItem>
-										))}
-									</SelectContent>
-								</Select>
-							</FormControl>
+								</FormControl>
+
+								<SelectContent>
+									{users?.map((user) => (
+										<SelectItem
+											key={user.id}
+											value={user.id}
+										>
+											{user.name}
+										</SelectItem>
+									))}
+								</SelectContent>
+							</Select>
 							<FormMessage />
 						</FormItem>
 					)}
@@ -184,26 +185,27 @@ export function TicketForm() {
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Project</FormLabel>
-							<FormControl>
-								<Select
-									value={field.value}
-									onValueChange={field.onChange}
-								>
+
+							<Select
+								defaultValue={field.value}
+								onValueChange={field.onChange}
+							>
+								<FormControl>
 									<SelectTrigger>
 										<SelectValue placeholder="Select project" />
 									</SelectTrigger>
-									<SelectContent>
-										{projects?.map((project) => (
-											<SelectItem
-												key={project.id}
-												value={project.id}
-											>
-												{project.title}
-											</SelectItem>
-										))}
-									</SelectContent>
-								</Select>
-							</FormControl>
+								</FormControl>
+								<SelectContent>
+									{projects?.map((project) => (
+										<SelectItem
+											key={project.id}
+											value={project.id}
+										>
+											{project.title}
+										</SelectItem>
+									))}
+								</SelectContent>
+							</Select>
 							<FormMessage />
 						</FormItem>
 					)}
