@@ -1,5 +1,7 @@
 "use client";
 
+import { FakeProfileApi } from "@/components/Profile/service/profileApi";
+import { FakeProjectApi } from "@/components/Project/service/projectApi";
 import {
 	createTicket,
 	FakeTicketApi,
@@ -22,42 +24,19 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+	QueryClient,
+	useMutation,
+	useQuery,
+	useQueryClient,
+} from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
 
 export function TicketEditForm(id: string) {
-	const { data: ticket } = useQuery({
-		queryKey: ["tickets", id],
-		queryFn: () => FakeTicketApi().getTicketDetails(),
-		select: (data) => {
-			Object.entries(data).filter(([key, _]) => {
-				key === id;
-			})[0][1];
-		},
-	});
-
-	const { data: users } = useQuery({
-		queryKey: ["users"],
-		queryFn: () => {
-			return Faket;
-		},
-	});
-
-	const { data: projects } = useQuery({
-		queryKey: ["projects"],
-		queryFn: () => {},
-	});
-
-	const FormTicketSchema = TicketSchema.omit({
-		project: true,
-		asignedTo: true,
-		updatedBy: true,
-	}).extend({ project: z.string(), asignedTo: z.string() });
-
 	const form = useForm<Ticket>({
 		resolver: zodResolver(TicketSchema),
 		defaultValues: {
@@ -71,9 +50,39 @@ export function TicketEditForm(id: string) {
 			project: "",
 		},
 	});
+	const queryClient = useQueryClient();
+
+	const { data: ticket, isLoading: isTicketLoading } = useQuery({
+		queryKey: ["tickets", id],
+		queryFn: () => FakeTicketApi().getTicketDetails(),
+		select: (data) => {
+			console.log(data);
+			console.log(id);
+
+			return Object.entries(data).filter(([key, _]) => key === id)[0][1];
+		},
+	});
+	console.log(ticket);
+
+	const { data: users, isLoading: isUsersLoading } = useQuery({
+		queryKey: ["users"],
+		queryFn: () => {
+			return FakeProfileApi().getProfileList();
+		},
+	});
+
+	const { data: projects, isLoading: isProjectsLoading } = useQuery({
+		queryKey: ["projects"],
+		queryFn: () => {
+			return FakeProjectApi().getProjectList();
+		},
+	});
 
 	const mutation = useMutation({
-		mutationFn: createTicket,
+		mutationFn: (data: Ticket) => {
+			queryClient.invalidateQueries({ queryKey: ["tickets", id] });
+			return createTicket(data);
+		},
 		onSuccess: () => {
 			toast.success("Ticket created successfully!");
 			form.reset();
@@ -83,156 +92,204 @@ export function TicketEditForm(id: string) {
 		},
 	});
 
+	if (isTicketLoading || isUsersLoading || isProjectsLoading) {
+		return (
+			<>
+				<div className="mx-auto my-0 w-fit flex-col space-y-3">
+					<Skeleton className="h-[125px] w-[250px] rounded-xl" />
+					<div className="space-y-2">
+						<Skeleton className="h-4 w-[250px]" />
+						<Skeleton className="h-4 w-[200px]" />
+					</div>
+				</div>
+			</>
+		);
+	}
+
 	function onSubmit(data: Ticket) {
+		data.updatedAt = new Date();
 		mutation.mutate(data);
 	}
 
+	form.setValue("title", ticket?.title || "");
+	form.setValue("description", ticket?.description || "");
 	return (
-		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-				<FormField
-					control={form.control}
-					name="title"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Title</FormLabel>
-							<FormControl>
-								<Input placeholder="Enter title" {...field} />
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-
-				<FormField
-					control={form.control}
-					name="status"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Status</FormLabel>
-							<FormControl>
-								<Input placeholder="Enter status" {...field} />
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-
-				<FormField
-					control={form.control}
-					name="description"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Description</FormLabel>
-							<FormControl>
-								<Textarea
-									placeholder="Enter description"
-									{...field}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-
-				<FormField
-					control={form.control}
-					name="asignedTo"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Asignee</FormLabel>
-							<Select
-								onValueChange={field.onChange}
-								defaultValue={field.value}
-							>
+		ticket && (
+			<Form {...form}>
+				<form
+					onSubmit={form.handleSubmit(onSubmit)}
+					className="space-y-6"
+				>
+					<FormField
+						control={form.control}
+						name="title"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Title</FormLabel>
 								<FormControl>
-									<SelectTrigger>
-										<SelectValue placeholder="Select asignees" />
-									</SelectTrigger>
+									<Input
+										placeholder="Enter title"
+										{...field}
+									/>
 								</FormControl>
-								<SelectContent>
-									{users?.map((user) => (
-										<SelectItem
-											key={user.id}
-											value={user.id}
-										>
-											{user.name}
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+
+					<FormField
+						control={form.control}
+						name="status"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Status</FormLabel>
+								<Select
+									onValueChange={field.onChange}
+									defaultValue={ticket.status}
+								>
+									<FormControl>
+										<SelectTrigger>
+											<SelectValue placeholder="Select a verified email to display" />
+										</SelectTrigger>
+									</FormControl>
+									<SelectContent>
+										<SelectItem value="not-started">
+											Not started
 										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-				<FormField
-					control={form.control}
-					name="updatedBy"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Updated By</FormLabel>
-							<Select
-								defaultValue={field.value}
-								onValueChange={field.onChange}
-							>
+										<SelectItem value="in-progress">
+											In progress
+										</SelectItem>
+										<SelectItem value="completed">
+											Completed
+										</SelectItem>
+									</SelectContent>
+								</Select>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+
+					<FormField
+						control={form.control}
+						name="description"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Description</FormLabel>
 								<FormControl>
-									<SelectTrigger>
-										<SelectValue placeholder="Select user" />
-									</SelectTrigger>
+									<Textarea
+										placeholder="Enter description"
+										{...field}
+									/>
 								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
 
-								<SelectContent>
-									{users?.map((user) => (
-										<SelectItem
-											key={user.id}
-											value={user.id}
-										>
-											{user.name}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+					<FormField
+						control={form.control}
+						name="asignedTo"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Asignee</FormLabel>
+								<Select
+									onValueChange={field.onChange}
+									defaultValue={field.value}
+								>
+									<FormControl>
+										<SelectTrigger>
+											<SelectValue placeholder="Select asignees" />
+										</SelectTrigger>
+									</FormControl>
+									<SelectContent>
+										{users &&
+											Object.values(users).map((user) => (
+												<SelectItem
+													key={user.id}
+													value={user.id || ""}
+												>
+													{user.fname} {user.lname}
+												</SelectItem>
+											))}
+									</SelectContent>
+								</Select>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name="updatedBy"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Updated By</FormLabel>
+								<Select
+									defaultValue={field.value}
+									onValueChange={field.onChange}
+								>
+									<FormControl>
+										<SelectTrigger>
+											<SelectValue placeholder="Select user" />
+										</SelectTrigger>
+									</FormControl>
 
-				<FormField
-					control={form.control}
-					name="project"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Project</FormLabel>
+									<SelectContent>
+										{users &&
+											Object.values(users).map((user) => (
+												<SelectItem
+													key={user.id}
+													value={user.id || ""}
+												>
+													{user.fname} {user.lname}
+												</SelectItem>
+											))}
+									</SelectContent>
+								</Select>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
 
-							<Select
-								defaultValue={field.value}
-								onValueChange={field.onChange}
-							>
-								<FormControl>
-									<SelectTrigger>
-										<SelectValue placeholder="Select project" />
-									</SelectTrigger>
-								</FormControl>
-								<SelectContent>
-									{projects?.map((project) => (
-										<SelectItem
-											key={project.id}
-											value={project.id}
-										>
-											{project.title}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+					<FormField
+						control={form.control}
+						name="project"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Project</FormLabel>
 
-				<Button type="submit" disabled={mutation.isPending}>
-					{mutation.isPending ? "Submitting..." : "Submit"}
-				</Button>
-			</form>
-		</Form>
+								<Select
+									defaultValue={field.value}
+									onValueChange={field.onChange}
+								>
+									<FormControl>
+										<SelectTrigger>
+											<SelectValue placeholder="Select project" />
+										</SelectTrigger>
+									</FormControl>
+									<SelectContent>
+										{projects &&
+											Object.values(projects).map(
+												(project) => (
+													<SelectItem
+														key={project.id}
+														value={project.id || ""}
+													>
+														{project.name}
+													</SelectItem>
+												)
+											)}
+									</SelectContent>
+								</Select>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+
+					<Button type="submit" disabled={mutation.isPending}>
+						{mutation.isPending ? "Submitting..." : "Submit"}
+					</Button>
+				</form>
+			</Form>
+		)
 	);
 }
