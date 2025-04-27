@@ -17,16 +17,20 @@ import {
 } from "@radix-ui/react-hover-card";
 import { Link } from "@tanstack/react-router";
 import { ProfileHoverCard } from "../Profile/ProfileHoverCard";
-import { Profile } from "../Profile/types/Profile";
-import { Project } from "../Project/types/Project";
+import { getInitials } from "../Profile/utils/getInitials";
 
 export type TicketCardProps = {
 	id: string;
 	title: string;
 	status: string;
 	updatedAt: Date;
-	updatedBy: Profile;
-	project: Project;
+	updatedBy: {
+		fname: string;
+		lname: string;
+		username: string;
+		id?: string | undefined;
+	};
+	project: string;
 };
 
 export function TicketCard({
@@ -57,9 +61,7 @@ export function TicketCard({
 					<CardTitle className="pb-4">{title}</CardTitle>
 				</CardHeader>
 				<CardContent className="flex flex-1 flex-col gap-2 px-4">
-					<Badge variant="default">
-						{project?.name || "No Project"}
-					</Badge>
+					<Badge variant="default">{project || "No Project"}</Badge>
 					{status && (
 						<Badge
 							variant="default"
@@ -79,16 +81,19 @@ export function TicketCard({
 						<HoverCard>
 							<HoverCardTrigger className="z-7">
 								<Avatar>
-									<AvatarFallback>CN</AvatarFallback>
+									<AvatarFallback>
+										{getInitials(
+											updatedBy.fname,
+											updatedBy.lname
+										)}
+									</AvatarFallback>
 								</Avatar>
 							</HoverCardTrigger>
 							<HoverCardContent className="z-10 max-w-80">
 								<div className="bg-card dark:bg-card rounded-lg border border-gray-300 px-3 py-2 transition-all dark:border-gray-600">
-									<ProfileHoverCard
-										id={
-											"dd51cc4a-1240-524d-bee1-6b9a11d20ab7"
-										}
-									/>
+									{updatedBy.id && (
+										<ProfileHoverCard id={updatedBy.id} />
+									)}
 								</div>
 							</HoverCardContent>
 						</HoverCard>
