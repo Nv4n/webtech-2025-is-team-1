@@ -2,15 +2,15 @@
 
 import { useState } from "react";
 import { MultiSelect } from "@/components/ui/multi-select";
-import { Cat, Dog, FolderDot, Turtle } from "lucide-react";
+import { FolderDot, ListTodo } from "lucide-react";
 import { Button } from "../ui/button";
 import { FakeProjectApi } from "../Project/service/projectApi";
 import { useQuery } from "@tanstack/react-query";
 
 const statusFiltersList = [
-	{ value: "not-started", label: "Not Started", icon: Turtle },
-	{ value: "in-progress", label: "In Progress", icon: Cat },
-	{ value: "completed", label: "Completed", icon: Dog },
+	{ value: "not-started", label: "Not Started", icon: ListTodo },
+	{ value: "in-progress", label: "In Progress", icon: ListTodo },
+	{ value: "completed", label: "Completed", icon: ListTodo },
 ];
 
 export function TicketFilter() {
@@ -36,13 +36,18 @@ export function TicketFilter() {
 
 	if (projectFiltersList) {
 	}
+
+	function filter(formData) {
+		// TODO: to implement it
+	}
+
 	return (
 		<div>
 			<h1 className="mb-4 text-2xl font-bold">Tickets Filter</h1>
 
-			<div className="flex max-w-4xl flex-wrap items-center gap-4 p-4">
+			<form className="flex max-w-2xl items-center gap-4 p-4" action={filter}>
 				{projectFiltersList && !isPorjectFiltersLoading && (
-					<MultiSelect
+					<MultiSelect name="projects-filters"
 						options={projectFiltersList}
 						onValueChange={setSelectedFrameworks}
 						defaultValue={selectedStatusFilters}
@@ -52,7 +57,7 @@ export function TicketFilter() {
 						maxCount={3}
 					/>
 				)}
-				<MultiSelect
+				<MultiSelect name="statuses-filters"
 					options={statusFiltersList}
 					onValueChange={setSelectedFrameworks}
 					defaultValue={selectedStatusFilters}
@@ -61,8 +66,8 @@ export function TicketFilter() {
 					animation={2}
 					maxCount={3}
 				/>
-				<Button>Apply Filters</Button>
-			</div>
+				<Button type="submit">Apply Filters</Button>
+			</form>
 		</div>
 	);
 }
