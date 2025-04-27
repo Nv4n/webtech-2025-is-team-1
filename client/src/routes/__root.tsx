@@ -6,6 +6,12 @@ import {
 	navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
+import {
+	TooltipProvider,
+	Tooltip,
+	TooltipTrigger,
+	TooltipContent,
+} from "@radix-ui/react-tooltip";
 import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
@@ -31,16 +37,30 @@ export const Route = createRootRoute({
 							</Link>
 						</NavigationMenuItem>
 						<NavigationMenuItem>
-							<Link
-								to="/profile"
-								className={cn(
-									NavMenuLinkStyles,
-									navigationMenuTriggerStyle()
-								)}
-								data-slot="navigation-menu-link"
-							>
-								Profile
-							</Link>
+							<TooltipProvider>
+								<Tooltip>
+									<TooltipTrigger asChild>
+										<Link
+											to="/profile"
+											className={cn(
+												NavMenuLinkStyles,
+												navigationMenuTriggerStyle()
+											)}
+											data-slot="navigation-menu-link"
+											disabled
+										>
+											Profile
+										</Link>
+									</TooltipTrigger>
+									<TooltipContent className="rounded-md border bg-gray-100 p-2 text-gray-800 shadow-md">
+										<pre>
+											Profile access will be available
+											shortly. Thank you for your
+											patience.
+										</pre>
+									</TooltipContent>
+								</Tooltip>
+							</TooltipProvider>
 						</NavigationMenuItem>
 						<NavigationMenuItem>
 							<Link
