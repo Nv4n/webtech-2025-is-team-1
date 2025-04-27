@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const UserSchema = z.object({
-	id: z.string(),
+	id: z.string().optional(),
 	fname: z.string().min(3),
 	lname: z.string().min(3),
 	username: z.string().min(3),
@@ -10,11 +10,9 @@ export const UserSchema = z.object({
 export type User = z.infer<typeof UserSchema>;
 
 export const ProfileSchema = UserSchema.pick({
+	id: true,
 	fname: true,
 	lname: true,
 	username: true,
-}).extend({
-	id: UserSchema.shape.id.optional(),
 });
-
 export type Profile = z.infer<typeof ProfileSchema>;

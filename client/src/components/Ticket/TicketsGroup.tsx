@@ -58,10 +58,6 @@ export const getTicketCard = (status: string): TicketCardProps => {
 		users[user.id] = user;
 	}
 
-	const allUserIds = Object.keys(users);
-
-	const asignees = allUserIds.filter(() => Math.random() > 0.5); // randomly pick some
-
 	const createdAt = new Date(
 		Date.now() - Math.floor(Math.random() * 1000000000)
 	); // Random past date
@@ -69,18 +65,22 @@ export const getTicketCard = (status: string): TicketCardProps => {
 		createdAt.getTime() + Math.floor(Math.random() * 500000000)
 	); // After createdAt
 
-	const updatedBy = allUserIds[Math.floor(Math.random() * allUserIds.length)];
-
+	const updatedBy = {
+		fname: generateRandomString(5, alphabet),
+		lname: generateRandomString(7, alphabet),
+		username: generateRandomString(8, alphabet),
+	};
+	const project = {
+		id: "",
+		name: generateRandomProjectName(),
+	}
 	return {
+		id: uuidv4(),
 		title: generateRandomString(10, alphabet),
-		description: generateRandomString(50, alphabet),
-		createdAt,
-		updatedAt,
-		updatedBy,
-		asignees,
-		project: generateRandomProjectName(),
+		updatedAt: updatedAt,
+		updatedBy: updatedBy,
+		project: project,
 		status: status,
-		usersById: users,
 	};
 };
 
