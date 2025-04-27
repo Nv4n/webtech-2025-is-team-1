@@ -23,11 +23,10 @@ export const TicketDetails = (id: string) => {
 		queryKey: ["tickets", id],
 		queryFn: () => FakeTicketApi().getTicketDetails(),
 		select: (data) => {
-			console.log(data);
-			console.log(id);
 			return Object.entries(data).filter(([key, _]) => key === id)[0][1];
 		},
 	});
+	
 
 	if (isLoading) {
 		return (
@@ -74,7 +73,7 @@ export const TicketDetails = (id: string) => {
 							</HoverCardTrigger>
 							<HoverCardContent className="w-80">
 								<ProfileHoverCard
-									id={"dd51cc4a-1240-524d-bee1-6b9a11d20ab7"}
+									id={ticket.asignedTo || ""}
 								></ProfileHoverCard>
 							</HoverCardContent>
 						</HoverCard>
@@ -96,7 +95,7 @@ export const TicketDetails = (id: string) => {
 							</HoverCardTrigger>
 							<HoverCardContent className="w-80">
 								<ProfileHoverCard
-									id={"8dbc03bf-524d-5613-b980-cf53ed53f14b"}
+									id={ticket.updatedBy || ""}
 								></ProfileHoverCard>
 							</HoverCardContent>
 						</HoverCard>
