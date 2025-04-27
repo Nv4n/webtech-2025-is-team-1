@@ -16,9 +16,6 @@ export const ProfileHoverCard = ({ id }: ProfileHoverCardProps) => {
 			return FakeProfileApi().getProfileList();
 		},
 		select: (data) => {
-			console.log(data);
-			console.log(id);
-
 			return Object.entries(data).filter(([key, _]) => key === id)[0][1];
 		},
 	});
