@@ -1,6 +1,9 @@
 "use client";
 
-import { createTicket } from "@/components/Ticket/service/ticketApi";
+import {
+	createTicket,
+	FakeTicketApi,
+} from "@/components/Ticket/service/ticketApi";
 import { Ticket, TicketSchema } from "@/components/Ticket/types/Ticket";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,8 +27,37 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { z } from "zod";
 
 export function TicketEditForm(id: string) {
+	const { data: ticket } = useQuery({
+		queryKey: ["tickets", id],
+		queryFn: () => FakeTicketApi().getTicketDetails(),
+		select: (data) => {
+			Object.entries(data).filter(([key, _]) => {
+				key === id;
+			})[0][1];
+		},
+	});
+
+	const { data: users } = useQuery({
+		queryKey: ["users"],
+		queryFn: () => {
+			return Faket;
+		},
+	});
+
+	const { data: projects } = useQuery({
+		queryKey: ["projects"],
+		queryFn: () => {},
+	});
+
+	const FormTicketSchema = TicketSchema.omit({
+		project: true,
+		asignedTo: true,
+		updatedBy: true,
+	}).extend({ project: z.string(), asignedTo: z.string() });
+
 	const form = useForm<Ticket>({
 		resolver: zodResolver(TicketSchema),
 		defaultValues: {
@@ -39,16 +71,6 @@ export function TicketEditForm(id: string) {
 			project: "",
 		},
 	});
-
-	const { data: users } = useQuery({
-		queryKey: ["users"],
-		queryFn: fetchUsers,
-	});
-
-	// const { data: projects } = useQuery({
-	// 	queryKey: ["projects"],
-	// 	queryFn: fetchProjects,
-	// });
 
 	const mutation = useMutation({
 		mutationFn: createTicket,

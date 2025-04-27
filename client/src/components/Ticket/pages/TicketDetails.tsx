@@ -5,6 +5,7 @@ import { FakeProjectApi } from "@/components/Project/service/projectApi";
 import { FakeTicketApi } from "@/components/Ticket/service/ticketApi";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
@@ -20,6 +21,8 @@ import {
 } from "@/components/ui/hover-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
+import { Pencil } from "lucide-react";
 
 const statusBadgeStyles = {
 	"not-started": "bg-red-700 text-white dark:text-white",
@@ -61,8 +64,15 @@ export const TicketDetails = (id: string) => {
 
 	return (
 		<>
-			<Card className="mx-auto mt-4 mb-0 w-fit max-w-lg px-4">
+			<Card className="relative isolate mx-auto mt-4 mb-0 w-fit max-w-lg px-4">
 				<CardHeader>
+					<Link
+						to="/tickets/$ticketId/edit"
+						params={{ ticketId: id }}
+						className="hover:bg-card-foreground/15 absolute top-2 right-2 w-fit rounded p-2"
+					>
+						<Pencil></Pencil>
+					</Link>
 					<CardTitle>{ticket.title}</CardTitle>
 					<CardDescription className="flex gap-2">
 						<span>status</span>
