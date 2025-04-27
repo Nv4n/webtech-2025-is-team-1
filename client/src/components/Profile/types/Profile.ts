@@ -10,6 +10,7 @@ export const UserSchema = z.object({
 export type User = z.infer<typeof UserSchema>;
 
 export const ProfileSchema = UserSchema.pick({
+	id: true,
 	fname: true,
 	lname: true,
 	username: true,
