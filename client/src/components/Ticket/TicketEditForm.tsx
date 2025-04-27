@@ -1,10 +1,6 @@
 "use client";
 
-import {
-	fetchUsers,
-	fetchProjects,
-	createTicket,
-} from "@/components/Ticket/service/ticketApi";
+import { createTicket } from "@/components/Ticket/service/ticketApi";
 import { Ticket, TicketSchema } from "@/components/Ticket/types/Ticket";
 import { Button } from "@/components/ui/button";
 import {
@@ -34,7 +30,7 @@ export function TicketForm() {
 		resolver: zodResolver(TicketSchema),
 		defaultValues: {
 			title: "",
-			status: "",
+			status: "not-started",
 			description: "",
 			asignedTo: "",
 			createdAt: new Date(),
@@ -49,10 +45,10 @@ export function TicketForm() {
 		queryFn: fetchUsers,
 	});
 
-	const { data: projects } = useQuery({
-		queryKey: ["projects"],
-		queryFn: fetchProjects,
-	});
+	// const { data: projects } = useQuery({
+	// 	queryKey: ["projects"],
+	// 	queryFn: fetchProjects,
+	// });
 
 	const mutation = useMutation({
 		mutationFn: createTicket,

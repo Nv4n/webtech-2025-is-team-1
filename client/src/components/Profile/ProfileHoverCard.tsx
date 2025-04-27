@@ -1,36 +1,22 @@
-import { Profile } from "@/components/Profile/types/Profile";
+import { FakeProfileApi } from "@/components/Profile/service/profileApi";
 import { getInitials } from "@/components/Profile/utils/getInitials";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
 import { CalendarIcon } from "lucide-react";
 
-const FakeUserApi = () => {
-	const getProfile = (_id: string) => {
-		const profile: Profile = {
-			fname: "Georgi",
-			lname: "Petranov",
-			username: "georgi_borimechka",
-		};
-		return new Promise<Profile>((resolve) => {
-			setTimeout(() => {
-				resolve(profile);
-			}, 1000);
-		});
-	};
-
-	return { getUser: getProfile };
-};
-
 interface ProfileHoverCardProps {
 	id: string;
 }
 
 export const ProfileHoverCard = ({ id }: ProfileHoverCardProps) => {
-	const { data, isLoading } = useQuery({
+	const { data: profile, isLoading } = useQuery({
 		queryKey: ["user", id],
 		queryFn: () => {
-			return FakeUserApi().getUser(id);
+			return FakeProfileApi().getProfileList();
+		},
+		select: (data) => {
+			return Object.entries(data).filter(([key, _]) => key === id)[0][1];
 		},
 	});
 	if (isLoading) {
@@ -46,22 +32,26 @@ export const ProfileHoverCard = ({ id }: ProfileHoverCardProps) => {
 			</>
 		);
 	}
+
 	return (
-		!!data && (
+		!!profile && (
 			<>
 				<div className="flex justify-between space-x-4">
 					<Avatar>
 						<AvatarFallback>
-							{getInitials(data.fname, data.lname)}
+							{getInitials(profile.fname, profile.lname)}
 						</AvatarFallback>
 					</Avatar>
 					<div className="space-y-1">
-						<h4 className="text-sm font-semibold">{data.fname}</h4>
+						<h4 className="text-sm font-semibold">
+							{profile.username}
+						</h4>
 						<p className="text-sm">
-							Senior Java Developer with 3 years experience
+							{profile.fname} {profile.lname} is Senior Java
+							Developer with 3 years experience
 						</p>
 						<div className="flex items-center pt-2">
-							<CalendarIcon className="mr-2 h-4 w-4 opacity-70" />{" "}
+							<CalendarIcon className="mr-2 h-4 w-4 opacity-70" />
 							<span className="text-muted-foreground text-xs">
 								Joined December 2020
 							</span>
