@@ -1,7 +1,11 @@
-
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@radix-ui/react-tooltip";
+import {
+	Tooltip,
+	TooltipTrigger,
+	TooltipContent,
+	TooltipProvider,
+} from "@radix-ui/react-tooltip";
 
 // Fake API imports
 import { FakeProfileApi } from "../Profile/service/profileApi";
@@ -12,87 +16,95 @@ import { CirclePlus } from "lucide-react";
 
 // Types
 type TicketStatus = {
-  status: string;
+	status: string;
 };
 
 export function TicketsGroup({ status }: TicketStatus) {
-  const [tickets, setTickets] = useState<any[]>([]);
-  const [users, setUsers] = useState<any[]>([]);
-  const [projects, setProjects] = useState<any[]>([]);
-  
-  useEffect(() => {
-    // Fetch ticket data, profile data (users), and project data
-    const fetchData = async () => {
-      const ticketApi = FakeTicketApi();
-      const profileApi = FakeProfileApi();
-      const projectApi = FakeProjectApi();
+	const [tickets, setTickets] = useState<any[]>([]);
+	const [users, setUsers] = useState<any[]>([]);
+	const [projects, setProjects] = useState<any[]>([]);
 
-      const [ticketData, userData, projectData] = await Promise.all([
-        ticketApi.getTicketDetails(),
-        profileApi.getProfileList(),
-        projectApi.getProjectList(),
-      ]);
+	useEffect(() => {
+		// Fetch ticket data, profile data (users), and project data
+		const fetchData = async () => {
+			const ticketApi = FakeTicketApi();
+			const profileApi = FakeProfileApi();
+			const projectApi = FakeProjectApi();
 
-      // Convert records to arrays
-      const ticketArray = Object.values(ticketData);
-      const userArray = Object.values(userData);
-      const projectArray = Object.values(projectData);
+			const [ticketData, userData, projectData] = await Promise.all([
+				ticketApi.getTicketDetails(),
+				profileApi.getProfileList(),
+				projectApi.getProjectList(),
+			]);
 
-      // Map ticket data and add user & project details
-      const ticketsWithDetails = ticketArray.map((ticket) => {
-        const updatedBy = userArray.find((user) => user.id === ticket.updatedBy);
-        const assignedTo = userArray.find((user) => user.id === ticket.asignedTo);
-        const project = projectArray.find((proj) => proj.id === ticket.project);
+			// Convert records to arrays
+			const ticketArray = Object.values(ticketData);
+			const userArray = Object.values(userData);
+			const projectArray = Object.values(projectData);
 
-        return {
-          ...ticket,
-          updatedBy: updatedBy ? `${updatedBy.fname} ${updatedBy.lname}` : "Unknown",
-          assignedTo: assignedTo ? `${assignedTo.fname} ${assignedTo.lname}` : "Unassigned",
-          project, // Pass the full project object here
-        };
-      });
+			// Map ticket data and add user & project details
+			const ticketsWithDetails = ticketArray.map((ticket) => {
+				const updatedBy = userArray.find(
+					(user) => user.id === ticket.updatedBy
+				);
+				const assignedTo = userArray.find(
+					(user) => user.id === ticket.asignedTo
+				);
+				const project = projectArray.find(
+					(proj) => proj.id === ticket.project
+				);
 
-      setTickets(ticketsWithDetails);
-      setUsers(userArray);
-      setProjects(projectArray);
-    };
+				return {
+					...ticket,
+					updatedBy: updatedBy
+						? `${updatedBy.fname} ${updatedBy.lname}`
+						: "Unknown",
+					assignedTo: assignedTo
+						? `${assignedTo.fname} ${assignedTo.lname}`
+						: "Unassigned",
+					project, // Pass the full project object here
+				};
+			});
 
-    fetchData();
-  }, [status]);
+			setTickets(ticketsWithDetails);
+			setUsers(userArray);
+			setProjects(projectArray);
+		};
 
-  return (
-    <div className="flex w-1/3 flex-col space-y-4">
-      <div className="flex w-2xs items-center justify-between">
-        {status === "not-started" && <h1>Not Started</h1>}
-        {status === "in-progress" && <h1>In Progress</h1>}
-        {status === "completed" && <h1>Completed</h1>}
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="ghost" className="cursor-pointer">
-                <CirclePlus />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent className="rounded-md border bg-gray-100 p-2 text-gray-800 shadow-md">
-              <pre>Add Ticket</pre>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </div>
+		fetchData();
+	}, [status]);
 
-      {tickets.length > 0 ? (
-        tickets
-          .filter((ticket) => ticket.status === status)
-          .map((ticket) => (
-            <TicketCard key={ticket.id} {...ticket} />
-          ))
-      ) : (
-        <div>Loading tickets...</div>
-      )}
+	return (
+		<div className="flex w-1/3 flex-col space-y-4">
+			<div className="flex w-2xs items-center justify-between">
+				{status === "not-started" && <h1>Not Started</h1>}
+				{status === "in-progress" && <h1>In Progress</h1>}
+				{status === "completed" && <h1>Completed</h1>}
+				<TooltipProvider>
+					<Tooltip>
+						<TooltipTrigger asChild>
+							<Button variant="ghost" className="cursor-pointer">
+								<CirclePlus />
+							</Button>
+						</TooltipTrigger>
+						<TooltipContent className="rounded-md border bg-gray-100 p-2 text-gray-800 shadow-md">
+							<pre>Add Ticket</pre>
+						</TooltipContent>
+					</Tooltip>
+				</TooltipProvider>
+			</div>
 
-      <Button variant="ghost" className="w-2xs cursor-pointer">
-        <pre>Add Ticket</pre>
-      </Button>
-    </div>
-  );
+			{tickets.length > 0 ? (
+				tickets
+					.filter((ticket) => ticket.status === status)
+					.map((ticket) => <TicketCard key={ticket.id} {...ticket} />)
+			) : (
+				<div>Loading tickets...</div>
+			)}
+
+			<Button variant="ghost" className="w-2xs cursor-pointer">
+				<pre>Add Ticket</pre>
+			</Button>
+		</div>
+	);
 }
