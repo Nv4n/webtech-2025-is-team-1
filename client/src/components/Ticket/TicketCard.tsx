@@ -17,16 +17,14 @@ import {
 } from "@radix-ui/react-hover-card";
 import { Link } from "@tanstack/react-router";
 import { ProfileHoverCard } from "../Profile/ProfileHoverCard";
-import { Profile } from "../Profile/types/Profile";
-import { Project } from "../Project/types/Project";
 
 export type TicketCardProps = {
 	id: string;
 	title: string;
 	status: string;
 	updatedAt: Date;
-	updatedBy: Profile;
-	project: Project;
+	updatedBy: string;
+	project: string;
 };
 
 export function TicketCard({
@@ -58,7 +56,7 @@ export function TicketCard({
 				</CardHeader>
 				<CardContent className="flex flex-1 flex-col gap-2 px-4">
 					<Badge variant="default">
-						{project?.name || "No Project"}
+						{project || "No Project"}
 					</Badge>
 					{status && (
 						<Badge

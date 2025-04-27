@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
 	Tooltip,
@@ -10,70 +9,73 @@ import {
 // Fake API imports
 import { FakeProfileApi } from "../Profile/service/profileApi";
 import { FakeTicketApi } from "../Ticket/service/ticketApi";
-import { FakeProjectApi } from "../Project/service/projectApi";
-import { TicketCard } from "./TicketCard"; // Assuming TicketCard is another component you have
+import { FakeProjectApi } from "../Project/service/projectApi"; // Assuming TicketCard is another component you have
 import { CirclePlus } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { TicketCard } from "./TicketCard";
 
 // Types
 type TicketStatus = {
 	status: string;
 };
 
-export function TicketsGroup({ status }: TicketStatus) {
-	const [tickets, setTickets] = useState<any[]>([]);
-	const [users, setUsers] = useState<any[]>([]);
-	const [projects, setProjects] = useState<any[]>([]);
+function fetchTicketDetails() {
+  const { data: ticketList, isLoading: isLoadingTickets } = useQuery({
+    queryKey: ["tickets"],
+    queryFn: () => {
+      return FakeTicketApi().getTicketDetails();
+    },
+    select: (data) => {
+      return Object.values(data);
+    },
+  });
+  const { data: userList, isLoading: isLoadingUsers } = useQuery({
+    queryKey: ["users"],
+    queryFn: () => {
+      return FakeProfileApi().getProfileList();
+    },
+    select: (data) => {
+      return Object.values(data);
+    },
+  });
+  const { data: projectList, isLoading: isLoadingProjects } = useQuery({
+    queryKey: ["projects"],
+    queryFn: () => {
+      return FakeProjectApi().getProjectList();
+    },
+    select: (data) => {
+      return Object.values(data);
+    },
+  });
+	if (isLoadingProjects || isLoadingTickets || isLoadingUsers) {
+		return [];
+	}
+	if (!ticketList || !userList || !projectList) {
+		return [];
+	}
+	const ticketsWithDetails = ticketList.map((ticket) => {
+		const updatedBy = userList.find((user) => user.id === ticket.updatedBy);
+		const assignedTo = userList.find(
+			(user) => user.id === ticket.asignedTo
+		);
+		const project = projectList.find((proj) => proj.id === ticket.project);
 
-	useEffect(() => {
-		// Fetch ticket data, profile data (users), and project data
-		const fetchData = async () => {
-			const ticketApi = FakeTicketApi();
-			const profileApi = FakeProfileApi();
-			const projectApi = FakeProjectApi();
-
-			const [ticketData, userData, projectData] = await Promise.all([
-				ticketApi.getTicketDetails(),
-				profileApi.getProfileList(),
-				projectApi.getProjectList(),
-			]);
-
-			// Convert records to arrays
-			const ticketArray = Object.values(ticketData);
-			const userArray = Object.values(userData);
-			const projectArray = Object.values(projectData);
-
-			// Map ticket data and add user & project details
-			const ticketsWithDetails = ticketArray.map((ticket) => {
-				const updatedBy = userArray.find(
-					(user) => user.id === ticket.updatedBy
-				);
-				const assignedTo = userArray.find(
-					(user) => user.id === ticket.asignedTo
-				);
-				const project = projectArray.find(
-					(proj) => proj.id === ticket.project
-				);
-
-				return {
-					...ticket,
-					updatedBy: updatedBy
-						? `${updatedBy.fname} ${updatedBy.lname}`
-						: "Unknown",
-					assignedTo: assignedTo
-						? `${assignedTo.fname} ${assignedTo.lname}`
-						: "Unassigned",
-					project, // Pass the full project object here
-				};
-			});
-
-			setTickets(ticketsWithDetails);
-			setUsers(userArray);
-			setProjects(projectArray);
+		return {
+			...ticket,
+			updatedBy: updatedBy
+				? `${updatedBy.fname} ${updatedBy.lname}`
+				: "Unknown",
+			assignedTo: assignedTo
+				? `${assignedTo.fname} ${assignedTo.lname}`
+				: "Unassigned",
+			project,
 		};
+	});
+	return ticketsWithDetails;
+}
 
-		fetchData();
-	}, [status]);
-
+export function TicketsGroup({ status }: TicketStatus) {
+	const tickets = fetchTicketDetails();
 	return (
 		<div className="flex w-1/3 flex-col space-y-4">
 			<div className="flex w-2xs items-center justify-between">
@@ -93,11 +95,24 @@ export function TicketsGroup({ status }: TicketStatus) {
 					</Tooltip>
 				</TooltipProvider>
 			</div>
-
+    
 			{tickets.length > 0 ? (
 				tickets
 					.filter((ticket) => ticket.status === status)
-					.map((ticket) => <TicketCard key={ticket.id} {...ticket} />)
+					.map((ticket) =>
+						ticket.id && ticket.project?.id ? (
+							<TicketCard
+                updatedAt={ticket.updatedAt}
+								updatedBy={ticket.updatedBy}
+								project={ticket.project.id}
+								id={ticket.id}
+								title={ticket.title}
+								status={ticket.status}
+								key={ticket.id}
+								{...tickets}
+							></TicketCard>
+						) : null
+					)
 			) : (
 				<div>Loading tickets...</div>
 			)}
