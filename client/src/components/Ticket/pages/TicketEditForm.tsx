@@ -2,9 +2,7 @@
 
 import { FakeProfileApi } from "@/components/Profile/service/profileApi";
 import { FakeProjectApi } from "@/components/Project/service/projectApi";
-import {
-	FakeTicketApi
-} from "@/components/Ticket/service/ticketApi";
+import { FakeTicketApi } from "@/components/Ticket/service/ticketApi";
 import { Ticket, TicketSchema } from "@/components/Ticket/types/Ticket";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,15 +24,13 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-	useMutation,
-	useQuery,
-	useQueryClient
-} from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 export function TicketEditForm(id: string) {
+	const navigate = useNavigate();
 	const form = useForm<Ticket>({
 		resolver: zodResolver(TicketSchema),
 		defaultValues: {
@@ -81,8 +77,12 @@ export function TicketEditForm(id: string) {
 			return FakeTicketApi().updateTicket(data);
 		},
 		onSuccess: () => {
-			toast.success("Ticket created successfully!");
+			toast.success("Ticket updated successfully!");
 			queryClient.invalidateQueries({ queryKey: ["tickets", id] });
+			navigate({
+				to: "/tickets/$ticketId",
+				params: { ticketId: id },
+			});
 		},
 		onError: () => {
 			toast.error("Failed to create ticket.");
@@ -204,7 +204,9 @@ export function TicketEditForm(id: string) {
 								<FormLabel>Asignee</FormLabel>
 								<Select
 									onValueChange={field.onChange}
-									defaultValue={field.value}
+									defaultValue={
+										ticket.asignedTo || field.value
+									}
 								>
 									<FormControl>
 										<SelectTrigger>
@@ -234,8 +236,10 @@ export function TicketEditForm(id: string) {
 							<FormItem>
 								<FormLabel>Updated By</FormLabel>
 								<Select
-									defaultValue={field.value}
 									onValueChange={field.onChange}
+									defaultValue={
+										ticket.updatedBy || field.value
+									}
 								>
 									<FormControl>
 										<SelectTrigger>
@@ -268,7 +272,7 @@ export function TicketEditForm(id: string) {
 								<FormLabel>Project</FormLabel>
 
 								<Select
-									defaultValue={field.value}
+									defaultValue={ticket.project || field.value}
 									onValueChange={field.onChange}
 								>
 									<FormControl>
