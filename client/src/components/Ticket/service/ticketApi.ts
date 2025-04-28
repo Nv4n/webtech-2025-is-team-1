@@ -182,6 +182,7 @@ export const FakeTicketApi = () => {
 				}, 250);
 			});
 		}
+
 		tickets[ticket.id] = ticket;
 		return new Promise<Ticket>((resolve) => {
 			setTimeout(() => {

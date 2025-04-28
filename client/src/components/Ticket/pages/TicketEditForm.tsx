@@ -3,8 +3,7 @@
 import { FakeProfileApi } from "@/components/Profile/service/profileApi";
 import { FakeProjectApi } from "@/components/Project/service/projectApi";
 import {
-	createTicket,
-	FakeTicketApi,
+	FakeTicketApi
 } from "@/components/Ticket/service/ticketApi";
 import { Ticket, TicketSchema } from "@/components/Ticket/types/Ticket";
 import { Button } from "@/components/ui/button";
@@ -28,10 +27,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-	QueryClient,
 	useMutation,
 	useQuery,
-	useQueryClient,
+	useQueryClient
 } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -84,7 +82,6 @@ export function TicketEditForm(id: string) {
 		},
 		onSuccess: () => {
 			toast.success("Ticket created successfully!");
-			form.reset();
 			queryClient.invalidateQueries({ queryKey: ["tickets", id] });
 		},
 		onError: () => {
@@ -107,7 +104,20 @@ export function TicketEditForm(id: string) {
 	}
 
 	function onSubmit(data: Ticket) {
+		data = form.getValues();
 		data.updatedAt = new Date();
+		if (!data.asignedTo) {
+			data.asignedTo = ticket?.asignedTo;
+		}
+		if (!data.id) {
+			data.id = id;
+		}
+		if (!data.updatedBy) {
+			data.updatedBy = ticket?.updatedBy || data.updatedBy;
+		}
+		if (!data.project) {
+			data.project = ticket?.project || data.project;
+		}
 		mutation.mutate(data);
 	}
 
