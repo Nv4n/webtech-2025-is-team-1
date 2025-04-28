@@ -176,13 +176,18 @@ export const FakeTicketApi = () => {
 	};
 	const updateTicket = (ticket: Ticket) => {
 		if (!ticket.id) {
-			return;
+			return new Promise<Ticket | undefined>((resolve) => {
+				setTimeout(() => {
+					resolve(undefined);
+				}, 250);
+			});
 		}
 		tickets[ticket.id] = ticket;
+		return new Promise<Ticket>((resolve) => {
+			setTimeout(() => {
+				resolve(ticket);
+			}, 250);
+		});
 	};
 	return { getTicketDetails, updateTicket };
-};
-
-export const createTicket = async (ticket: Ticket) => {
-	return ticket;
 };

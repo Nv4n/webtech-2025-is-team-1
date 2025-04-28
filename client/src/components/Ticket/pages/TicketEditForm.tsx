@@ -80,12 +80,12 @@ export function TicketEditForm(id: string) {
 
 	const mutation = useMutation({
 		mutationFn: (data: Ticket) => {
-			queryClient.invalidateQueries({ queryKey: ["tickets", id] });
-			return createTicket(data);
+			return FakeTicketApi().updateTicket(data);
 		},
 		onSuccess: () => {
 			toast.success("Ticket created successfully!");
 			form.reset();
+			queryClient.invalidateQueries({ queryKey: ["tickets", id] });
 		},
 		onError: () => {
 			toast.error("Failed to create ticket.");
