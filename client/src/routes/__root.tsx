@@ -62,7 +62,7 @@ export const Route = createRootRoute({
 								</Tooltip>
 							</TooltipProvider>
 						</NavigationMenuItem>
-						<NavigationMenuItem>
+						{/* <NavigationMenuItem>
 							<Link
 								to="/tickets/$ticketId"
 								params={{ ticketId: "1" }}
@@ -74,8 +74,8 @@ export const Route = createRootRoute({
 							>
 								Tickets/1
 							</Link>
-						</NavigationMenuItem>
-						<NavigationMenuItem>
+						</NavigationMenuItem> */}
+						{/* <NavigationMenuItem>
 							<Link
 								to="/tickets/$ticketId/edit"
 								params={{ ticketId: "1" }}
@@ -87,7 +87,7 @@ export const Route = createRootRoute({
 							>
 								Tickets/1/edit
 							</Link>
-						</NavigationMenuItem>
+						</NavigationMenuItem> */}
 
 						<NavigationMenuItem>
 							<ThemeButton />

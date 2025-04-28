@@ -116,63 +116,65 @@ export function TestFilter() {
 
 		return (
 			<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-				<div>
-					<label
-						htmlFor="projectsFilters"
-						className="block text-sm font-medium text-gray-700"
-					>
-						Select Filters By Projects
-					</label>
-					<Controller
-						name="projectsFilters"
-						control={control}
-						render={({ field }) => (
-							<MultiSelect
-								name="projects-filters"
-								options={projectFiltersList || []}
-								onValueChange={field.onChange}
-								placeholder="Select Filters By Projects"
-								variant="inverted"
-								animation={2}
-								maxCount={3}
-							/>
+				<div className="flex flex-wrap gap-4">
+					<div className="min-w-[250px] flex-1">
+						<label
+							htmlFor="projectsFilters"
+							className="mb-1 block text-sm font-medium text-gray-700"
+						>
+							Select Filters By Projects
+						</label>
+						<Controller
+							name="projectsFilters"
+							control={control}
+							render={({ field }) => (
+								<MultiSelect
+									name="projects-filters"
+									options={projectFiltersList || []}
+									onValueChange={field.onChange}
+									placeholder="Select Filters By Projects"
+									variant="inverted"
+									animation={2}
+									maxCount={3}
+								/>
+							)}
+						/>
+						{errors.projectsFilters && (
+							<p className="text-sm text-red-500">
+								{errors.projectsFilters.message}
+							</p>
 						)}
-					/>
-					{errors.projectsFilters && (
-						<p className="text-sm text-red-500">
-							{errors.projectsFilters.message}
-						</p>
-					)}
-				</div>
+					</div>
 
-				<div>
-					<label
-						htmlFor="statusesFilters"
-						className="block text-sm font-medium text-gray-700"
-					>
-						Select Filters By Status
-					</label>
-					<Controller
-						name="statusesFilters"
-						control={control}
-						render={({ field }) => (
-							<MultiSelect
-								{...field}
-								onValueChange={field.onChange}
-								id="statusesFilters"
-								options={statusFiltersList || []} 
-								placeholder="Select Filters By Status"
-								variant="inverted"
-								animation={2}
-								maxCount={3}
-							/>
+					<div className="min-w-[250px] flex-1">
+						<label
+							htmlFor="statusesFilters"
+							className="mb-1 block text-sm font-medium text-gray-700"
+						>
+							Select Filters By Status
+						</label>
+						<Controller
+							name="statusesFilters"
+							control={control}
+							render={({ field }) => (
+								<MultiSelect
+									{...field}
+									onValueChange={field.onChange}
+									id="statusesFilters"
+									options={statusFiltersList || []}
+									placeholder="Select Filters By Status"
+									variant="inverted"
+									animation={2}
+									maxCount={3}
+								/>
+							)}
+						/>
+						{errors.statusesFilters && (
+							<p className="text-sm text-red-500">
+								{errors.statusesFilters.message}
+							</p>
 						)}
-					/>
-					{errors.statusesFilters && (
-						<p className="text-sm text-red-500">
-							{errors.statusesFilters.message}
-						</p>
-					)}
+					</div>
 				</div>
 
 				<button

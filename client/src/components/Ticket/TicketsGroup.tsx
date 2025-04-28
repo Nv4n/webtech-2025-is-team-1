@@ -85,7 +85,7 @@ export function TicketsGroup({ status }: TicketStatus) {
 								<CirclePlus />
 							</Button>
 						</TooltipTrigger>
-						<TooltipContent className="rounded-md border bg-gray-100 p-2 text-gray-800 shadow-md">
+						<TooltipContent className="rounded-md z-10 border bg-gray-100 p-2 text-gray-800 shadow-md">
 							<pre>Add Ticket</pre>
 						</TooltipContent>
 					</Tooltip>
