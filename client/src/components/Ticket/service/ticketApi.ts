@@ -187,7 +187,7 @@ export const FakeTicketApi = () => {
 		return new Promise<Ticket>((resolve) => {
 			setTimeout(() => {
 				resolve(ticket);
-			}, 250);
+			}, 1000);
 		});
 	};
 	return { getTicketDetails, updateTicket };
