@@ -1,5 +1,5 @@
 import js from "@eslint/js";
-import pluginQuery from '@tanstack/eslint-plugin-query';
+import pluginQuery from "@tanstack/eslint-plugin-query";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 import reactDom from "eslint-plugin-react-dom";
 import reactHooks from "eslint-plugin-react-hooks";
@@ -9,12 +9,12 @@ import globals from "globals";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-	{ ignores: ["dist", "vite.config.*", "tsconfig.*"] },
+	{ ignores: ["dist", "vite.config.*", "tsconfig.*", "node_modules"] },
 	{
 		extends: [
 			js.configs.recommended,
 			...tseslint.configs.recommendedTypeChecked,
-			...pluginQuery.configs['flat/recommended'],
+			...pluginQuery.configs["flat/recommended"],
 			eslintPluginPrettierRecommended,
 			"prettier",
 		],
