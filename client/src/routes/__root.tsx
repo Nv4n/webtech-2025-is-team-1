@@ -5,21 +5,32 @@ import {
 	NavigationMenuList,
 	navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import {
-	TooltipProvider,
-	Tooltip,
-	TooltipTrigger,
-	TooltipContent,
-} from "@radix-ui/react-tooltip";
-import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
+	CatchBoundary,
+	createRootRoute,
+	Link,
+	Outlet,
+	useLocation,
+	useNavigate,
+} from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+import { toast } from "sonner";
 
 const NavMenuLinkStyles =
 	"data-[active=true]:focus:bg-accent data-[active=true]:hover:bg-accent data-[active=true]:bg-accent/50 data-[active=true]:text-accent-foreground hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:ring-ring/50 [&_svg:not([class*='text-'])]:text-muted-foreground flex flex-col gap-1 rounded-sm p-2 text-sm transition-all outline-none focus-visible:ring-[3px] focus-visible:outline-1 [&_svg:not([class*='size-'])]:size-4";
 
 export const Route = createRootRoute({
 	component: () => {
+		const location = useLocation();
+		const navigate = useNavigate();
+
 		return (
 			<>
 				<NavigationMenu>
@@ -47,7 +58,7 @@ export const Route = createRootRoute({
 												navigationMenuTriggerStyle()
 											)}
 											data-slot="navigation-menu-link"
-											disabled
+											// disabled
 										>
 											Profile
 										</Link>
@@ -95,7 +106,17 @@ export const Route = createRootRoute({
 					</NavigationMenuList>
 				</NavigationMenu>
 				<hr className="mb-4" />
-				<Outlet />
+				<CatchBoundary
+					onCatch={(error) => {
+						toast.error(error.message);
+						navigate({ to: "/" });
+					}}
+					getResetKey={() => {
+						return location.pathname;
+					}}
+				>
+					<Outlet />
+				</CatchBoundary>
 				<TanStackRouterDevtools />
 			</>
 		);

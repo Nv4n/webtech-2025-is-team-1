@@ -2,7 +2,8 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/profile")({
 	beforeLoad: async () => {
-		throw redirect({ to: "/", replace: true });
+		throw new Error("TEST LINK ERRORS");
+		// throw redirect({ to: "/", replace: true });
 	},
 	component: RouteComponent,
 });
