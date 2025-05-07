@@ -3,15 +3,17 @@ import { ProjectSchema } from "@/components/Project/types/Project";
 import { z } from "zod";
 
 export const TicketSchema = z.object({
-	id: z.string().optional(), // set to optional to skip mandatory check
-	title: z.string().min(3),
+	id: z.coerce.string().optional(), // set to optional to skip mandatory check
+	title: z.string().min(3).max(200),
 	status: z.enum(["not-started", "in-progress", "completed"]),
+	priority: z.enum(["Low", "Medium", "High"]),
 	description: z.string().min(10),
-	asignedTo: UserSchema.shape.id,
+	assignee: UserSchema.shape.id,
+	project: ProjectSchema.pick({ id: true }).required().shape.id,
+	author: UserSchema.shape.id,
 	createdAt: z.date(),
 	updatedAt: z.date(),
 	updatedBy: UserSchema.pick({ id: true }).required().shape.id,
-	project: ProjectSchema.pick({ id: true }).required().shape.id,
 });
 
 export type Ticket = z.infer<typeof TicketSchema>;

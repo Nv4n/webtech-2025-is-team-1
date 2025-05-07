@@ -10,7 +10,7 @@ let tickets: Record<string, Ticket> = {
 		updatedAt: new Date("2025-04-12T14:30:00Z"),
 		updatedBy: "2",
 		project: "1",
-		asignedTo: "5",
+		assignee: "5",
 	},
 	"2": {
 		id: "2",
@@ -33,7 +33,7 @@ let tickets: Record<string, Ticket> = {
 		updatedAt: new Date("2025-04-11T13:00:00Z"),
 		updatedBy: "4",
 		project: "3",
-		asignedTo: "6",
+		assignee: "6",
 	},
 	"4": {
 		id: "4",
@@ -44,7 +44,7 @@ let tickets: Record<string, Ticket> = {
 		updatedAt: new Date("2025-04-07T15:15:00Z"),
 		updatedBy: "3",
 		project: "4",
-		asignedTo: "1",
+		assignee: "1",
 	},
 	"5": {
 		id: "5",
@@ -65,7 +65,7 @@ let tickets: Record<string, Ticket> = {
 		updatedAt: new Date("2025-04-10T10:00:00Z"),
 		updatedBy: "6",
 		project: "6",
-		asignedTo: "9",
+		assignee: "9",
 	},
 	"7": {
 		id: "7",
@@ -76,7 +76,7 @@ let tickets: Record<string, Ticket> = {
 		updatedAt: new Date("2025-04-02T15:45:00Z"),
 		updatedBy: "5",
 		project: "1",
-		asignedTo: "2",
+		assignee: "2",
 	},
 	"8": {
 		id: "8",
@@ -97,7 +97,7 @@ let tickets: Record<string, Ticket> = {
 		updatedAt: new Date("2025-04-13T09:00:00Z"),
 		updatedBy: "9",
 		project: "3",
-		asignedTo: "4",
+		assignee: "4",
 	},
 	"10": {
 		id: "10",
@@ -118,7 +118,7 @@ let tickets: Record<string, Ticket> = {
 		updatedAt: new Date("2025-04-08T10:00:00Z"),
 		updatedBy: "1",
 		project: "5",
-		asignedTo: "3",
+		assignee: "3",
 	},
 	"12": {
 		id: "12",
@@ -129,7 +129,7 @@ let tickets: Record<string, Ticket> = {
 		updatedAt: new Date("2025-04-05T17:00:00Z"),
 		updatedBy: "2",
 		project: "6",
-		asignedTo: "8",
+		assignee: "8",
 	},
 	"13": {
 		id: "13",
@@ -141,7 +141,7 @@ let tickets: Record<string, Ticket> = {
 		updatedAt: new Date("2025-04-10T12:00:00Z"),
 		updatedBy: "4",
 		project: "1",
-		asignedTo: "7",
+		assignee: "7",
 	},
 	"14": {
 		id: "14",
@@ -162,7 +162,7 @@ let tickets: Record<string, Ticket> = {
 		updatedAt: new Date("2025-04-07T14:00:00Z"),
 		updatedBy: "6",
 		project: "3",
-		asignedTo: "10",
+		assignee: "10",
 	},
 };
 

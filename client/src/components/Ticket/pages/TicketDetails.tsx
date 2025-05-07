@@ -99,13 +99,13 @@ export const TicketDetails = (id: string) => {
 					<p>{ticket.description}</p>
 				</CardContent>
 				<CardFooter className="flex flex-col items-start gap-4">
-					{ticket.asignedTo && (
+					{ticket.assignee && (
 						<UserHoverCard
-							id={ticket.asignedTo}
+							id={ticket.assignee}
 							content={"is assigned to issue"}
 						/>
 					)}
-					{ticket.asignedTo && (
+					{ticket.assignee && (
 						<UserHoverCard
 							id={ticket.updatedBy}
 							content={"last updated issue"}

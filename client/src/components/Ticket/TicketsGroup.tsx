@@ -55,9 +55,7 @@ function fetchTicketDetails() {
 	}
 	const ticketsWithDetails = ticketList.map((ticket) => {
 		const updatedBy = userList.find((user) => user.id === ticket.updatedBy);
-		const assignedTo = userList.find(
-			(user) => user.id === ticket.asignedTo
-		);
+		const assignedTo = userList.find((user) => user.id === ticket.assignee);
 		const project = projectList.find((proj) => proj.id === ticket.project);
 
 		return {

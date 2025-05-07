@@ -37,7 +37,7 @@ export function TicketEditForm(id: string) {
 			title: "",
 			status: "not-started",
 			description: "",
-			asignedTo: "",
+			assignee: "",
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			updatedBy: "",
@@ -106,8 +106,8 @@ export function TicketEditForm(id: string) {
 	function onSubmit(data: Ticket) {
 		data = form.getValues();
 		data.updatedAt = new Date();
-		if (!data.asignedTo) {
-			data.asignedTo = ticket?.asignedTo;
+		if (!data.assignee) {
+			data.assignee = ticket?.assignee;
 		}
 		if (!data.id) {
 			data.id = id;
@@ -205,7 +205,7 @@ export function TicketEditForm(id: string) {
 								<Select
 									onValueChange={field.onChange}
 									defaultValue={
-										ticket.asignedTo || field.value
+										ticket.assignee || field.value
 									}
 								>
 									<FormControl>
