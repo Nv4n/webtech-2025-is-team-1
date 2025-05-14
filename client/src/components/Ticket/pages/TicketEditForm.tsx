@@ -1,8 +1,11 @@
 "use client";
 
-import { FakeProfileApi } from "@/components/Profile/service/profileApi";
-import { FakeProjectApi } from "@/components/Project/service/projectApi";
-import { FakeTicketApi } from "@/components/Ticket/service/ticketApi";
+import { useGetUserList } from "@/components/Profile/service/profileQueries";
+import { useGetProjectList } from "@/components/Project/service/projectQueries";
+import {
+	useGetTicket,
+	useUpdateTicket,
+} from "@/components/Ticket/service/ticketQueries";
 import { Ticket, TicketSchema } from "@/components/Ticket/types/Ticket";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,67 +27,40 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 
 export function TicketEditForm(id: string) {
-	const navigate = useNavigate();
+	const { data: ticket, isLoading: isTicketLoading } = useGetTicket(id);
+
 	const form = useForm<Ticket>({
 		resolver: zodResolver(TicketSchema),
-		defaultValues: {
-			title: "",
-			status: "not-started",
-			description: "",
-			assignee: "",
-			createdAt: new Date(),
-			updatedAt: new Date(),
-			updatedBy: "",
-			project: "",
-			priority: "Low",
-		},
-	});
-	const queryClient = useQueryClient();
-
-	const { data: ticket, isLoading: isTicketLoading } = useQuery({
-		queryKey: ["tickets", id],
-		queryFn: () => FakeTicketApi().getTicketDetails(),
-		select: (data) => {
-			return Object.entries(data).filter(([key, _]) => key === id)[0][1];
-		},
-	});
-
-	const { data: users, isLoading: isUsersLoading } = useQuery({
-		queryKey: ["users"],
-		queryFn: () => {
-			return FakeProfileApi().getProfileList();
-		},
+		defaultValues: async () =>
+			new Promise((resolve) => {
+				if (!isTicketLoading) {
+					console.log(ticket);
+					if (ticket) {
+						resolve({ ...ticket });
+					}
+					resolve({
+						title: "",
+						status: "not-started",
+						description: "",
+						assignee: "",
+						createdAt: new Date(),
+						updatedAt: new Date(),
+						updatedBy: "",
+						project: "",
+						priority: "Low",
+					});
+				}
+			}),
 	});
 
-	const { data: projects, isLoading: isProjectsLoading } = useQuery({
-		queryKey: ["projects"],
-		queryFn: () => {
-			return FakeProjectApi().getProjectList();
-		},
-	});
+	const { data: users, isLoading: isUsersLoading } = useGetUserList();
+	const { data: projects, isLoading: isProjectsLoading } =
+		useGetProjectList();
 
-	const mutation = useMutation({
-		mutationFn: (data: Ticket) => {
-			return FakeTicketApi().updateTicket(data);
-		},
-		onSuccess: () => {
-			toast.success("Ticket updated successfully!");
-			queryClient.invalidateQueries({ queryKey: ["tickets", id] });
-			navigate({
-				to: "/tickets/$ticketId",
-				params: { ticketId: id },
-			});
-		},
-		onError: () => {
-			toast.error("Failed to create ticket.");
-		},
-	});
+	const { mutation: updateTicket } = useUpdateTicket(id);
 
 	if (isTicketLoading || isUsersLoading || isProjectsLoading) {
 		return (
@@ -117,15 +93,8 @@ export function TicketEditForm(id: string) {
 		if (!data.project) {
 			data.project = ticket?.project || data.project;
 		}
-		mutation.mutate(data);
+		updateTicket.mutate(data);
 	}
-
-	form.setValue("title", ticket?.title || "");
-	form.setValue("description", ticket?.description || "");
-	form.setValue("assignee", ticket?.assignee || "");
-	form.setValue("project", ticket?.project || "");
-	form.setValue("updatedBy", ticket?.updatedBy || "");
-	form.setValue("status", ticket?.status || "not-started");
 
 	return (
 		ticket && (
@@ -303,8 +272,8 @@ export function TicketEditForm(id: string) {
 						)}
 					/>
 
-					<Button type="submit" disabled={mutation.isPending}>
-						{mutation.isPending ? "Submitting..." : "Submit"}
+					<Button type="submit" disabled={updateTicket.isPending}>
+						{updateTicket.isPending ? "Submitting..." : "Submit"}
 					</Button>
 				</form>
 			</Form>
