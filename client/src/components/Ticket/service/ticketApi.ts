@@ -11,6 +11,7 @@ let tickets: Record<string, Ticket> = {
 		updatedBy: "2",
 		project: "1",
 		assignee: "5",
+		priority: "Low",
 	},
 	"2": {
 		id: "2",
@@ -22,6 +23,7 @@ let tickets: Record<string, Ticket> = {
 		updatedAt: new Date("2025-04-08T08:20:00Z"),
 		updatedBy: "1",
 		project: "2",
+		priority: "Low",
 	},
 	"3": {
 		id: "3",
@@ -34,6 +36,7 @@ let tickets: Record<string, Ticket> = {
 		updatedBy: "4",
 		project: "3",
 		assignee: "6",
+		priority: "Low",
 	},
 	"4": {
 		id: "4",
@@ -45,6 +48,7 @@ let tickets: Record<string, Ticket> = {
 		updatedBy: "3",
 		project: "4",
 		assignee: "1",
+		priority: "Low",
 	},
 	"5": {
 		id: "5",
@@ -55,6 +59,7 @@ let tickets: Record<string, Ticket> = {
 		updatedAt: new Date("2025-04-14T07:00:00Z"),
 		updatedBy: "7",
 		project: "5",
+		priority: "Low",
 	},
 	"6": {
 		id: "6",
@@ -66,6 +71,7 @@ let tickets: Record<string, Ticket> = {
 		updatedBy: "6",
 		project: "6",
 		assignee: "9",
+		priority: "Low",
 	},
 	"7": {
 		id: "7",
@@ -77,6 +83,7 @@ let tickets: Record<string, Ticket> = {
 		updatedBy: "5",
 		project: "1",
 		assignee: "2",
+		priority: "Low",
 	},
 	"8": {
 		id: "8",
@@ -87,6 +94,7 @@ let tickets: Record<string, Ticket> = {
 		updatedAt: new Date("2025-04-09T13:00:00Z"),
 		updatedBy: "8",
 		project: "2",
+		priority: "Low",
 	},
 	"9": {
 		id: "9",
@@ -98,6 +106,7 @@ let tickets: Record<string, Ticket> = {
 		updatedBy: "9",
 		project: "3",
 		assignee: "4",
+		priority: "Low",
 	},
 	"10": {
 		id: "10",
@@ -108,6 +117,7 @@ let tickets: Record<string, Ticket> = {
 		updatedAt: new Date("2025-04-13T11:00:00Z"),
 		updatedBy: "10",
 		project: "4",
+		priority: "Low",
 	},
 	"11": {
 		id: "11",
@@ -119,6 +129,7 @@ let tickets: Record<string, Ticket> = {
 		updatedBy: "1",
 		project: "5",
 		assignee: "3",
+		priority: "Low",
 	},
 	"12": {
 		id: "12",
@@ -130,6 +141,7 @@ let tickets: Record<string, Ticket> = {
 		updatedBy: "2",
 		project: "6",
 		assignee: "8",
+		priority: "Low",
 	},
 	"13": {
 		id: "13",
@@ -142,6 +154,7 @@ let tickets: Record<string, Ticket> = {
 		updatedBy: "4",
 		project: "1",
 		assignee: "7",
+		priority: "Low",
 	},
 	"14": {
 		id: "14",
@@ -152,6 +165,7 @@ let tickets: Record<string, Ticket> = {
 		updatedAt: new Date("2025-04-12T10:00:00Z"),
 		updatedBy: "5",
 		project: "2",
+		priority: "Low",
 	},
 	"15": {
 		id: "15",
@@ -163,6 +177,7 @@ let tickets: Record<string, Ticket> = {
 		updatedBy: "6",
 		project: "3",
 		assignee: "10",
+		priority: "Low",
 	},
 };
 

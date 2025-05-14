@@ -42,6 +42,7 @@ export function TicketEditForm(id: string) {
 			updatedAt: new Date(),
 			updatedBy: "",
 			project: "",
+			priority: "Low",
 		},
 	});
 	const queryClient = useQueryClient();
@@ -50,13 +51,9 @@ export function TicketEditForm(id: string) {
 		queryKey: ["tickets", id],
 		queryFn: () => FakeTicketApi().getTicketDetails(),
 		select: (data) => {
-			console.log(data);
-			console.log(id);
-
 			return Object.entries(data).filter(([key, _]) => key === id)[0][1];
 		},
 	});
-	console.log(ticket);
 
 	const { data: users, isLoading: isUsersLoading } = useQuery({
 		queryKey: ["users"],
@@ -125,6 +122,11 @@ export function TicketEditForm(id: string) {
 
 	form.setValue("title", ticket?.title || "");
 	form.setValue("description", ticket?.description || "");
+	form.setValue("assignee", ticket?.assignee || "");
+	form.setValue("project", ticket?.project || "");
+	form.setValue("updatedBy", ticket?.updatedBy || "");
+	form.setValue("status", ticket?.status || "not-started");
+
 	return (
 		ticket && (
 			<Form {...form}>
