@@ -1,5 +1,3 @@
-"use client";
-
 import { useGetUserList } from "@/components/Profile/service/profileQueries";
 import { useGetProjectList } from "@/components/Project/service/projectQueries";
 import {
@@ -27,59 +25,37 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 export function TicketEditForm(id: string) {
-	const { data: ticket, isLoading: isTicketLoading } = useGetTicket(id);
-
 	const form = useForm<Ticket>({
 		resolver: zodResolver(TicketSchema),
-		defaultValues: async () =>
-			new Promise((resolve) => {
-				if (!isTicketLoading) {
-					console.log(ticket);
-					if (ticket) {
-						resolve({ ...ticket });
-					}
-					resolve({
-						title: "",
-						status: "not-started",
-						description: "",
-						assignee: "",
-						createdAt: new Date(),
-						updatedAt: new Date(),
-						updatedBy: "",
-						project: "",
-						priority: "Low",
-					});
-				}
-			}),
+		defaultValues: {
+			title: "Default title",
+			status: "not-started",
+			priority: "Low",
+			description: "Default description",
+			createdAt: new Date(),
+			project: "1",
+			updatedAt: new Date(),
+			updatedBy: "1",
+			id: id,
+			assignee: "1",
+			author: "1",
+		},
 	});
 
+	const { data: ticket, isLoading: isTicketLoading } = useGetTicket(id);
 	const { data: users, isLoading: isUsersLoading } = useGetUserList();
 	const { data: projects, isLoading: isProjectsLoading } =
 		useGetProjectList();
 
 	const { mutation: updateTicket } = useUpdateTicket(id);
 
-	if (isTicketLoading || isUsersLoading || isProjectsLoading) {
-		return (
-			<>
-				<div className="mx-auto my-0 w-fit flex-col space-y-3">
-					<Skeleton className="h-[125px] w-[250px] rounded-xl" />
-					<div className="space-y-2">
-						<Skeleton className="h-4 w-[250px]" />
-						<Skeleton className="h-4 w-[200px]" />
-					</div>
-				</div>
-			</>
-		);
-	}
-
 	function onSubmit(data: Ticket) {
 		console.log(data);
 
-		data = form.getValues();
 		data.updatedAt = new Date();
 		if (!data.assignee) {
 			data.assignee = ticket?.assignee;
@@ -96,8 +72,27 @@ export function TicketEditForm(id: string) {
 		updateTicket.mutate(data);
 	}
 
+	if (isTicketLoading || isUsersLoading || isProjectsLoading) {
+		return (
+			<>
+				<div className="mx-auto my-0 w-fit flex-col space-y-3">
+					<Skeleton className="h-[125px] w-[250px] rounded-xl" />
+					<div className="space-y-2">
+						<Skeleton className="h-4 w-[250px]" />
+						<Skeleton className="h-4 w-[200px]" />
+					</div>
+				</div>
+			</>
+		);
+	}
+
+	if (!ticket) {
+		throw new Error("No such ticket");
+	}
+	// form.reset({ ...ticket });
+
 	return (
-		ticket && (
+		<>
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit((data) => onSubmit(data))}
@@ -128,11 +123,11 @@ export function TicketEditForm(id: string) {
 								<FormLabel>Status</FormLabel>
 								<Select
 									onValueChange={field.onChange}
-									defaultValue={ticket.status}
+									defaultValue={ticket.status || field.value}
 								>
 									<FormControl>
 										<SelectTrigger>
-											<SelectValue placeholder="Select a verified email to display" />
+											<SelectValue placeholder="Select status" />
 										</SelectTrigger>
 									</FormControl>
 									<SelectContent>
@@ -271,12 +266,47 @@ export function TicketEditForm(id: string) {
 							</FormItem>
 						)}
 					/>
+					<FormField
+						control={form.control}
+						name="priority"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Priority</FormLabel>
+
+								<Select
+									defaultValue={
+										ticket.priority || field.value
+									}
+									onValueChange={field.onChange}
+								>
+									<FormControl>
+										<SelectTrigger>
+											<SelectValue placeholder="Select priority" />
+										</SelectTrigger>
+									</FormControl>
+									<SelectContent>
+										{Object.values(
+											TicketSchema.shape.priority.options
+										).map((priority) => (
+											<SelectItem
+												key={priority}
+												value={priority}
+											>
+												{priority}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
 
 					<Button type="submit" disabled={updateTicket.isPending}>
 						{updateTicket.isPending ? "Submitting..." : "Submit"}
 					</Button>
 				</form>
 			</Form>
-		)
+		</>
 	);
 }
