@@ -104,6 +104,8 @@ export function TicketEditForm(id: string) {
 	}
 
 	function onSubmit(data: Ticket) {
+		console.log(data);
+
 		data = form.getValues();
 		data.updatedAt = new Date();
 		if (!data.assignee) {
@@ -127,7 +129,7 @@ export function TicketEditForm(id: string) {
 		ticket && (
 			<Form {...form}>
 				<form
-					onSubmit={form.handleSubmit(onSubmit)}
+					onSubmit={form.handleSubmit((data) => onSubmit(data))}
 					className="space-y-6"
 				>
 					<FormField
@@ -198,7 +200,7 @@ export function TicketEditForm(id: string) {
 
 					<FormField
 						control={form.control}
-						name="asignedTo"
+						name="assignee"
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Asignee</FormLabel>
