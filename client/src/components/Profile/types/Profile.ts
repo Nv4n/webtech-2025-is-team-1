@@ -10,6 +10,7 @@ export const UserSchema = z.object({
 	email: z.string().email().max(100),
 	role: z.string().min(3).max(20),
 });
+
 export type User = z.infer<typeof UserSchema>;
 
 export const ProfileSchema = UserSchema.pick({
