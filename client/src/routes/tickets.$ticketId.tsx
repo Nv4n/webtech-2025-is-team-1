@@ -1,4 +1,4 @@
-import { TicketDetails } from "@/components/Ticket/pages/TicketDetails";
+import { TicketDetails } from "@/features/Ticket/pages/TicketDetails";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/tickets/$ticketId")({
