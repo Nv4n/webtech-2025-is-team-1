@@ -1,6 +1,6 @@
 import { LabelSpan } from "@/components/LabelSpan";
-import { TicketDate } from "@/features/Ticket/types/TicketDate";
 import { Badge } from "@/components/ui/badge";
+import { TicketDate } from "@/features/Ticket/types/TicketDate";
 
 export function _Date({ labelContent, date }: TicketDate) {
 	return (

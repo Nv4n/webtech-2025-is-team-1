@@ -1,8 +1,6 @@
-"use client";
-
-import { FakeProjectApi } from "@/features/Project/service/projectApi";
 import { Button } from "@/components/ui/button";
 import { MultiSelect } from "@/components/ui/multi-select";
+import { FakeProjectApi } from "@/features/Project/service/projectApi";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { FolderDot, ListTodo } from "lucide-react";

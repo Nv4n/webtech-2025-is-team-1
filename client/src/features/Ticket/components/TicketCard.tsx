@@ -1,3 +1,5 @@
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import {
 	Card,
 	CardContent,
@@ -5,19 +7,11 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-
-import { Badge } from "@/components/ui/badge";
-
-import { _Date } from "@/features/Ticket/TicketDateBadge";
-import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
-import {
-	HoverCard,
-	HoverCardContent,
-	HoverCardTrigger,
-} from "@radix-ui/react-hover-card";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { ProfileHoverCard } from "@/features/Profile/components/ProfileHoverCard";
+import { getInitials } from "@/features/Profile/utils/getInitials";
+import { _Date } from "@/features/Ticket/components/TicketDateBadge";
 import { Link } from "@tanstack/react-router";
-import { ProfileHoverCard } from "../Profile/ProfileHoverCard";
-import { getInitials } from "../Profile/utils/getInitials";
 
 export type TicketCardProps = {
 	id: string;

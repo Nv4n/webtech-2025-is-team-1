@@ -1,7 +1,7 @@
-import { FakeProfileApi } from "@/features/Profile/service/profileApi";
-import { getInitials } from "@/features/Profile/utils/getInitials";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
+import { FakeProfileApi } from "@/features/Profile/service/profileApi";
+import { getInitials } from "@/features/Profile/utils/getInitials";
 import { useQuery } from "@tanstack/react-query";
 import { CalendarIcon } from "lucide-react";
 

@@ -1,5 +1,5 @@
-import { TestFilter } from "@/features/Ticket/TicketFilter";
-import { TicketsGroup } from "@/features/Ticket/TicketsGroup";
+import { TestFilter } from "@/features/Ticket/components/TicketFilter";
+import { TicketsGroup } from "@/features/Ticket/components/TicketsGroup";
 
 export function TicketsDashboard() {
 	return (

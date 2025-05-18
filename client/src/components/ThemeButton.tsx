@@ -1,7 +1,6 @@
-import { Moon, Sun } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import { useDarkMode } from "@/hooks/usehooks-ts/useDarkTheme";
+import { Moon, Sun } from "lucide-react";
 
 const htmlElement = document.getElementById("html")!;
 

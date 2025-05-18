@@ -1,18 +1,11 @@
 import { Button } from "@/components/ui/button";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTrigger,
-} from "@radix-ui/react-tooltip";
-
-// Fake API imports
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { FakeProfileApi } from "@/features/Profile/service/profileApi";
+import { FakeProjectApi } from "@/features/Project/service/projectApi";
+import { TicketCard } from "@/features/Ticket/components/TicketCard";
+import { FakeTicketApi } from "@/features/Ticket/service/ticketApi";
 import { useQuery } from "@tanstack/react-query";
 import { CirclePlus } from "lucide-react";
-import { FakeProfileApi } from "../Profile/service/profileApi";
-import { FakeProjectApi } from "../Project/service/projectApi"; // Assuming TicketCard is another component you have
-import { FakeTicketApi } from "./service/ticketApi";
-import { TicketCard } from "./TicketCard";
 
 // Types
 type TicketStatus = {

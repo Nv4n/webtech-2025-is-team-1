@@ -1,8 +1,3 @@
-import { ProfileHoverCard } from "@/features/Profile/components/ProfileHoverCard";
-import { FakeProfileApi } from "@/features/Profile/service/profileApi";
-import { getInitials } from "@/features/Profile/utils/getInitials";
-import { FakeProjectApi } from "@/features/Project/service/projectApi";
-import { FakeTicketApi } from "@/features/Ticket/service/ticketApi";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -19,6 +14,11 @@ import {
 	HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ProfileHoverCard } from "@/features/Profile/components/ProfileHoverCard";
+import { FakeProfileApi } from "@/features/Profile/service/profileApi";
+import { getInitials } from "@/features/Profile/utils/getInitials";
+import { FakeProjectApi } from "@/features/Project/service/projectApi";
+import { FakeTicketApi } from "@/features/Ticket/service/ticketApi";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { Pencil } from "lucide-react";
