@@ -1,4 +1,4 @@
-import { TicketsDashboard } from "@/components/Ticket/TicketsDashBoard";
+import { TicketsDashboard } from "@/features/Ticket/pages/TicketsDashBoard";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({

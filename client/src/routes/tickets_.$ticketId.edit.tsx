@@ -1,4 +1,4 @@
-import { TicketEditForm } from "@/components/Ticket/pages/TicketEditForm";
+import { TicketEditForm } from "@/features/Ticket/pages/TicketEditForm";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/tickets_/$ticketId/edit")({
