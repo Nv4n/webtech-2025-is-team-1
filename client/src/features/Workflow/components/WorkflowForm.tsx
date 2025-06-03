@@ -17,6 +17,10 @@ import {
 	Edge,
 	OnNodesChange,
 	OnEdgesChange,
+	applyNodeChanges,
+	NodeChange,
+	EdgeChange,
+	applyEdgeChanges,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 
@@ -36,6 +40,8 @@ const edgeSchema = z.object({
 	source: z.string(),
 	target: z.string(),
 	label: z.string().optional(),
+	sourceHandle: z.string().nullable().optional(),
+	targetHandle: z.string().nullable().optional(),
 });
 
 const formSchema = z.object({
@@ -130,9 +136,9 @@ function FlowEditor({
 	);
 }
 
-export default function CreateProjectForm() {
-	const [initialNodes, setInitialNodes] = useState<Node[]>([]);
-	const [initialEdges, setInitialEdges] = useState<Edge[]>([]);
+export const CreateProjectForm = () => {
+	const [initialNodes, setNodes] = useState<Node[]>([]);
+	const [initialEdges, setEdges] = useState<Edge[]>([]);
 
 	useEffect(() => {
 		// Replace with your API call
@@ -150,8 +156,8 @@ export default function CreateProjectForm() {
 				data: { label: s.label },
 			}));
 
-			setInitialNodes(nodes);
-			setInitialEdges([]);
+			setNodes(nodes);
+			setEdges([]);
 		};
 
 		fetchStatuses();
@@ -167,10 +173,25 @@ export default function CreateProjectForm() {
 	});
 
 	const { handleSubmit, register, setValue, control, watch } = form;
+	const onNodesChange = useCallback(
+		(changes: NodeChange<Node>[]) => {
+			setNodes((nds) => applyNodeChanges(changes, nds));
+			setValue("nodes", z.array(nodeSchema).parse(initialNodes));
+		},
+		[setNodes, initialNodes, setValue]
+	);
+
+	const onEdgesChange = useCallback(
+		(changes: EdgeChange<Edge>[]) => {
+			setEdges((edgs) => applyEdgeChanges(changes, edgs));
+			setValue("edges", z.array(edgeSchema).parse(initialEdges));
+		},
+		[setEdges, initialEdges, setValue]
+	);
 
 	useEffect(() => {
-		setValue("nodes", initialNodes);
-		setValue("edges", initialEdges);
+		setValue("nodes", z.array(nodeSchema).parse(initialNodes));
+		setValue("edges", z.array(edgeSchema).parse(initialEdges));
 	}, [initialNodes, initialEdges, setValue]);
 
 	const nodes = watch("nodes");
@@ -193,12 +214,12 @@ export default function CreateProjectForm() {
 						<Controller
 							control={control}
 							name="nodes"
-							render={() => null} // Just track it
+							render={() => <></>}
 						/>
 						<Controller
 							control={control}
 							name="edges"
-							render={() => null} // Just track it
+							render={() => <></>}
 						/>
 
 						<FlowEditor
@@ -207,21 +228,26 @@ export default function CreateProjectForm() {
 								...e,
 								type: "custom",
 								markerEnd: { type: MarkerType.ArrowClosed },
+								sourceHandle: e.sourceHandle ?? null,
+								targetHandle: e.targetHandle ?? null,
 							}))}
-							onNodesChange={(changes) =>
-								setValue("nodes", changes)
-							}
-							onEdgesChange={(changes) =>
-								setValue("edges", changes)
-							}
+							onNodesChange={onNodesChange}
+							onEdgesChange={onEdgesChange}
 							onConnect={(params) => {
-								const newEdge = {
+								const newEdge: Edge = {
 									...params,
 									id: `${params.source}-${params.target}`,
 									type: "custom",
 									markerEnd: { type: MarkerType.ArrowClosed },
+									sourceHandle: null,
+									targetHandle: null,
 								};
-								setValue("edges", addEdge(newEdge, edges));
+								setValue(
+									"edges",
+									z
+										.array(edgeSchema)
+										.parse(addEdge(newEdge, edges))
+								);
 							}}
 						/>
 
@@ -231,4 +257,4 @@ export default function CreateProjectForm() {
 			</form>
 		</ReactFlowProvider>
 	);
-}
+};
