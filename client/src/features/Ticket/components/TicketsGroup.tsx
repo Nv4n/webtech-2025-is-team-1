@@ -7,9 +7,15 @@ import { FakeTicketApi } from "@/features/Ticket/service/ticketApi";
 import { useQuery } from "@tanstack/react-query";
 import { CirclePlus } from "lucide-react";
 
-// Types
 type TicketStatus = {
 	status: string;
+};
+
+const fallBackProfile = {
+  fname: "Unknown",
+  lname: "User",
+  username: "unknown",
+  id: "",
 };
 
 function fetchTicketDetails() {
@@ -47,17 +53,18 @@ function fetchTicketDetails() {
 		return [];
 	}
 	const ticketsWithDetails = ticketList.map((ticket) => {
-		const updatedBy = userList.find((user) => user.id === ticket.updatedBy);
-		const assignedTo = userList.find((user) => user.id === ticket.assignee);
-		const project = projectList.find((proj) => proj.id === ticket.project);
+  	const updatedBy = userList.find((user) => user.id === ticket.updatedBy);
+  	const assignedTo = userList.find((user) => user.id === ticket.assignee);
+  	const project = projectList.find((proj) => proj.id === ticket.project);
 
-		return {
-			...ticket,
-			updatedBy: updatedBy ? updatedBy : {},
-			assignedTo: assignedTo ? assignedTo : {},
-			project,
-		};
+  	return {
+    	...ticket,
+    	updatedBy: updatedBy ?? fallBackProfile,
+    	assignedTo: assignedTo ?? fallBackProfile,
+    	project,
+  	};
 	});
+
 	return ticketsWithDetails;
 }
 

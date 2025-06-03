@@ -5,7 +5,7 @@ import { MultiSelect } from "@/components/ui/multi-select";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { FolderDot, ListTodo } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { FakeProjectApi } from "@/features/Project/service/projectApi";
@@ -109,7 +109,7 @@ export function TestFilter() {
 				statusesFilters: [],
 			},
 		});
-
+		
 		const onSubmit = (data: FormData) => {
 			console.log("Selected Filters:", data);
 		};
@@ -129,7 +129,8 @@ export function TestFilter() {
 							control={control}
 							render={({ field }) => (
 								<MultiSelect
-									name="projects-filters"
+									id="projectsFilters"
+									name="projectsFilters"
 									options={projectFiltersList || []}
 									onValueChange={field.onChange}
 									placeholder="Select Filters By Projects"

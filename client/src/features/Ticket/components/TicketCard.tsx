@@ -22,7 +22,7 @@ export type TicketCardProps = {
 		fname: string;
 		lname: string;
 		username: string;
-		id?: string | undefined;
+		id?: string;
 	};
 	project: string;
 };
@@ -85,8 +85,8 @@ export function TicketCard({
 							</HoverCardTrigger>
 							<HoverCardContent className="z-10 max-w-80">
 								<div className="bg-card dark:bg-card rounded-lg border border-gray-300 px-3 py-2 transition-all dark:border-gray-600">
-									{updatedBy.id && (
-										<ProfileHoverCard id={updatedBy.id} />
+									{updatedBy && (
+										<ProfileHoverCard id={updatedBy?.id ?? ""} />
 									)}
 								</div>
 							</HoverCardContent>
