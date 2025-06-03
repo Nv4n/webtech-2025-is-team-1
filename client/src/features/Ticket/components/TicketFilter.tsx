@@ -8,7 +8,7 @@ import { FolderDot, ListTodo } from "lucide-react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
-import { FakeProjectApi } from "@/components/Project/service/projectApi";
+import { FakeProjectApi } from "@/features/Project/service/projectApi";
 
 const statusFiltersList = [
 	{ value: "not-started", label: "Not Started", icon: ListTodo },
