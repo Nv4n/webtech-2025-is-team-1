@@ -5,16 +5,21 @@ import { MultiSelect } from "@/components/ui/multi-select";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { FolderDot, ListTodo } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { FakeProjectApi } from "@/features/Project/service/projectApi";
+import { Ticket } from "@/features/Ticket/types/Ticket";
 
 const statusFiltersList = [
 	{ value: "not-started", label: "Not Started", icon: ListTodo },
 	{ value: "in-progress", label: "In Progress", icon: ListTodo },
 	{ value: "completed", label: "Completed", icon: ListTodo },
 ];
+
+type TicketFilterProps = {
+  data: Ticket[];
+};
 
 export function TicketFilter() {
 	const [selectedStatusFilters, setSelectedFrameworks] = useState<string[]>(
@@ -80,7 +85,7 @@ export function TestFilter() {
 		projectsFilters?: string[];
 		statusesFilters?: string[];
 	};
-	const { data: projectFiltersList, isLoading: isPorjectFiltersLoading } =
+	const { data: projectFiltersList } =
 		useQuery({
 			queryKey: ["projects"],
 			queryFn: async () => {
@@ -110,8 +115,23 @@ export function TestFilter() {
 			},
 		});
 		
-		const onSubmit = (data: FormData) => {
-			console.log("Selected Filters:", data);
+		const onSubmit = async (data: FormData) => {
+			const queryParams = new URLSearchParams();
+
+  			if (data.projectsFilters?.length) {
+    			queryParams.append("projects", data.projectsFilters.join(","));
+  			}
+
+  			if (data.statusesFilters?.length) {
+    			queryParams.append("statuses", data.statusesFilters.join(","));
+  			}
+
+			// TODO: to be implemented with the end end-point of the back-end
+  			const response = await fetch(`/api/tickets?${queryParams.toString()}`);
+  			const tickets = await response.json();
+
+  			console.log("Filtered Tickets:", tickets);
+  			// You can now store these in state and render them
 		};
 
 		return (
