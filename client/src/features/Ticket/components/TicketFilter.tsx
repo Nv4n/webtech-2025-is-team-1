@@ -22,7 +22,7 @@ type TicketFilterProps = {
 };
 
 export function TicketFilter() {
-	const [selectedStatusFilters, setSelectedFrameworks] = useState<string[]>(
+	const [selectedStatusFilters, setSelectedFilters] = useState<string[]>(
 		[]
 	);
 	const { data: projectFiltersList, isLoading: isPorjectFiltersLoading } =
@@ -49,9 +49,10 @@ export function TicketFilter() {
 			<form className="flex max-w-2xl items-center gap-4 p-4">
 				{projectFiltersList && !isPorjectFiltersLoading && (
 					<MultiSelect
+						className="cursor-pointer"
 						name="projects-filters"
 						options={projectFiltersList}
-						onValueChange={setSelectedFrameworks}
+						onValueChange={setSelectedFilters}
 						defaultValue={selectedStatusFilters}
 						placeholder="Select Filters By Projects"
 						variant="inverted"
@@ -60,9 +61,10 @@ export function TicketFilter() {
 					/>
 				)}
 				<MultiSelect
+					className="cursor-pointer"
 					name="statuses-filters"
 					options={statusFiltersList}
-					onValueChange={setSelectedFrameworks}
+					onValueChange={setSelectedFilters}
 					defaultValue={selectedStatusFilters}
 					placeholder="Select Filters By Status"
 					variant="inverted"
