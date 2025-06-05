@@ -11,11 +11,9 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-<<<<<<< HEAD
+import { Route as TestImport } from './routes/test'
 import { Route as RegisterImport } from './routes/register'
-=======
 import { Route as ProjectImport } from './routes/project'
->>>>>>> 0ccb1edc195057975401c53e4230bdf58c48ea45
 import { Route as ProfileImport } from './routes/profile'
 import { Route as LoginImport } from './routes/login'
 import { Route as IndexImport } from './routes/index'
@@ -25,15 +23,21 @@ import { Route as TicketsTicketIdEditImport } from './routes/tickets_.$ticketId.
 
 // Create/Update Routes
 
-<<<<<<< HEAD
+const TestRoute = TestImport.update({
+  id: '/test',
+  path: '/test',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const RegisterRoute = RegisterImport.update({
   id: '/register',
   path: '/register',
-=======
+  getParentRoute: () => rootRoute,
+} as any)
+
 const ProjectRoute = ProjectImport.update({
   id: '/project',
   path: '/project',
->>>>>>> 0ccb1edc195057975401c53e4230bdf58c48ea45
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -98,19 +102,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileImport
       parentRoute: typeof rootRoute
     }
-<<<<<<< HEAD
-    '/register': {
-      id: '/register'
-      path: '/register'
-      fullPath: '/register'
-      preLoaderRoute: typeof RegisterImport
-=======
     '/project': {
       id: '/project'
       path: '/project'
       fullPath: '/project'
       preLoaderRoute: typeof ProjectImport
->>>>>>> 0ccb1edc195057975401c53e4230bdf58c48ea45
+      parentRoute: typeof rootRoute
+    }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterImport
+      parentRoute: typeof rootRoute
+    }
+    '/test': {
+      id: '/test'
+      path: '/test'
+      fullPath: '/test'
+      preLoaderRoute: typeof TestImport
       parentRoute: typeof rootRoute
     }
     '/tickets/$ticketId': {
@@ -143,11 +153,9 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
-<<<<<<< HEAD
-  '/register': typeof RegisterRoute
-=======
   '/project': typeof ProjectRoute
->>>>>>> 0ccb1edc195057975401c53e4230bdf58c48ea45
+  '/register': typeof RegisterRoute
+  '/test': typeof TestRoute
   '/tickets/$ticketId': typeof TicketsTicketIdRoute
   '/tickets': typeof TicketsIndexRoute
   '/tickets/$ticketId/edit': typeof TicketsTicketIdEditRoute
@@ -157,11 +165,9 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
-<<<<<<< HEAD
-  '/register': typeof RegisterRoute
-=======
   '/project': typeof ProjectRoute
->>>>>>> 0ccb1edc195057975401c53e4230bdf58c48ea45
+  '/register': typeof RegisterRoute
+  '/test': typeof TestRoute
   '/tickets/$ticketId': typeof TicketsTicketIdRoute
   '/tickets': typeof TicketsIndexRoute
   '/tickets/$ticketId/edit': typeof TicketsTicketIdEditRoute
@@ -172,11 +178,9 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
-<<<<<<< HEAD
-  '/register': typeof RegisterRoute
-=======
   '/project': typeof ProjectRoute
->>>>>>> 0ccb1edc195057975401c53e4230bdf58c48ea45
+  '/register': typeof RegisterRoute
+  '/test': typeof TestRoute
   '/tickets/$ticketId': typeof TicketsTicketIdRoute
   '/tickets/': typeof TicketsIndexRoute
   '/tickets_/$ticketId/edit': typeof TicketsTicketIdEditRoute
@@ -188,11 +192,9 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/profile'
-<<<<<<< HEAD
-    | '/register'
-=======
     | '/project'
->>>>>>> 0ccb1edc195057975401c53e4230bdf58c48ea45
+    | '/register'
+    | '/test'
     | '/tickets/$ticketId'
     | '/tickets'
     | '/tickets/$ticketId/edit'
@@ -201,11 +203,9 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/profile'
-<<<<<<< HEAD
-    | '/register'
-=======
     | '/project'
->>>>>>> 0ccb1edc195057975401c53e4230bdf58c48ea45
+    | '/register'
+    | '/test'
     | '/tickets/$ticketId'
     | '/tickets'
     | '/tickets/$ticketId/edit'
@@ -214,11 +214,9 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/profile'
-<<<<<<< HEAD
-    | '/register'
-=======
     | '/project'
->>>>>>> 0ccb1edc195057975401c53e4230bdf58c48ea45
+    | '/register'
+    | '/test'
     | '/tickets/$ticketId'
     | '/tickets/'
     | '/tickets_/$ticketId/edit'
@@ -229,11 +227,9 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
-<<<<<<< HEAD
-  RegisterRoute: typeof RegisterRoute
-=======
   ProjectRoute: typeof ProjectRoute
->>>>>>> 0ccb1edc195057975401c53e4230bdf58c48ea45
+  RegisterRoute: typeof RegisterRoute
+  TestRoute: typeof TestRoute
   TicketsTicketIdRoute: typeof TicketsTicketIdRoute
   TicketsIndexRoute: typeof TicketsIndexRoute
   TicketsTicketIdEditRoute: typeof TicketsTicketIdEditRoute
@@ -243,11 +239,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
-<<<<<<< HEAD
-  RegisterRoute: RegisterRoute,
-=======
   ProjectRoute: ProjectRoute,
->>>>>>> 0ccb1edc195057975401c53e4230bdf58c48ea45
+  RegisterRoute: RegisterRoute,
+  TestRoute: TestRoute,
   TicketsTicketIdRoute: TicketsTicketIdRoute,
   TicketsIndexRoute: TicketsIndexRoute,
   TicketsTicketIdEditRoute: TicketsTicketIdEditRoute,
@@ -266,11 +260,9 @@ export const routeTree = rootRoute
         "/",
         "/login",
         "/profile",
-<<<<<<< HEAD
-        "/register",
-=======
         "/project",
->>>>>>> 0ccb1edc195057975401c53e4230bdf58c48ea45
+        "/register",
+        "/test",
         "/tickets/$ticketId",
         "/tickets/",
         "/tickets_/$ticketId/edit"
@@ -285,13 +277,14 @@ export const routeTree = rootRoute
     "/profile": {
       "filePath": "profile.tsx"
     },
-<<<<<<< HEAD
-    "/register": {
-      "filePath": "register.tsx"
-=======
     "/project": {
       "filePath": "project.tsx"
->>>>>>> 0ccb1edc195057975401c53e4230bdf58c48ea45
+    },
+    "/register": {
+      "filePath": "register.tsx"
+    },
+    "/test": {
+      "filePath": "test.tsx"
     },
     "/tickets/$ticketId": {
       "filePath": "tickets.$ticketId.tsx"
