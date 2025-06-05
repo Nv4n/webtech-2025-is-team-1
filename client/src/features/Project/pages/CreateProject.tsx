@@ -23,31 +23,15 @@ import {
 	applyEdgeChanges,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-
-const nodeSchema = z.object({
-	id: z.string(),
-	type: z.string(),
-	position: z.object({ x: z.number(), y: z.number() }),
-	data: z.object({ label: z.string() }),
-});
-
-const edgeSchema = z.object({
-	id: z.string(),
-	source: z.string(),
-	target: z.string(),
-	label: z.string().optional(),
-	sourceHandle: z.string().nullable().optional(),
-	targetHandle: z.string().nullable().optional(),
-});
+import { NodeSchema, EdgeSchema } from "@/features/Workflow/types/Workflow";
 
 const formSchema = z.object({
 	name: z.string().min(1),
-	nodes: z.array(nodeSchema),
-	edges: z.array(edgeSchema),
+	nodes: z.array(NodeSchema),
+	edges: z.array(EdgeSchema),
 });
 
 type CustomEdgeProps = EdgeProps;
@@ -245,7 +229,7 @@ export const CreateProjectForm = () => {
 								setValue(
 									"edges",
 									z
-										.array(edgeSchema)
+										.array(EdgeSchema)
 										.parse(addEdge(newEdge, edges))
 								);
 							}}
