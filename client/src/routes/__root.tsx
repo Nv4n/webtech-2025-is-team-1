@@ -1,3 +1,4 @@
+import { Route as RegisterRoute } from '@/routes/register';
 import { ThemeButton } from "@/components/ThemeButton";
 import {
 	NavigationMenu,
@@ -29,6 +30,24 @@ export const Route = createRootRoute({
 								data-slot="navigation-menu-link"
 							>
 								Home
+							</Link>
+						</NavigationMenuItem>
+						<NavigationMenuItem>
+							<Link
+  								to={"/register"}
+  								className={cn(NavMenuLinkStyles, navigationMenuTriggerStyle())}
+  								data-slot="navigation-menu-link"
+							>
+  								Register
+							</Link>
+						</NavigationMenuItem>
+						<NavigationMenuItem>
+							<Link
+  								to={"/login"}
+  								className={cn(NavMenuLinkStyles, navigationMenuTriggerStyle())}
+  								data-slot="navigation-menu-link"
+							>
+  								Login
 							</Link>
 						</NavigationMenuItem>
 						<NavigationMenuItem>
