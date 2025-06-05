@@ -5,7 +5,12 @@ import {
 	NavigationMenuList,
 	navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
@@ -56,6 +61,18 @@ export const Route = createRootRoute({
 									</TooltipContent>
 								</Tooltip>
 							</TooltipProvider>
+						</NavigationMenuItem>
+						<NavigationMenuItem>
+							<Link
+								to="/project"
+								className={cn(
+									NavMenuLinkStyles,
+									navigationMenuTriggerStyle()
+								)}
+								data-slot="navigation-menu-link"
+							>
+								Project
+							</Link>
 						</NavigationMenuItem>
 						{/* <NavigationMenuItem>
 							<Link

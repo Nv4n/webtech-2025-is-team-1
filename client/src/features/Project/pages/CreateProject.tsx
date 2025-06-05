@@ -1,3 +1,4 @@
+import { BaseNode } from "@/components/base-node";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -27,6 +28,10 @@ import "@xyflow/react/dist/style.css";
 import { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
+
+const nodeTypes = {
+	baseNode: BaseNode,
+};
 
 const formSchema = z.object({
 	name: z.string().min(1),
@@ -78,6 +83,10 @@ type FlowEditorProps = {
 	onConnect: (connection: Connection) => void;
 };
 
+const rfStyle = {
+	backgroundColor: "#B8CEFF",
+};
+
 function FlowEditor({
 	nodes,
 	edges,
@@ -110,7 +119,9 @@ function FlowEditor({
 				onEdgesChange={onEdgesChange}
 				onConnect={onConnect}
 				edgeTypes={edgeTypes}
+				nodeTypes={nodeTypes}
 				fitView
+				style={rfStyle}
 			>
 				<Controls />
 				<MiniMap />
@@ -135,8 +146,8 @@ export const CreateProjectForm = () => {
 
 			const nodes: Node[] = statuses.map((s, i) => ({
 				id: s.id,
-				type: "default",
-				position: { x: i * 150, y: 100 },
+				type: "baseNode",
+				position: { x: i * 150, y: 150 },
 				data: { label: s.label },
 			}));
 
@@ -160,7 +171,7 @@ export const CreateProjectForm = () => {
 	const onNodesChange = useCallback(
 		(changes: NodeChange<Node>[]) => {
 			setNodes((nds) => applyNodeChanges(changes, nds));
-			setValue("nodes", z.array(nodeSchema).parse(initialNodes));
+			setValue("nodes", z.array(NodeSchema).parse(initialNodes));
 		},
 		[setNodes, initialNodes, setValue]
 	);
@@ -168,14 +179,14 @@ export const CreateProjectForm = () => {
 	const onEdgesChange = useCallback(
 		(changes: EdgeChange<Edge>[]) => {
 			setEdges((edgs) => applyEdgeChanges(changes, edgs));
-			setValue("edges", z.array(edgeSchema).parse(initialEdges));
+			setValue("edges", z.array(EdgeSchema).parse(initialEdges));
 		},
 		[setEdges, initialEdges, setValue]
 	);
 
 	useEffect(() => {
-		setValue("nodes", z.array(nodeSchema).parse(initialNodes));
-		setValue("edges", z.array(edgeSchema).parse(initialEdges));
+		setValue("nodes", z.array(NodeSchema).parse(initialNodes));
+		setValue("edges", z.array(EdgeSchema).parse(initialEdges));
 	}, [initialNodes, initialEdges, setValue]);
 
 	const nodes = watch("nodes");
