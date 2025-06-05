@@ -1,6 +1,7 @@
+import { IdSchema } from "@/types/ZodId";
 import { z } from "zod";
 
-export const UserIdSchema = z.coerce.string();
+export const UserIdSchema = IdSchema;
 
 export const UserSchema = z.object({
 	id: UserIdSchema.optional(),

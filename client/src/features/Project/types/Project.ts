@@ -1,8 +1,9 @@
 import { UserIdSchema } from "@/features/Profile/types/Profile";
 import { WorkflowIdSchema } from "@/features/Workflow/types/Workflow";
+import { IdSchema } from "@/types/ZodId";
 import { z } from "zod";
 
-export const ProjectIdSchema = z.coerce.string();
+export const ProjectIdSchema = IdSchema;
 
 export const ProjectSchema = z.object({
 	id: ProjectIdSchema.optional(),

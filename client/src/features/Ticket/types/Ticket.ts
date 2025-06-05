@@ -1,8 +1,9 @@
 import { UserSchema } from "@/features/Profile/types/Profile";
 import { ProjectSchema } from "@/features/Project/types/Project";
+import { IdSchema } from "@/types/ZodId";
 import { z } from "zod";
 
-export const TicketIdSchema = z.coerce.string();
+export const TicketIdSchema = IdSchema;
 
 export const TicketSchema = z.object({
 	id: TicketIdSchema.optional(), // set to optional to skip mandatory check
