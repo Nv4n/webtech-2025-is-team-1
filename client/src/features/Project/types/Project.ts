@@ -6,9 +6,18 @@ export const ProjectSchema = z.object({
 	name: z.string().min(3).max(100),
 	description: z.string().min(10),
 	createdAt: z.date().min(new Date("1900-01-01"), { message: "Too old" }),
+	// workflowId: WorkflowSchema.shape.id,
 	ownerId: UserSchema.shape.id,
 });
 
-const ProjectWithoutCA = ProjectSchema.omit({ createdAt: true, ownerId: true });
+export type Project = z.infer<typeof ProjectSchema>;
 
-export type Project = z.infer<typeof ProjectWithoutCA>;
+const ProjectEditSchema = ProjectSchema.pick({ name: true, createdAt: true });
+
+export type ProjectEdit = z.infer<typeof ProjectEditSchema>;
+
+const ProjectCreateSchema = ProjectEditSchema.extend({
+	// worflow: WorkflowSchema.pick({ fromStatus: true, toStatus: true }),
+});
+
+export type ProjectCreate = z.infer<typeof ProjectCreateSchema>;
