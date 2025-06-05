@@ -1,9 +1,12 @@
 import { UserSchema } from "@/features/Profile/types/Profile";
 import { ProjectSchema } from "@/features/Project/types/Project";
+import { IdSchema } from "@/types/ZodId";
 import { z } from "zod";
 
+export const TicketIdSchema = IdSchema;
+
 export const TicketSchema = z.object({
-	id: z.coerce.string().optional(), // set to optional to skip mandatory check
+	id: TicketIdSchema.optional(), // set to optional to skip mandatory check
 	title: z.string().min(3).max(200),
 	status: z.enum(["not-started", "in-progress", "completed"]),
 	priority: z.enum(["Low", "Medium", "High"]),

@@ -1,14 +1,27 @@
-import { UserSchema } from "@/features/Profile/types/Profile";
+import { UserIdSchema } from "@/features/Profile/types/Profile";
+import { WorkflowIdSchema } from "@/features/Workflow/types/Workflow";
+import { IdSchema } from "@/types/ZodId";
 import { z } from "zod";
 
+export const ProjectIdSchema = IdSchema;
+
 export const ProjectSchema = z.object({
-	id: z.coerce.string().optional(),
+	id: ProjectIdSchema.optional(),
 	name: z.string().min(3).max(100),
 	description: z.string().min(10),
 	createdAt: z.date().min(new Date("1900-01-01"), { message: "Too old" }),
-	ownerId: UserSchema.shape.id,
+	workflowId: WorkflowIdSchema,
+	ownerId: UserIdSchema,
 });
 
-const ProjectWithoutCA = ProjectSchema.omit({ createdAt: true, ownerId: true });
+export type Project = z.infer<typeof ProjectSchema>;
 
-export type Project = z.infer<typeof ProjectWithoutCA>;
+const ProjectEditSchema = ProjectSchema.pick({ name: true, createdAt: true });
+
+export type ProjectEdit = z.infer<typeof ProjectEditSchema>;
+
+const ProjectCreateSchema = ProjectEditSchema.extend({
+	// worflow: WorkflowSchema.pick({ fromStatus: true, toStatus: true }),
+});
+
+export type ProjectCreate = z.infer<typeof ProjectCreateSchema>;
