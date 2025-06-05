@@ -1,7 +1,9 @@
 import { z } from "zod";
 
+export const UserIdSchema = z.coerce.string();
+
 export const UserSchema = z.object({
-	id: z.coerce.string().optional(),
+	id: UserIdSchema.optional(),
 	fname: z.string().min(3),
 	lname: z.string().min(3),
 	username: z.string().min(3),
