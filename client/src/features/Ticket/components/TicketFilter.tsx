@@ -1,11 +1,9 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { FolderDot, ListTodo } from "lucide-react";
-import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { FakeProjectApi } from "@/features/Project/service/projectApi";
@@ -18,91 +16,34 @@ const statusFiltersList = [
 ];
 
 type TicketFilterProps = {
-  data: Ticket[];
+	data: Ticket[];
 };
-
-export function TicketFilter() {
-	const [selectedStatusFilters, setSelectedFilters] = useState<string[]>(
-		[]
-	);
-	const { data: projectFiltersList, isLoading: isPorjectFiltersLoading } =
-		useQuery({
-			queryKey: ["projects"],
-			queryFn: async () => {
-				return FakeProjectApi().getProjectList();
-			},
-			select: (data) => {
-				return Object.entries(data).map(([_, value]) => {
-					return {
-						value: value.name.toLowerCase(),
-						label: value.name,
-						icon: FolderDot,
-					};
-				});
-			},
-		});
-
-	return (
-		<div>
-			<h1 className="mb-4 text-2xl font-bold">Tickets Filter</h1>
-
-			<form className="flex max-w-2xl items-center gap-4 p-4">
-				{projectFiltersList && !isPorjectFiltersLoading && (
-					<MultiSelect
-						className="cursor-pointer"
-						name="projects-filters"
-						options={projectFiltersList}
-						onValueChange={setSelectedFilters}
-						defaultValue={selectedStatusFilters}
-						placeholder="Select Filters By Projects"
-						variant="inverted"
-						animation={2}
-						maxCount={3}
-					/>
-				)}
-				<MultiSelect
-					className="cursor-pointer"
-					name="statuses-filters"
-					options={statusFiltersList}
-					onValueChange={setSelectedFilters}
-					defaultValue={selectedStatusFilters}
-					placeholder="Select Filters By Status"
-					variant="inverted"
-					animation={2}
-					maxCount={3}
-				/>
-				<Button type="submit">Apply Filters</Button>
-			</form>
-		</div>
-	);
-}
 
 export const filtersSchema = z.object({
 	projectsFilters: z.array(z.string()).optional(),
 	statusesFilters: z.array(z.string()).optional(),
 });
 
-export function TestFilter() {
+export function TicketsFilter() {
 	type FormData = {
 		projectsFilters?: string[];
 		statusesFilters?: string[];
 	};
-	const { data: projectFiltersList } =
-		useQuery({
-			queryKey: ["projects"],
-			queryFn: async () => {
-				return FakeProjectApi().getProjectList();
-			},
-			select: (data) => {
-				return Object.entries(data).map(([_, value]) => {
-					return {
-						value: value.name.toLowerCase(),
-						label: value.name,
-						icon: FolderDot,
-					};
-				});
-			},
-		});
+	const { data: projectFiltersList } = useQuery({
+		queryKey: ["projects"],
+		queryFn: async () => {
+			return FakeProjectApi().getProjectList();
+		},
+		select: (data) => {
+			return Object.entries(data).map(([_, value]) => {
+				return {
+					value: value.name.toLowerCase(),
+					label: value.name,
+					icon: FolderDot,
+				};
+			});
+		},
+	});
 
 	const FiltersForm = () => {
 		const {
@@ -116,24 +57,26 @@ export function TestFilter() {
 				statusesFilters: [],
 			},
 		});
-		
+
 		const onSubmit = async (data: FormData) => {
 			const queryParams = new URLSearchParams();
 
-  			if (data.projectsFilters?.length) {
-    			queryParams.append("projects", data.projectsFilters.join(","));
-  			}
+			if (data.projectsFilters?.length) {
+				queryParams.append("projects", data.projectsFilters.join(","));
+			}
 
-  			if (data.statusesFilters?.length) {
-    			queryParams.append("statuses", data.statusesFilters.join(","));
-  			}
+			if (data.statusesFilters?.length) {
+				queryParams.append("statuses", data.statusesFilters.join(","));
+			}
 
 			// TODO: to be implemented with the end end-point of the back-end
-  			const response = await fetch(`/api/tickets?${queryParams.toString()}`);
-  			const tickets = await response.json();
+			const response = await fetch(
+				`/api/tickets?${queryParams.toString()}`
+			);
+			const tickets = await response.json();
 
-  			console.log("Filtered Tickets:", tickets);
-  			// You can now store these in state and render them
+			console.log("Filtered Tickets:", tickets);
+			// You can now store these in state and render them
 		};
 
 		return (

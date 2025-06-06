@@ -1,5 +1,6 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
@@ -116,6 +117,9 @@ export const TicketDetails = (id: string) => {
 						Created at {ticket.createdAt.toLocaleDateString()}
 					</span>
 				</CardFooter>
+				<form>
+					<Button type="submit" className="w-full bg-red-700">Delete ticket</Button>
+				</form>
 			</Card>
 		</>
 	);
