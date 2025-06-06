@@ -18,6 +18,7 @@ import { Route as ProfileImport } from './routes/profile'
 import { Route as LoginImport } from './routes/login'
 import { Route as IndexImport } from './routes/index'
 import { Route as TicketsIndexImport } from './routes/tickets.index'
+import { Route as TicketsCreateImport } from './routes/tickets.create'
 import { Route as TicketsTicketIdImport } from './routes/tickets.$ticketId'
 import { Route as TicketsTicketIdEditImport } from './routes/tickets_.$ticketId.edit'
 
@@ -62,6 +63,12 @@ const IndexRoute = IndexImport.update({
 const TicketsIndexRoute = TicketsIndexImport.update({
   id: '/tickets/',
   path: '/tickets/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const TicketsCreateRoute = TicketsCreateImport.update({
+  id: '/tickets/create',
+  path: '/tickets/create',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -130,6 +137,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TicketsTicketIdImport
       parentRoute: typeof rootRoute
     }
+    '/tickets/create': {
+      id: '/tickets/create'
+      path: '/tickets/create'
+      fullPath: '/tickets/create'
+      preLoaderRoute: typeof TicketsCreateImport
+      parentRoute: typeof rootRoute
+    }
     '/tickets/': {
       id: '/tickets/'
       path: '/tickets'
@@ -157,6 +171,7 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/test': typeof TestRoute
   '/tickets/$ticketId': typeof TicketsTicketIdRoute
+  '/tickets/create': typeof TicketsCreateRoute
   '/tickets': typeof TicketsIndexRoute
   '/tickets/$ticketId/edit': typeof TicketsTicketIdEditRoute
 }
@@ -169,6 +184,7 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/test': typeof TestRoute
   '/tickets/$ticketId': typeof TicketsTicketIdRoute
+  '/tickets/create': typeof TicketsCreateRoute
   '/tickets': typeof TicketsIndexRoute
   '/tickets/$ticketId/edit': typeof TicketsTicketIdEditRoute
 }
@@ -182,6 +198,7 @@ export interface FileRoutesById {
   '/register': typeof RegisterRoute
   '/test': typeof TestRoute
   '/tickets/$ticketId': typeof TicketsTicketIdRoute
+  '/tickets/create': typeof TicketsCreateRoute
   '/tickets/': typeof TicketsIndexRoute
   '/tickets_/$ticketId/edit': typeof TicketsTicketIdEditRoute
 }
@@ -196,6 +213,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/test'
     | '/tickets/$ticketId'
+    | '/tickets/create'
     | '/tickets'
     | '/tickets/$ticketId/edit'
   fileRoutesByTo: FileRoutesByTo
@@ -207,6 +225,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/test'
     | '/tickets/$ticketId'
+    | '/tickets/create'
     | '/tickets'
     | '/tickets/$ticketId/edit'
   id:
@@ -218,6 +237,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/test'
     | '/tickets/$ticketId'
+    | '/tickets/create'
     | '/tickets/'
     | '/tickets_/$ticketId/edit'
   fileRoutesById: FileRoutesById
@@ -231,6 +251,7 @@ export interface RootRouteChildren {
   RegisterRoute: typeof RegisterRoute
   TestRoute: typeof TestRoute
   TicketsTicketIdRoute: typeof TicketsTicketIdRoute
+  TicketsCreateRoute: typeof TicketsCreateRoute
   TicketsIndexRoute: typeof TicketsIndexRoute
   TicketsTicketIdEditRoute: typeof TicketsTicketIdEditRoute
 }
@@ -243,6 +264,7 @@ const rootRouteChildren: RootRouteChildren = {
   RegisterRoute: RegisterRoute,
   TestRoute: TestRoute,
   TicketsTicketIdRoute: TicketsTicketIdRoute,
+  TicketsCreateRoute: TicketsCreateRoute,
   TicketsIndexRoute: TicketsIndexRoute,
   TicketsTicketIdEditRoute: TicketsTicketIdEditRoute,
 }
@@ -264,6 +286,7 @@ export const routeTree = rootRoute
         "/register",
         "/test",
         "/tickets/$ticketId",
+        "/tickets/create",
         "/tickets/",
         "/tickets_/$ticketId/edit"
       ]
@@ -288,6 +311,9 @@ export const routeTree = rootRoute
     },
     "/tickets/$ticketId": {
       "filePath": "tickets.$ticketId.tsx"
+    },
+    "/tickets/create": {
+      "filePath": "tickets.create.tsx"
     },
     "/tickets/": {
       "filePath": "tickets.index.tsx"

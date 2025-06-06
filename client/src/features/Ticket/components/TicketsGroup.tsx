@@ -1,10 +1,13 @@
 import { Button } from "@/components/ui/button";
+import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { FakeProfileApi } from "@/features/Profile/service/profileApi";
 import { FakeProjectApi } from "@/features/Project/service/projectApi";
 import { TicketCard } from "@/features/Ticket/components/TicketCard";
 import { FakeTicketApi } from "@/features/Ticket/service/ticketApi";
+import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 import { CirclePlus } from "lucide-react";
 
 type TicketStatus = {
@@ -17,6 +20,9 @@ const fallBackProfile = {
   username: "unknown",
   id: "",
 };
+
+const NavMenuLinkStyles =
+	"data-[active=true]:focus:bg-accent data-[active=true]:hover:bg-accent data-[active=true]:bg-accent/50 data-[active=true]:text-accent-foreground hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:ring-ring/50 [&_svg:not([class*='text-'])]:text-muted-foreground flex flex-col gap-1 rounded-sm p-2 text-sm transition-all outline-none focus-visible:ring-[3px] focus-visible:outline-1 [&_svg:not([class*='size-'])]:size-4";
 
 function fetchTicketDetails() {
 	const { data: ticketList, isLoading: isLoadingTickets } = useQuery({
@@ -79,9 +85,16 @@ export function TicketsGroup({ status }: TicketStatus) {
 				<TooltipProvider>
 					<Tooltip>
 						<TooltipTrigger asChild>
-							<Button variant="ghost" className="cursor-pointer">
-								<CirclePlus />
-							</Button>
+							<Link
+								to="/tickets/create"
+								className={cn(
+								NavMenuLinkStyles,
+								navigationMenuTriggerStyle()
+								)}
+								data-slot="navigation-menu-link"
+							>
+								<pre>Add Ticket</pre>
+							</Link>
 						</TooltipTrigger>
 						<TooltipContent className="rounded-md z-10 border bg-gray-100 p-2 text-gray-800 shadow-md">
 							<pre>Add Ticket</pre>
@@ -110,10 +123,16 @@ export function TicketsGroup({ status }: TicketStatus) {
 			) : (
 				<div>Loading tickets...</div>
 			)}
-
-			<Button variant="ghost" className="w-2xs cursor-pointer">
+			<Link
+				to="/tickets/create"
+				className={cn(
+				NavMenuLinkStyles,
+				navigationMenuTriggerStyle()
+				)}
+				data-slot="navigation-menu-link"
+			>
 				<pre>Add Ticket</pre>
-			</Button>
+			</Link>
 		</div>
 	);
 }
