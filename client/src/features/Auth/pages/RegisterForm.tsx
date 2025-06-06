@@ -7,12 +7,18 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 import { RegisterSchema } from "@/features/Auth/types/AuthUser";
+import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Link } from "@tanstack/react-router";
 import { useForm, FormProvider } from "react-hook-form";
 import { z } from "zod";
 
 type RegisterUser = z.infer<typeof RegisterSchema>;
+
+const NavMenuLinkStyles =
+	"data-[active=true]:focus:bg-accent data-[active=true]:hover:bg-accent data-[active=true]:bg-accent/50 data-[active=true]:text-accent-foreground hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:ring-ring/50 [&_svg:not([class*='text-'])]:text-muted-foreground flex flex-col gap-1 rounded-sm p-2 text-sm transition-all outline-none focus-visible:ring-[3px] focus-visible:outline-1 [&_svg:not([class*='size-'])]:size-4";
 
 function RegisterForm() {
   const form = useForm<RegisterUser>({
@@ -97,6 +103,13 @@ function RegisterForm() {
         <Button type="submit" className="w-full">
           Register
         </Button>
+        <Link 
+          to="/login" 
+          className={cn(NavMenuLinkStyles, navigationMenuTriggerStyle(), "w-full")}
+          data-slot="navigation-menu-link"
+        >
+          Login
+        </Link>
       </form>
     </FormProvider>
   );
