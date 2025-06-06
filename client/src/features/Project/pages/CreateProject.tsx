@@ -2,6 +2,7 @@ import { BaseNode } from "@/components/base-node";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { ProjectWorkflow } from "@/features/Workflow/components/ProjectWorkflow";
 import { EdgeSchema, NodeSchema } from "@/features/Workflow/types/ReactFlow";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -29,111 +30,26 @@ import { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
-const nodeTypes = {
-	baseNode: BaseNode,
-};
-
 const formSchema = z.object({
 	name: z.string().min(1),
 	nodes: z.array(NodeSchema),
 	edges: z.array(EdgeSchema),
 });
 
-type CustomEdgeProps = EdgeProps;
-
-const CustomEdge = ({
-	id,
-	sourceX,
-	sourceY,
-	targetX,
-	targetY,
-	markerEnd,
-}: CustomEdgeProps) => {
-	return (
-		<g>
-			<path
-				id={id}
-				d={`M${sourceX},${sourceY} L${targetX},${targetY}`}
-				stroke="#000"
-				strokeWidth={2}
-				markerEnd={markerEnd}
-				fill="none"
-			/>
-			<text
-				x={(sourceX + targetX) / 2}
-				y={(sourceY + targetY) / 2 - 5}
-				textAnchor="middle"
-				style={{ fontSize: 12 }}
-			>
-				{`${id}`}
-			</text>
-		</g>
-	);
-};
-
-const edgeTypes = {
-	custom: CustomEdge,
-};
-
-type FlowEditorProps = {
-	nodes: Node[];
-	edges: Edge[];
-	onNodesChange: OnNodesChange;
-	onEdgesChange: OnEdgesChange;
-	onConnect: (connection: Connection) => void;
-};
-
-const rfStyle = {
-	backgroundColor: "#B8CEFF",
-};
-
-function FlowEditor({
-	nodes,
-	edges,
-	onNodesChange,
-	onEdgesChange,
-	onConnect,
-}: FlowEditorProps) {
-	const { setEdges } = useReactFlow();
-
-	const handleDeleteEdge = useCallback(
-		(event: KeyboardEvent) => {
-			if (event.key === "Delete" || event.key === "Backspace") {
-				setEdges((eds) => eds.filter((e) => !e.selected));
-			}
-		},
-		[setEdges]
-	);
-
-	useEffect(() => {
-		document.addEventListener("keydown", handleDeleteEdge);
-		return () => document.removeEventListener("keydown", handleDeleteEdge);
-	}, [handleDeleteEdge]);
-
-	return (
-		<div className="h-96 w-full rounded border">
-			<ReactFlow
-				nodes={nodes}
-				edges={edges}
-				onNodesChange={onNodesChange}
-				onEdgesChange={onEdgesChange}
-				onConnect={onConnect}
-				edgeTypes={edgeTypes}
-				nodeTypes={nodeTypes}
-				fitView
-				style={rfStyle}
-			>
-				<Controls />
-				<MiniMap />
-				<Background />
-			</ReactFlow>
-		</div>
-	);
-}
-
 export const CreateProjectForm = () => {
 	const [initialNodes, setNodes] = useState<Node[]>([]);
 	const [initialEdges, setEdges] = useState<Edge[]>([]);
+
+	const form = useForm({
+		resolver: zodResolver(formSchema),
+		defaultValues: {
+			name: "",
+			nodes: [],
+			edges: [],
+		},
+	});
+
+	const { handleSubmit, register, setValue, watch } = form;
 
 	useEffect(() => {
 		// Replace with your API call
@@ -158,38 +74,31 @@ export const CreateProjectForm = () => {
 		fetchStatuses();
 	}, []);
 
-	const form = useForm({
-		resolver: zodResolver(formSchema),
-		defaultValues: {
-			name: "",
-			nodes: [],
-			edges: [],
-		},
-	});
-
-	const { handleSubmit, register, setValue, control, watch } = form;
 	const onNodesChange = useCallback(
 		(changes: NodeChange<Node>[]) => {
-			setNodes((nds) => applyNodeChanges(changes, nds));
+			setNodes((nds) => {
+				console.log(nds);
+				console.log(changes);
+
+				return applyNodeChanges(changes, nds);
+			});
 			setValue("nodes", z.array(NodeSchema).parse(initialNodes));
 		},
-		[setNodes, initialNodes, setValue]
+		[setNodes]
 	);
 
 	const onEdgesChange = useCallback(
 		(changes: EdgeChange<Edge>[]) => {
 			setEdges((edgs) => applyEdgeChanges(changes, edgs));
-			setValue("edges", z.array(EdgeSchema).parse(initialEdges));
+			// setValue("edges", z.array(EdgeSchema).parse(initialEdges));
 		},
-		[setEdges, initialEdges, setValue]
+		[setEdges]
 	);
 
-	useEffect(() => {
-		setValue("nodes", z.array(NodeSchema).parse(initialNodes));
-		setValue("edges", z.array(EdgeSchema).parse(initialEdges));
-	}, [initialNodes, initialEdges, setValue]);
+	setValue("nodes", z.array(NodeSchema).parse(initialNodes));
+	// const nodes = watch("nodes");
+	// console.log(nodes);
 
-	const nodes = watch("nodes");
 	const edges = watch("edges");
 
 	const onSubmit = (data: unknown) => {
@@ -197,59 +106,31 @@ export const CreateProjectForm = () => {
 	};
 
 	return (
-		<ReactFlowProvider>
-			<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-				<Card>
-					<CardContent className="space-y-4 p-4">
-						<Input
-							{...register("name" as const)}
-							placeholder="Project Name"
-						/>
-
-						<Controller
-							control={control}
-							name="nodes"
-							render={() => <></>}
-						/>
-						<Controller
-							control={control}
-							name="edges"
-							render={() => <></>}
-						/>
-
-						<FlowEditor
-							nodes={nodes}
-							edges={edges.map((e) => ({
-								...e,
-								type: "custom",
-								markerEnd: { type: MarkerType.ArrowClosed },
-								sourceHandle: e.sourceHandle ?? null,
-								targetHandle: e.targetHandle ?? null,
-							}))}
-							onNodesChange={onNodesChange}
-							onEdgesChange={onEdgesChange}
-							onConnect={(params) => {
-								const newEdge: Edge = {
-									...params,
-									id: `${params.source}-${params.target}`,
-									type: "custom",
-									markerEnd: { type: MarkerType.ArrowClosed },
-									sourceHandle: null,
-									targetHandle: null,
-								};
-								setValue(
-									"edges",
-									z
-										.array(EdgeSchema)
-										.parse(addEdge(newEdge, edges))
-								);
-							}}
-						/>
-
-						<Button type="submit">Create Project</Button>
-					</CardContent>
-				</Card>
-			</form>
-		</ReactFlowProvider>
+		<ProjectWorkflow
+			nodes={initialNodes}
+			edges={initialEdges.map((e) => ({
+				...e,
+				type: "directional",
+				markerEnd: { type: MarkerType.ArrowClosed },
+				sourceHandle: e.sourceHandle ?? null,
+				targetHandle: e.targetHandle ?? null,
+			}))}
+			onNodesChange={onNodesChange}
+			onEdgesChange={onEdgesChange}
+			onConnect={(params) => {
+				const newEdge: Edge = {
+					...params,
+					id: `${params.source}-${params.target}`,
+					type: "baseNode",
+					markerEnd: { type: MarkerType.ArrowClosed },
+					sourceHandle: null,
+					targetHandle: null,
+				};
+				setValue(
+					"edges",
+					z.array(EdgeSchema).parse(addEdge(newEdge, edges))
+				);
+			}}
+		/>
 	);
 };
