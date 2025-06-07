@@ -1,6 +1,5 @@
-import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Link } from "@tanstack/react-router";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
 	Form,
 	FormControl,
@@ -27,8 +26,9 @@ import {
 } from "@/features/Ticket/service/ticketQueries";
 import { Ticket, TicketSchema } from "@/features/Ticket/types/Ticket";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Link } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const inputStyle = "mx-[10px] my-0 w-[460px]";
 const selectStyle = "mx-[10px] my-0 w-[150px]";
@@ -90,16 +90,15 @@ export function TicketEditForm(id: string) {
 	}
 
 	return (
-		<Card className="mx-auto my-0 w-fit p-2">
+		<Card className="mx-auto my-0 w-fit py-8">
 			<CardHeader>
-				{" "}
 				<CardTitle>Edit ticket</CardTitle>
 			</CardHeader>
 			<CardContent>
 				<Form {...form}>
 					<form
 						onSubmit={form.handleSubmit(onSubmit)}
-						className="mx-auto w-[550px] space-y-6"
+						className="mx-auto w-xl space-y-6"
 					>
 						<FormField
 							control={form.control}
@@ -274,23 +273,30 @@ export function TicketEditForm(id: string) {
 							)}
 						/>
 
-						<Button
-							type="submit"
-							disabled={updateTicket.isPending}
-							className="mx-[10px] rounded-full"
-						>
-							{updateTicket.isPending
-								? "Submitting..."
-								: "Submit"}
-						</Button>
+						<div className="flex gap-2">
+							<Button
+								type="submit"
+								variant="outline"
+								disabled={updateTicket.isPending}
+								className="cursor-pointer"
+							>
+								{updateTicket.isPending
+									? "Submitting..."
+									: "Submit"}
+							</Button>
 
-						<Link
-							to="/tickets/$ticketId"
-							params={{ ticketId: id }}
-							className="rounded-full bg-red-700 px-4 py-2 text-center font-semibold text-white hover:bg-red-800"
-						>
-							Cancel
-						</Link>
+							<Link
+								to="/tickets/$ticketId"
+								params={{ ticketId: id }}
+							>
+								<Button
+									variant="default"
+									className="cursor-pointer"
+								>
+									Cancel
+								</Button>
+							</Link>
+						</div>
 					</form>
 				</Form>
 			</CardContent>

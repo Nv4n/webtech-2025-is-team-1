@@ -15,14 +15,20 @@ import {
 	HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { ProfileHoverCard } from "@/features/Profile/components/ProfileHoverCard";
 import { FakeProfileApi } from "@/features/Profile/service/profileApi";
 import { getInitials } from "@/features/Profile/utils/getInitials";
 import { FakeProjectApi } from "@/features/Project/service/projectApi";
 import { FakeTicketApi } from "@/features/Ticket/service/ticketApi";
+
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { Pencil } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 
 const statusBadgeStyles = {
 	"not-started": "bg-red-700 text-white dark:text-white",
@@ -66,13 +72,43 @@ export const TicketDetails = (id: string) => {
 		<>
 			<Card className="relative isolate mx-auto mt-4 mb-0 w-fit max-w-lg px-4">
 				<CardHeader>
-					<Link
-						to="/tickets/$ticketId/edit"
-						params={{ ticketId: id }}
-						className="hover:bg-card-foreground/15 absolute top-2 right-2 w-fit rounded p-2"
-					>
-						<Pencil></Pencil>
-					</Link>
+					<div className="absolute top-2 right-2 flex gap-4">
+						<Tooltip>
+							<TooltipTrigger asChild>
+								<Link
+									to="/tickets/$ticketId/edit"
+									params={{ ticketId: id }}
+									className="hover:bg-card-foreground/15w-fit rounded p-2"
+								>
+									<Pencil>
+										<span className="sr-only">
+											Edit ticket
+										</span>
+									</Pencil>
+								</Link>
+							</TooltipTrigger>
+							<TooltipContent>
+								<p>Edit ticket</p>
+							</TooltipContent>
+						</Tooltip>
+						<Tooltip>
+							<TooltipTrigger asChild>
+								<Button
+									type="submit"
+									className="w-fit cursor-pointer rounded"
+								>
+									<Trash2>
+										<span className="sr-only">
+											Delete ticket
+										</span>
+									</Trash2>
+								</Button>
+							</TooltipTrigger>
+							<TooltipContent>
+								<p> Delete ticket</p>
+							</TooltipContent>
+						</Tooltip>
+					</div>
 					<CardTitle>{ticket.title}</CardTitle>
 					<CardDescription className="flex gap-2">
 						<span>status</span>
@@ -117,11 +153,6 @@ export const TicketDetails = (id: string) => {
 						Created at {ticket.createdAt.toLocaleDateString()}
 					</span>
 				</CardFooter>
-				<form>
-					<Button type="submit" className="w-full bg-red-700">
-						Delete ticket
-					</Button>
-				</form>
 			</Card>
 		</>
 	);
