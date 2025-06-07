@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import { serverAddr } from "@/config/config";
+import { getCookie } from "@/features/Auth/utils/cookies";
 import { ProfileHoverCardProps } from "@/features/Profile/components/ProfileHoverCard";
 import { FakeFullProfileApi } from "@/features/Profile/service/fullProfileApi";
 import { ProfileSchema } from "@/features/Profile/types/Profile";
@@ -29,7 +30,11 @@ export function ProfileData({ id }: ProfileHoverCardProps) {
 	const { data: profileData, isLoading: isProfileLoading } = useQuery({
 		queryKey: ["fullDataUsers", id],
 		queryFn: async () => {
-			const res = await fetch(`${serverAddr}/api/users/me`);
+			const res = await fetch(`${serverAddr}/api/users/me`, {
+				headers: {
+					Authorization: `Bearer ${getCookie("authtoken")}`,
+				},
+			});
 			if (!(res.status >= 400)) {
 				navigate({ to: "/" });
 			}
