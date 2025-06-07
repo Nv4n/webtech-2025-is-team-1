@@ -100,13 +100,17 @@ function fetchTicketDetails() {
 				navigate({ to: "/login" });
 			}
 			const ticketsResp = await res.json();
+			console.log(ticketsResp);
+
 			const parsedTickets = z.array(TicketSchema).safeParse(ticketsResp);
+			console.log(parsedTickets);
+
 			if (parsedTickets.success) {
 				return parsedTickets.data;
 			} else {
 				console.error("Parse error:", parsedTickets.error.message);
-				deleteCookie("authtoken");
-				navigate({ to: "/login" });
+				// deleteCookie("authtoken");
+				// navigate({ to: "/login" });
 			}
 		},
 	});
@@ -178,7 +182,6 @@ export function TicketsGroup({ status }: TicketStatus) {
 					</Tooltip>
 				</TooltipProvider>
 			</div>
-
 			{tickets.length > 0 ? (
 				tickets
 					.filter((ticket) => ticket.status === parseInt(status) + 1)

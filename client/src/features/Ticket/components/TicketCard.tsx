@@ -22,7 +22,7 @@ export type TicketCardProps = {
 	id: string;
 	title: string;
 	status: string;
-	updatedAt: Date;
+	updatedAt: string;
 	updatedBy: {
 		firstName: string;
 		lastName: string;

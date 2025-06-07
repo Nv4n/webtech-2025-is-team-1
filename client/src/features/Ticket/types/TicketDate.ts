@@ -1,4 +1,4 @@
 export type TicketDate = {
 	labelContent: string;
-	date: Date;
+	date: string;
 };
