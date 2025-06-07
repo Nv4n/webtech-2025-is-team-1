@@ -7,9 +7,11 @@ export function TicketsDashboard() {
 		<div>
 			<TicketsFilter />
 			<div className="flex w-full justify-center space-x-4 p-4">
-				<TicketsGroup status="not-started" />
-				<TicketsGroup status="in-progress" />
-				<TicketsGroup status="completed" />
+				{TicketStatuses.map((status) => {
+					// console.log(status);
+
+					return <TicketsGroup key={status} status={status} />;
+				})}
 			</div>
 		</div>
 	);
@@ -21,6 +23,8 @@ export function TicketsDashboardWithFilter() {
 			<TicketsFilter />
 			<div className="flex w-full justify-center space-x-4 p-4">
 				{TicketStatuses.map((status) => {
+					console.log(status);
+
 					return <TicketsGroup status={status} />;
 				})}
 			</div>
