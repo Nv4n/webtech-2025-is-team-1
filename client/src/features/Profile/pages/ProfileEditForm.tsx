@@ -74,7 +74,7 @@ export function ProfileEditForm({ id }: { id: string }) {
 			>
 				<FormField
 					control={form.control}
-					name="fname"
+					name="firstName"
 					render={({ field }) => (
 						<FormItem className={itemStyle}>
 							<FormLabel>First Name</FormLabel>
@@ -91,7 +91,7 @@ export function ProfileEditForm({ id }: { id: string }) {
 
 				<FormField
 					control={form.control}
-					name="lname"
+					name="lastName"
 					render={({ field }) => (
 						<FormItem className={itemStyle}>
 							<FormLabel>Last Name</FormLabel>

@@ -32,9 +32,7 @@ export function ProfileData({ id }: ProfileHoverCardProps) {
 					Authorization: `Bearer ${getCookie("authtoken")}`,
 				},
 			});
-			if (!(res.status >= 400)) {
-				navigate({ to: "/" });
-			}
+
 			const jsonedProfile = await res.json();
 			const parsedProfile = ProfileSchema.safeParse(jsonedProfile);
 			if (parsedProfile.success) {
@@ -126,7 +124,7 @@ export function ProfileData({ id }: ProfileHoverCardProps) {
 
 				<Button
 					onClick={onLogOut}
-					variant="outline"
+					// variant=""
 					data-slot="navigation-menu-link"
 				>
 					<LogOut className="h-4 w-4" />
