@@ -1,9 +1,14 @@
 import { z } from "zod";
 
 export const TicketStatuses = [
-	"not-started",
-	"in-progress",
-	"completed",
+	"Open",
+	"InProgress",
+	"InReview",
+	"Testing",
+	"Done",
+	"Closed",
+	"Blocked",
+	"Cancelled",
 ] as const;
 export const TicketPriorities = ["Low", "Medium", "High"] as const;
 

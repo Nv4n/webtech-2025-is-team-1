@@ -1,6 +1,7 @@
 "use client";
 
 import { MultiSelect } from "@/components/ui/multi-select";
+import { serverAddr } from "@/config/config";
 import { FakeProjectApi } from "@/features/Project/service/projectApi";
 import { TicketStatuses } from "@/features/Ticket/types/Ticket";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -60,7 +61,7 @@ export function TicketsFilter() {
 		});
 
 		const onSubmit = async (data: FormData) => {
-			const queryParams = new URLSearchParams();
+			/*const queryParams = new URLSearchParams();
 
 			if (data.projectsFilters?.length) {
 				queryParams.append("projects", data.projectsFilters.join(","));
@@ -68,15 +69,20 @@ export function TicketsFilter() {
 
 			if (data.statusesFilters?.length) {
 				queryParams.append("statuses", data.statusesFilters.join(","));
-			}
+			}*/
 
 			// TODO: to be implemented with the end end-point of the back-end
-			const response = await fetch(
-				`/api/tickets?${queryParams.toString()}`
+			const res = await fetch(
+				//`/api/tickets?${queryParams.toString()}`
+				`${serverAddr}/api/tickets/filter?projectIds=${data.projectsFilters}`,
+				{
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}
 			);
-			const tickets = await response.json();
-
-			console.log("Filtered Tickets:", tickets);
+			console.log(res);
 			// You can now store these in state and render them
 		};
 
