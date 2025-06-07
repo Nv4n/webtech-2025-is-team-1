@@ -1,19 +1,16 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import { serverAddr } from "@/config/config";
-import { getCookie } from "@/features/Auth/utils/cookies";
+import { deleteCookie, getCookie } from "@/features/Auth/utils/cookies";
 import { ProfileHoverCardProps } from "@/features/Profile/components/ProfileHoverCard";
 import { FakeFullProfileApi } from "@/features/Profile/service/fullProfileApi";
 import { ProfileSchema } from "@/features/Profile/types/Profile";
 import { getInitials } from "@/features/Profile/utils/getInitials";
-import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { LogOut } from "lucide-react";
-import { toast } from "sonner";
 
 function getProfileDataWithFakeApi({ id }: ProfileHoverCardProps) {
 	const { data } = useQuery({
@@ -62,6 +59,11 @@ export function ProfileData({ id }: ProfileHoverCardProps) {
 
 	if (!profileData) return null;
 
+	function onLogOut() {
+		deleteCookie("authtoken");
+		navigate({ to: "/login" });
+	}
+
 	return (
 		<div className="bg-secondary mx-auto mt-10 max-w-md space-y-6 rounded-2xl p-6 text-gray-800 shadow-md">
 			<div className="flex items-center space-x-4">
@@ -81,7 +83,7 @@ export function ProfileData({ id }: ProfileHoverCardProps) {
 						<Badge variant="secondary">
 							{profileData.username}
 						</Badge>
-						<Badge variant="outline">{profileData.role}</Badge>
+						{/* <Badge variant="outline">{profileData.role}</Badge> */}
 					</div>
 				</div>
 			</div>
@@ -90,7 +92,7 @@ export function ProfileData({ id }: ProfileHoverCardProps) {
 				<p className="text-sm font-medium text-gray-600">
 					Account Created:
 				</p>
-				<Badge className="bg-blue-500 dark:bg-blue-700">
+				{/* <Badge className="bg-blue-500 dark:bg-blue-700">
 					{new Date(profileData.createdAt).toLocaleDateString(
 						"en-US",
 						{
@@ -99,7 +101,7 @@ export function ProfileData({ id }: ProfileHoverCardProps) {
 							day: "numeric",
 						}
 					)}
-				</Badge>
+				</Badge> */}
 			</div>
 
 			<div className="w-full space-y-2">
@@ -122,17 +124,14 @@ export function ProfileData({ id }: ProfileHoverCardProps) {
 					</Link>
 				</div>
 
-				<Link
-					to="/login"
-					className={cn(
-						"hover:bg-muted flex w-full items-center justify-center gap-2 rounded-md py-2 text-sm font-medium text-gray-600 transition dark:text-white",
-						navigationMenuTriggerStyle()
-					)}
+				<Button
+					onClick={onLogOut}
+					variant="outline"
 					data-slot="navigation-menu-link"
 				>
 					<LogOut className="h-4 w-4" />
 					Log Out
-				</Link>
+				</Button>
 			</div>
 		</div>
 	);
