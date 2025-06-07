@@ -9,6 +9,7 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { serverAddr } from "@/config/config";
 import { RegisterSchema } from "@/features/Auth/types/AuthUser";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "@tanstack/react-router";
@@ -22,8 +23,14 @@ function RegisterForm() {
 		resolver: zodResolver(RegisterSchema),
 	});
 
-	function onSubmit(data: RegisterUser) {
+	async function onSubmit(data: RegisterUser) {
 		console.log(data);
+		const res = await fetch(`${serverAddr}/api/auth/register`, {
+			method: "POST",
+			body: JSON.stringify(data),
+		});
+		console.log(res);
+
 		// TODO: Call register API
 	}
 

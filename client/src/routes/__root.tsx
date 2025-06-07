@@ -39,30 +39,6 @@ export const Route = createRootRoute({
 						</NavigationMenuItem>
 						<NavigationMenuItem>
 							<Link
-								to={"/register"}
-								className={cn(
-									NavMenuLinkStyles,
-									navigationMenuTriggerStyle()
-								)}
-								data-slot="navigation-menu-link"
-							>
-								Register
-							</Link>
-						</NavigationMenuItem>
-						<NavigationMenuItem>
-							<Link
-								to={"/login"}
-								className={cn(
-									NavMenuLinkStyles,
-									navigationMenuTriggerStyle()
-								)}
-								data-slot="navigation-menu-link"
-							>
-								Login
-							</Link>
-						</NavigationMenuItem>
-						<NavigationMenuItem>
-							<Link
 								to="/profile"
 								className={cn(
 									NavMenuLinkStyles,
