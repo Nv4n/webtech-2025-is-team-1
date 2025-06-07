@@ -1,22 +1,24 @@
-import { UserSchema } from "@/features/Profile/types/Profile";
-import { ProjectSchema } from "@/features/Project/types/Project";
-import { IdSchema } from "@/types/ZodId";
 import { z } from "zod";
 
-export const TicketIdSchema = IdSchema;
+export const TicketStatuses = [
+	"not-started",
+	"in-progress",
+	"completed",
+] as const;
+export const TicketPriorities = ["Low", "Medium", "High"] as const;
 
 export const TicketSchema = z.object({
-	id: TicketIdSchema.optional(), // set to optional to skip mandatory check
+	id: z.coerce.string().optional(), // set to optional to skip mandatory check
 	title: z.string().min(3).max(200),
-	status: z.enum(["not-started", "in-progress", "completed"]),
-	priority: z.enum(["Low", "Medium", "High"]),
+	status: z.enum(TicketStatuses),
+	priority: z.enum(TicketPriorities),
 	description: z.string().min(10),
-	assignee: UserSchema.shape.id,
-	project: ProjectSchema.pick({ id: true }).required().shape.id,
-	author: UserSchema.shape.id,
+	assignee: z.coerce.string(),
+	project: z.coerce.string(),
+	author: z.coerce.string(),
 	createdAt: z.date(),
 	updatedAt: z.date(),
-	updatedBy: UserSchema.pick({ id: true }).required().shape.id,
+	updatedBy: z.coerce.string(),
 });
 
 export type Ticket = z.infer<typeof TicketSchema>;

@@ -1,16 +1,11 @@
-import { ProjectIdSchema } from "@/features/Project/types/Project";
 import { TicketSchema } from "@/features/Ticket/types/Ticket";
 import { z } from "zod";
 
-export const WorkflowIdSchema = z.coerce.string();
-
 export const WorkflowSchema = z.object({
-	id: WorkflowIdSchema.optional(),
-	project: ProjectIdSchema,
-	fromStatus: TicketSchema.shape.status,
+	id: z.coerce.string().optional(),
+	project: z.coerce.string(),
+	fromStatus: z.coerce.string(),
 	toStatus: TicketSchema.shape.status,
 });
 
 export type Workflow = z.infer<typeof WorkflowSchema>;
-
-

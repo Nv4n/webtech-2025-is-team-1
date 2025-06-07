@@ -89,7 +89,7 @@ export const Route = createRootRoute({
 						</NavigationMenuItem>
 						<NavigationMenuItem>
 							<Link
-								to="/project"
+								to="/projects/create"
 								className={cn(
 									NavMenuLinkStyles,
 									navigationMenuTriggerStyle()

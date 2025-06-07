@@ -1,5 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { FakeProfileApi } from "@/features/Profile/service/profileApi";
 import { FakeProjectApi } from "@/features/Project/service/projectApi";
 import { TicketCard } from "@/features/Ticket/components/TicketCard";
@@ -12,17 +17,17 @@ type TicketStatus = {
 };
 
 const fallBackProfile = {
-  fname: "Unknown",
-  lname: "User",
-  username: "unknown",
-  id: "",
+	fname: "Unknown",
+	lname: "User",
+	username: "unknown",
+	id: "",
 };
 
 function fetchTicketDetails() {
 	const { data: ticketList, isLoading: isLoadingTickets } = useQuery({
 		queryKey: ["tickets"],
 		queryFn: () => {
-			return FakeTicketApi().getTicketDetails();
+			return FakeTicketApi().getTicketList();
 		},
 		select: (data) => {
 			return Object.values(data);
@@ -53,16 +58,16 @@ function fetchTicketDetails() {
 		return [];
 	}
 	const ticketsWithDetails = ticketList.map((ticket) => {
-  	const updatedBy = userList.find((user) => user.id === ticket.updatedBy);
-  	const assignedTo = userList.find((user) => user.id === ticket.assignee);
-  	const project = projectList.find((proj) => proj.id === ticket.project);
+		const updatedBy = userList.find((user) => user.id === ticket.updatedBy);
+		const assignedTo = userList.find((user) => user.id === ticket.assignee);
+		const project = projectList.find((proj) => proj.id === ticket.project);
 
-  	return {
-    	...ticket,
-    	updatedBy: updatedBy ?? fallBackProfile,
-    	assignedTo: assignedTo ?? fallBackProfile,
-    	project,
-  	};
+		return {
+			...ticket,
+			updatedBy: updatedBy ?? fallBackProfile,
+			assignedTo: assignedTo ?? fallBackProfile,
+			project,
+		};
 	});
 
 	return ticketsWithDetails;
@@ -83,7 +88,7 @@ export function TicketsGroup({ status }: TicketStatus) {
 								<CirclePlus />
 							</Button>
 						</TooltipTrigger>
-						<TooltipContent className="rounded-md z-10 border bg-gray-100 p-2 text-gray-800 shadow-md">
+						<TooltipContent className="z-10 rounded-md border bg-gray-100 p-2 text-gray-800 shadow-md">
 							<pre>Add Ticket</pre>
 						</TooltipContent>
 					</Tooltip>

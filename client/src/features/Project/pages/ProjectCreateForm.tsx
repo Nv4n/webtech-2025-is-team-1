@@ -1,33 +1,19 @@
-import { BaseNode } from "@/components/base-node";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { ProjectWorkflow } from "@/features/Workflow/components/ProjectWorkflow";
 import { EdgeSchema, NodeSchema } from "@/features/Workflow/types/ReactFlow";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-	Background,
-	Connection,
-	Controls,
 	Edge,
 	EdgeChange,
-	EdgeProps,
 	MarkerType,
-	MiniMap,
 	Node,
 	NodeChange,
-	OnEdgesChange,
-	OnNodesChange,
-	ReactFlow,
-	ReactFlowProvider,
 	addEdge,
 	applyEdgeChanges,
 	applyNodeChanges,
-	useReactFlow,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { useCallback, useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -36,7 +22,7 @@ const formSchema = z.object({
 	edges: z.array(EdgeSchema),
 });
 
-export const CreateProjectForm = () => {
+export const ProjectCreateForm = () => {
 	const [initialNodes, setNodes] = useState<Node[]>([]);
 	const [initialEdges, setEdges] = useState<Edge[]>([]);
 
@@ -48,8 +34,6 @@ export const CreateProjectForm = () => {
 			edges: [],
 		},
 	});
-
-	const { handleSubmit, register, setValue, watch } = form;
 
 	useEffect(() => {
 		// Replace with your API call
@@ -82,7 +66,7 @@ export const CreateProjectForm = () => {
 
 				return applyNodeChanges(changes, nds);
 			});
-			setValue("nodes", z.array(NodeSchema).parse(initialNodes));
+			form.setValue("nodes", z.array(NodeSchema).parse(initialNodes));
 		},
 		[setNodes]
 	);
@@ -95,11 +79,7 @@ export const CreateProjectForm = () => {
 		[setEdges]
 	);
 
-	setValue("nodes", z.array(NodeSchema).parse(initialNodes));
-	// const nodes = watch("nodes");
-	// console.log(nodes);
-
-	const edges = watch("edges");
+	form.setValue("nodes", z.array(NodeSchema).parse(initialNodes));
 
 	const onSubmit = (data: unknown) => {
 		console.log("Form Submitted:", data);
@@ -126,9 +106,9 @@ export const CreateProjectForm = () => {
 					sourceHandle: null,
 					targetHandle: null,
 				};
-				setValue(
+				form.setValue(
 					"edges",
-					z.array(EdgeSchema).parse(addEdge(newEdge, edges))
+					z.array(EdgeSchema).parse(addEdge(newEdge, initialEdges))
 				);
 			}}
 		/>

@@ -7,7 +7,7 @@ import { toast } from "sonner";
 export const useGetTicket = (id: string) => {
 	const { data, isLoading } = useQuery({
 		queryKey: ["tickets", id],
-		queryFn: () => FakeTicketApi().getTicketDetails(),
+		queryFn: () => FakeTicketApi().getTicketList(),
 		select: (data) => {
 			return Object.entries(data).filter(([key, _]) => key === id)[0][1];
 		},

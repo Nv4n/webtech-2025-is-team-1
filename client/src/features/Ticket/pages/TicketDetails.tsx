@@ -33,7 +33,7 @@ const statusBadgeStyles = {
 export const TicketDetails = (id: string) => {
 	const { data: ticket, isLoading } = useQuery({
 		queryKey: ["tickets", id],
-		queryFn: () => FakeTicketApi().getTicketDetails(),
+		queryFn: () => FakeTicketApi().getTicketList(),
 		select: (data) => {
 			return Object.entries(data).filter(([key, _]) => key === id)[0][1];
 		},
@@ -118,7 +118,9 @@ export const TicketDetails = (id: string) => {
 					</span>
 				</CardFooter>
 				<form>
-					<Button type="submit" className="w-full bg-red-700">Delete ticket</Button>
+					<Button type="submit" className="w-full bg-red-700">
+						Delete ticket
+					</Button>
 				</form>
 			</Card>
 		</>

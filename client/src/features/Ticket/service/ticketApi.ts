@@ -205,5 +205,5 @@ export const FakeTicketApi = () => {
 			}, 1000);
 		});
 	};
-	return { getTicketDetails, updateTicket };
+	return { getTicketList: getTicketDetails, updateTicket };
 };
