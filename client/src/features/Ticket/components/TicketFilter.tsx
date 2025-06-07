@@ -12,10 +12,10 @@ import { z } from "zod";
 
 function getStatusFilterList() {
 	return Object.keys(TicketStatuses).map((key) => {
-		console.log(TicketStatuses);
-		console.log(key);
+		// console.log(TicketStatuses);
+		// console.log(key);
 
-		console.log(TicketStatuses[parseInt(key)]);
+		// console.log(TicketStatuses[parseInt(key)]);
 		return {
 			value: key,
 			label: TicketStatuses[parseInt(key)].replace(

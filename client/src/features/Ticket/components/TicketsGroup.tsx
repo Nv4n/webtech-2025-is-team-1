@@ -184,12 +184,12 @@ export function TicketsGroup({ status }: TicketStatus) {
 			</div>
 			{tickets.length > 0 ? (
 				tickets
-					.filter((ticket) => ticket.status === parseInt(status) + 1)
+					.filter((ticket) => ticket.status === status)
 					.map((ticket) =>
 						ticket.id && ticket.project?.id ? (
 							<TicketCard
 								updatedAt={ticket.updatedAt}
-								updatedBy={ticket.updatedBy}
+								// updatedBy={ticket.updatedBy}
 								project={ticket.project.name}
 								id={ticket.id}
 								title={ticket.title}

@@ -23,12 +23,12 @@ export type TicketCardProps = {
 	title: string;
 	status: string;
 	updatedAt: string;
-	updatedBy: {
-		firstName: string;
-		lastName: string;
-		username: string;
-		id?: string;
-	};
+	// updatedBy: {
+	// 	firstName: string;
+	// 	lastName: string;
+	// 	username: string;
+	// 	id?: string;
+	// };
 	project: string;
 };
 
@@ -37,7 +37,7 @@ export function TicketCard({
 	title,
 	status,
 	updatedAt,
-	updatedBy,
+	// updatedBy,
 	project,
 }: TicketCardProps) {
 	return (
@@ -59,7 +59,7 @@ export function TicketCard({
 				</CardContent>
 				<CardFooter className="flex flex-col items-start gap-4 px-4 pt-2 pb-4">
 					<_Date labelContent="Updated At" date={updatedAt} />
-					{updatedBy && (
+					{/* {updatedBy && (
 						<HoverCard>
 							<HoverCardTrigger className="z-7">
 								<Avatar>
@@ -81,7 +81,7 @@ export function TicketCard({
 								</div>
 							</HoverCardContent>
 						</HoverCard>
-					)}
+					)} */}
 				</CardFooter>
 			</div>
 		</Card>
