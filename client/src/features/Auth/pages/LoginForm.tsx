@@ -24,6 +24,9 @@ export function LoginForm() {
 		console.log(data);
 		const res = fetch(`${serverAddr}/api/auth/login`, {
 			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
 			body: JSON.stringify(data),
 		});
 		console.log(res);

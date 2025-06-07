@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import { serverAddr } from "@/config/config";
 import {
 	useGetUser,
 	useUpdateUser,
@@ -43,6 +44,14 @@ export function ProfileEditForm({ id }: { id: string }) {
 
 	function onSubmit(data: Profile) {
 		mutateUser.mutate(data);
+		const res = fetch(`${serverAddr}/api/users/me`, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(data),
+		});
+		console.log(res);
 	}
 
 	if (isUserLoading) {
