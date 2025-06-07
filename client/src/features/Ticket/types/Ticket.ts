@@ -1,22 +1,28 @@
-import { z } from "zod";
+import { number, z } from "zod";
 
-export const TicketStatuses = [
-	"Open",
-	"InProgress",
-	"InReview",
-	"Testing",
-	"Done",
-	"Closed",
-	"Blocked",
-	"Cancelled",
-] as const;
-export const TicketPriorities = ["Low", "Medium", "High"] as const;
+export const TicketStatuses = {
+	1: "Open",
+	2: "InProgress",
+	3: "InReview",
+	4: "Testing",
+	5: "Done",
+	6: "Closed",
+	7: "Blocked",
+	8: "Cancelled",
+} as const;
+
+export const TicketPriorities = {
+	1: "Low",
+	2: "Medium",
+	3: "High",
+	4: "Critical",
+};
 
 export const TicketSchema = z.object({
 	id: z.coerce.string().optional(), // set to optional to skip mandatory check
 	title: z.string().min(3).max(200),
-	status: z.enum(TicketStatuses),
-	priority: z.enum(TicketPriorities),
+	status: z.number(),
+	priority: z.number(),
 	description: z.string().min(10),
 	assignee: z.coerce.string(),
 	project: z.coerce.string(),
