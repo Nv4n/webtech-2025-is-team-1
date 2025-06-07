@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
+import { serverAddr } from "@/config/config";
 import { useGetUserList } from "@/features/Profile/service/profileQueries";
 import { useGetProjectList } from "@/features/Project/service/projectQueries";
 import {
@@ -64,7 +65,10 @@ export function TicketEditForm(id: string) {
 		}
 	}, [ticket]);
 
-	function onSubmit(data: Ticket) {
+	async function onSubmit(data: Ticket) {
+		console.log(data);
+		const res = await fetch(`${serverAddr}/api/tickets/${id}`);
+		
 		data.updatedAt = new Date();
 		if (!data.assignee) data.assignee = ticket?.assignee || data.assignee;
 		if (!data.id) data.id = id;

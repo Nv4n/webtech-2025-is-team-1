@@ -11,10 +11,13 @@ import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
 function getStatusFilterList() {
-	return TicketStatuses.map((status) => {
+	return Object.keys(TicketStatuses).map((key) => {
 		return {
-			value: status,
-			label: status.replace(/([a-z])([A-Z])/g, "$1 $2").split(" "),
+			value: key,
+			label: TicketStatuses[parseInt(key) + 1].replace(
+				/([a-z])([A-Z])/g,
+				"$1 $2"
+			),
 			icon: ListTodo,
 		};
 	});
