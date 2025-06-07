@@ -20,16 +20,16 @@ export function LoginForm() {
 		resolver: zodResolver(LoginSchema),
 	});
 
-	function onSubmit(data: LoginUser) {
+	async function onSubmit(data: LoginUser) {
 		console.log(data);
-		const res = fetch(`${serverAddr}/api/auth/login`, {
+		const res = await fetch(`${serverAddr}/api/auth/login`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify(data),
 		});
-		console.log(res);
+		console.log(await res.json());
 	}
 
 	return (
