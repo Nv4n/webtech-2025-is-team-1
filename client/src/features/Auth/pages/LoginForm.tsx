@@ -10,12 +10,19 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { serverAddr } from "@/config/config";
-import { LoginSchema, LoginUser } from "@/features/Auth/types/AuthUser";
+import {
+	AuthResponseSchema,
+	LoginSchema,
+	LoginUser,
+} from "@/features/Auth/types/AuthUser";
+import { setCookie } from "@/features/Auth/utils/cookies";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export function LoginForm() {
+	const navigate = useNavigate();
 	const form = useForm<LoginUser>({
 		resolver: zodResolver(LoginSchema),
 	});
@@ -29,7 +36,17 @@ export function LoginForm() {
 			},
 			body: JSON.stringify(data),
 		});
-		console.log(await res.json());
+		const deseril = await res.json();
+		console.log(deseril);
+
+		const authResp = AuthResponseSchema.safeParse(deseril);
+
+		if (authResp.success) {
+			setCookie("authtoken", authResp.data.token);
+			navigate({ to: "/" });
+		} else {
+			toast.error(authResp.error.message);
+		}
 	}
 
 	return (

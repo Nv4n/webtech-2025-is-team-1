@@ -1,5 +1,5 @@
 import { UserSchema } from "@/features/Profile/types/Profile";
-import { z } from "zod";
+import { string, z } from "zod";
 
 export const LoginSchema = UserSchema.pick({
 	username: true,
@@ -22,3 +22,14 @@ export const RegisterSchema = RegisterSchemaPure.extend({
 });
 
 export type RegisterUser = z.infer<typeof RegisterSchema>;
+
+export const AuthResponseSchema = z.object({
+	email: z.string().email(),
+	expiration: z.string(),
+	role: z.string(),
+	success: z.boolean(),
+	token: z.string(),
+	username: z.string(),
+});
+
+export type AuthResponse = z.infer<typeof AuthResponseSchema>;
