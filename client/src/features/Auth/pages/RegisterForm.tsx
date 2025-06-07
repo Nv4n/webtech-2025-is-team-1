@@ -10,10 +10,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { serverAddr } from "@/config/config";
-import { RegisterSchema, RegisterUser } from "@/features/Auth/types/AuthUser";
+import {
+	RegisterSchema,
+	RegisterSchemaPure,
+	RegisterUser,
+} from "@/features/Auth/types/AuthUser";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 export function RegisterForm() {
 	const form = useForm<RegisterUser>({
@@ -22,9 +27,12 @@ export function RegisterForm() {
 
 	async function onSubmit(data: RegisterUser) {
 		console.log(data);
+		const send = RegisterSchemaPure.parse(data);
+		console.log(send);
+
 		const res = fetch(`${serverAddr}/api/auth/register`, {
 			method: "POST",
-			body: JSON.stringify(data),
+			body: JSON.stringify(send),
 		});
 		console.log(res);
 	}
@@ -49,6 +57,38 @@ export function RegisterForm() {
 									<FormControl>
 										<Input
 											placeholder="Enter Username..."
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="firstName"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>First name</FormLabel>
+									<FormControl>
+										<Input
+											placeholder="Enter First name..."
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="lastName"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Last name</FormLabel>
+									<FormControl>
+										<Input
+											placeholder="Enter Last name..."
 											{...field}
 										/>
 									</FormControl>

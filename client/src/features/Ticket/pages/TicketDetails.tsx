@@ -183,7 +183,10 @@ function UserHoverCard({ id, content, date }: UserHoverCard) {
 					<HoverCardTrigger>
 						<Avatar>
 							<AvatarFallback>
-								{getInitials(assignee.fname, assignee.lname)}
+								{getInitials(
+									assignee.firstName,
+									assignee.lastName
+								)}
 							</AvatarFallback>
 						</Avatar>
 					</HoverCardTrigger>
@@ -193,7 +196,7 @@ function UserHoverCard({ id, content, date }: UserHoverCard) {
 				</HoverCard>
 				<div className="flex flex-col">
 					<p className="leading-7">
-						{assignee.fname} {assignee.lname} {content}{" "}
+						{assignee.firstName} {assignee.lastName} {content}{" "}
 						{date &&
 							`on
 						${date.toLocaleDateString()}`}

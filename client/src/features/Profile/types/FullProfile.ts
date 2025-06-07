@@ -7,13 +7,13 @@ export const UserIdSchema = IdSchema;
 export type User = z.infer<typeof UserSchema>;
 
 export const ProfileSchema = UserSchema.pick({
-    id: true,
-    fname: true,
-    lname: true,
-    username: true,
-    email: true,
-    password: true,
-    role: true,
-    createdAt: true,
+	id: true,
+	firstName: true,
+	lastName: true,
+	username: true,
+	email: true,
+	password: true,
+	role: true,
+	createdAt: true,
 });
 export type FullProfile = z.infer<typeof ProfileSchema>;

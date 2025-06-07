@@ -39,7 +39,7 @@ export const ProfileHoverCard = ({ id }: ProfileHoverCardProps) => {
 				<div className="flex justify-between space-x-4">
 					<Avatar>
 						<AvatarFallback>
-							{getInitials(profile.fname, profile.lname)}
+							{getInitials(profile.firstName, profile.lastName)}
 						</AvatarFallback>
 					</Avatar>
 					<div className="space-y-1">
@@ -47,8 +47,8 @@ export const ProfileHoverCard = ({ id }: ProfileHoverCardProps) => {
 							{profile.username}
 						</h4>
 						<p className="text-sm">
-							{profile.fname} {profile.lname} is Senior Java
-							Developer with 3 years experience
+							{profile.firstName} {profile.lastName} is Senior
+							Java Developer with 3 years experience
 						</p>
 						<div className="flex items-center pt-2">
 							<CalendarIcon className="mr-2 h-4 w-4 opacity-70" />

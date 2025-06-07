@@ -9,8 +9,11 @@ import { cn } from "@/lib/utils";
 import {
 	CatchBoundary,
 	createRootRoute,
+	ErrorComponent,
 	Link,
 	Outlet,
+	useNavigate,
+	useRouter,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { toast, useSonner } from "sonner";
@@ -20,6 +23,8 @@ const NavMenuLinkStyles =
 
 export const Route = createRootRoute({
 	component: () => {
+		const router = useRouter();
+		const navigate = useNavigate();
 		return (
 			<>
 				<NavigationMenu>

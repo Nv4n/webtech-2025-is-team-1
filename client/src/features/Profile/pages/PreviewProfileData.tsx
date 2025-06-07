@@ -24,16 +24,16 @@ export function ProfileData({ id }: ProfileHoverCardProps) {
 		<div className="bg-secondary mx-auto mt-10 max-w-md space-y-6 rounded-2xl p-6 text-gray-800 shadow-md">
 			<div className="flex items-center space-x-4">
 				<Avatar className="h-10 w-10 rounded-full bg-zinc-800">
-					<AvatarFallback className="flex h-full w-full items-center justify-center rounded-full bg-zinc-800 dark:bg-black text-sm font-semibold text-white">
+					<AvatarFallback className="flex h-full w-full items-center justify-center rounded-full bg-zinc-800 text-sm font-semibold text-white dark:bg-black">
 						{getInitials(
-							profileData?.fname || "",
-							profileData?.lname || ""
+							profileData?.firstName || "",
+							profileData?.lastName || ""
 						)}
 					</AvatarFallback>
 				</Avatar>
 				<div className="space-y-1">
 					<h2 className="text-lg font-semibold text-gray-600">
-						{profileData.fname} {profileData.lname}
+						{profileData.firstName} {profileData.lastName}
 					</h2>
 					<div className="flex flex-wrap gap-2">
 						<Badge variant="secondary">
@@ -60,7 +60,7 @@ export function ProfileData({ id }: ProfileHoverCardProps) {
 				</Badge>
 			</div>
 
-			<div className="space-y-2 w-full">
+			<div className="w-full space-y-2">
 				<div className="mb-2 flex space-x-2">
 					<Link to="/profile" className="flex-1">
 						<Button
@@ -70,11 +70,11 @@ export function ProfileData({ id }: ProfileHoverCardProps) {
 							Change Password
 						</Button>
 					</Link>
-					<Link to="/profile-edit" className="flex-1 bg-primary text-gray-600 dark:text-white rounded-full">
-						<Button
-							variant="outline"
-							className="w-full flex-1"
-						>
+					<Link
+						to="/profile-edit"
+						className="bg-primary flex-1 rounded-full text-gray-600 dark:text-white"
+					>
+						<Button variant="outline" className="w-full flex-1">
 							Edit
 						</Button>
 					</Link>

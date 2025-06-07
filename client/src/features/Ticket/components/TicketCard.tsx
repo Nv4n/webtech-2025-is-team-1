@@ -24,8 +24,8 @@ export type TicketCardProps = {
 	status: string;
 	updatedAt: Date;
 	updatedBy: {
-		fname: string;
-		lname: string;
+		firstName: string;
+		lastName: string;
 		username: string;
 		id?: string;
 	};
@@ -65,8 +65,8 @@ export function TicketCard({
 								<Avatar>
 									<AvatarFallback>
 										{getInitials(
-											updatedBy.fname,
-											updatedBy.lname
+											updatedBy.firstName,
+											updatedBy.lastName
 										)}
 									</AvatarFallback>
 								</Avatar>

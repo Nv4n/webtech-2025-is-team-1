@@ -8,17 +8,17 @@ export const LoginSchema = UserSchema.pick({
 
 export type LoginUser = z.infer<typeof LoginSchema>;
 
-export const RegisterSchema = UserSchema.omit({
+export const RegisterSchemaPure = UserSchema.omit({
 	id: true,
 	createdAt: true,
 	role: true,
-})
-	.extend({
-		rePassword: UserSchema.shape.password,
-	})
-	.refine((data) => data.password === data.rePassword, {
-		message: "Passwords do not match",
-		path: ["rePassword"],
-	});
+});
+
+export const RegisterSchema = RegisterSchemaPure.extend({
+	rePassword: UserSchema.shape.password,
+}).refine((data) => data.password === data.rePassword, {
+	message: "Passwords do not match",
+	path: ["rePassword"],
+});
 
 export type RegisterUser = z.infer<typeof RegisterSchema>;

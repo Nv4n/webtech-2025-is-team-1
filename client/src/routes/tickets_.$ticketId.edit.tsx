@@ -7,6 +7,5 @@ export const Route = createFileRoute("/tickets_/$ticketId/edit")({
 
 function TicketEditComponent() {
 	const { ticketId } = Route.useParams();
-	throw new Error("test");
 	return TicketEditForm(ticketId);
 }

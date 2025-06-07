@@ -2,8 +2,8 @@ import { z } from "zod";
 
 export const UserSchema = z.object({
 	id: z.coerce.string().optional(),
-	fname: z.string().min(3),
-	lname: z.string().min(3),
+	firstName: z.string().min(3),
+	lastName: z.string().min(3),
 	username: z.string().min(3),
 	password: z.string().min(8).max(32),
 	createdAt: z.date().min(new Date("1900-01-01"), { message: "Too old" }),
@@ -15,8 +15,8 @@ export type User = z.infer<typeof UserSchema>;
 
 export const ProfileSchema = UserSchema.pick({
 	id: true,
-	fname: true,
-	lname: true,
+	firstName: true,
+	lastName: true,
 	username: true,
 	// role: true,
 });

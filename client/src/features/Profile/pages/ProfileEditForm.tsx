@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
 	useGetUser,
-    useUpdateUser
+	useUpdateUser,
 } from "@/features/Profile/service/profileQueries";
 import { Profile, ProfileSchema } from "@/features/Profile/types/Profile";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,18 +23,17 @@ const inputStyle = "mx-[10px] my-0 w-[460px]";
 const itemStyle = "mx-[10px]";
 
 export function ProfileEditForm({ id }: { id: string }) {
-    
 	const form = useForm<Profile>({
 		resolver: zodResolver(ProfileSchema),
 		defaultValues: {
 			id: id,
-			fname: "",
-			lname: "",
+			firstName: "",
+			lastName: "",
 			username: "",
 		},
 	});
 	const { data: user, isLoading: isUserLoading } = useGetUser(id);
-    const { mutation: mutateUser } = useUpdateUser(id);
+	const { mutation: mutateUser } = useUpdateUser(id);
 
 	useEffect(() => {
 		if (user) {
@@ -115,10 +114,7 @@ export function ProfileEditForm({ id }: { id: string }) {
 					)}
 				/>
 
-				<Button
-					type="submit"
-					className="mx-[10px] rounded-full"
-				>
+				<Button type="submit" className="mx-[10px] rounded-full">
 					{"Save"}
 				</Button>
 

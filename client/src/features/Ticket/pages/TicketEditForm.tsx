@@ -89,6 +89,8 @@ export function TicketEditForm(id: string) {
 		throw new Error("No such ticket");
 	}
 	form.setValue("project", ticket.project);
+	form.setValue("status", ticket.status);
+	form.setValue("assignee", ticket.assignee);
 
 	return (
 		<Card className="mx-auto my-0 w-fit py-8">
@@ -192,8 +194,8 @@ export function TicketEditForm(id: string) {
 																user.id || ""
 															}
 														>
-															{user.fname}{" "}
-															{user.lname}
+															{user.firstName}{" "}
+															{user.lastName}
 														</SelectItem>
 													)
 												)}

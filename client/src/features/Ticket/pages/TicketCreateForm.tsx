@@ -142,8 +142,8 @@ export function TicketCreateForm() {
 																	""
 																}
 															>
-																{user.fname}{" "}
-																{user.lname}
+																{user.firstName}{" "}
+																{user.lastName}
 															</SelectItem>
 														)
 													)}
@@ -180,8 +180,8 @@ export function TicketCreateForm() {
 																	""
 																}
 															>
-																{user.fname}{" "}
-																{user.lname}
+																{user.firstName}{" "}
+																{user.lastName}
 															</SelectItem>
 														)
 													)}
