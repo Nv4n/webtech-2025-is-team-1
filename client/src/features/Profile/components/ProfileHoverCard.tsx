@@ -5,7 +5,7 @@ import { getInitials } from "@/features/Profile/utils/getInitials";
 import { useQuery } from "@tanstack/react-query";
 import { CalendarIcon } from "lucide-react";
 
-interface ProfileHoverCardProps {
+export interface ProfileHoverCardProps {
 	id: string;
 }
 
