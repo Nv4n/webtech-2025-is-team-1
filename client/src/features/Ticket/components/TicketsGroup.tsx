@@ -114,6 +114,7 @@ function fetchTicketDetails() {
 			}
 		},
 	});
+	//TODO ADOPT TO API
 	const { data: userList, isLoading: isLoadingUsers } = useQuery({
 		queryKey: ["users"],
 		queryFn: () => {
@@ -123,6 +124,7 @@ function fetchTicketDetails() {
 			return Object.values(data);
 		},
 	});
+	//TODO ADOPT TO API, EXPORT OUTSIDE
 	const { data: projectList, isLoading: isLoadingProjects } = useQuery({
 		queryKey: ["projects"],
 		queryFn: () => {
@@ -155,7 +157,9 @@ function fetchTicketDetails() {
 }
 
 export function TicketsGroup({ status }: TicketStatus) {
+	//TODO FIX TO API
 	const tickets = fetchTicketDetails();
+
 	return (
 		<div className="flex w-1/3 flex-col space-y-4">
 			<div className="flex w-2xs items-center justify-between">
@@ -193,7 +197,8 @@ export function TicketsGroup({ status }: TicketStatus) {
 								title={ticket.title}
 								status={String(ticket.status)}
 								key={ticket.id}
-								{...tickets}
+								//TODO NOT SURE WHAT IS THIS
+								// {...ticket}
 							></TicketCard>
 						) : null
 					)

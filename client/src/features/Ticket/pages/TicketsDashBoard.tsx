@@ -23,7 +23,7 @@ export function TicketsDashboardWithFilter() {
 			<TicketsFilter />
 			<div className="flex w-full justify-center space-x-4 p-4">
 				{TicketStatuses.map((status) => {
-					console.log(status);
+					// console.log(status);
 
 					return <TicketsGroup status={status} />;
 				})}
