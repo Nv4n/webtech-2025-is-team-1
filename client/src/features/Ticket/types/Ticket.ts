@@ -16,7 +16,7 @@ export const TicketPriorities = {
 	2: "Medium",
 	3: "High",
 	4: "Critical",
-};
+} as const;
 
 export const TicketSchema = z.object({
 	id: z.coerce.string().optional(), // set to optional to skip mandatory check
