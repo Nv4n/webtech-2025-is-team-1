@@ -7,9 +7,7 @@ export function _Date({ labelContent, date }: TicketDate) {
 		<div className="flex items-center space-x-2">
 			<LabelSpan content={labelContent} />
 			<Badge variant="outline">
-				<pre>
-					{date.getMonth()}/{date.getDate()}/{date.getFullYear()}
-				</pre>
+				<pre>{new Date(date).toLocaleString()}</pre>
 			</Badge>
 		</div>
 	);
