@@ -9,6 +9,7 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { serverAddr } from "@/config/config";
 import { LoginSchema } from "@/features/Auth/types/AuthUser";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "@tanstack/react-router";
@@ -24,7 +25,11 @@ function LoginForm() {
 
 	function onSubmit(data: LoginUser) {
 		console.log(data);
-		// TODO: Call login API
+		const res = fetch(`${serverAddr}/api/auth/login`, {
+			method: "POST",
+			body: JSON.stringify(data),
+		});
+		console.log(res);
 	}
 
 	return (
