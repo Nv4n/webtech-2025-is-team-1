@@ -1,4 +1,6 @@
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { Link } from "@tanstack/react-router";
 import {
 	Form,
 	FormControl,
@@ -26,6 +28,11 @@ import {
 import { Ticket, TicketSchema } from "@/features/Ticket/types/Ticket";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+const inputStyle = "mx-[10px] my-0 w-[460px]";
+const selectStyle = "mx-[10px] my-0 w-[150px]";
+const itemStyle = "mx-[10px]";
 
 export function TicketEditForm(id: string) {
 	const form = useForm<Ticket>({
@@ -49,263 +56,244 @@ export function TicketEditForm(id: string) {
 	const { data: users, isLoading: isUsersLoading } = useGetUserList();
 	const { data: projects, isLoading: isProjectsLoading } =
 		useGetProjectList();
-
 	const { mutation: updateTicket } = useUpdateTicket(id);
 
-	function onSubmit(data: Ticket) {
-		console.log(data);
+	useEffect(() => {
+		if (ticket) {
+			form.reset({ ...ticket });
+		}
+	}, [ticket]);
 
+	function onSubmit(data: Ticket) {
 		data.updatedAt = new Date();
-		if (!data.assignee) {
-			data.assignee = ticket?.assignee;
-		}
-		if (!data.id) {
-			data.id = id;
-		}
-		if (!data.updatedBy) {
-			data.updatedBy = ticket?.updatedBy || data.updatedBy;
-		}
-		if (!data.project) {
-			data.project = ticket?.project || data.project;
-		}
+		if (!data.assignee) data.assignee = ticket?.assignee || data.assignee;
+		if (!data.id) data.id = id;
+		if (!data.project) data.project = ticket?.project || data.project;
+
 		updateTicket.mutate(data);
 	}
 
 	if (isTicketLoading || isUsersLoading || isProjectsLoading) {
 		return (
-			<>
-				<div className="mx-auto my-0 w-fit flex-col space-y-3">
-					<Skeleton className="h-[125px] w-[250px] rounded-xl" />
-					<div className="space-y-2">
-						<Skeleton className="h-4 w-[250px]" />
-						<Skeleton className="h-4 w-[200px]" />
-					</div>
+			<div className="mx-auto my-0 w-fit flex-col space-y-3">
+				<Skeleton className="h-[125px] w-[250px] rounded-xl" />
+				<div className="space-y-2">
+					<Skeleton className="h-4 w-[250px]" />
+					<Skeleton className="h-4 w-[200px]" />
 				</div>
-			</>
+			</div>
 		);
 	}
 
 	if (!ticket) {
 		throw new Error("No such ticket");
 	}
-	// form.reset({ ...ticket });
 
 	return (
-		<>
-			<Form {...form}>
-				<form
-					onSubmit={form.handleSubmit((data) => onSubmit(data))}
-					className="space-y-6"
-				>
-					<FormField
-						control={form.control}
-						name="title"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Title</FormLabel>
-								<FormControl>
-									<Input
-										placeholder="Enter title"
-										{...field}
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-
-					<FormField
-						control={form.control}
-						name="status"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Status</FormLabel>
-								<Select
-									onValueChange={field.onChange}
-									defaultValue={ticket.status || field.value}
-								>
-									<FormControl>
-										<SelectTrigger>
-											<SelectValue placeholder="Select status" />
-										</SelectTrigger>
+		<Card className="mx-auto my-0 w-fit p-2">
+			<CardHeader>
+				{" "}
+				<CardTitle>Edit ticket</CardTitle>
+			</CardHeader>
+			<CardContent>
+				<Form {...form}>
+					<form
+						onSubmit={form.handleSubmit(onSubmit)}
+						className="mx-auto w-[550px] space-y-6"
+					>
+						<FormField
+							control={form.control}
+							name="title"
+							render={({ field }) => (
+								<FormItem className={itemStyle}>
+									<FormLabel>Title</FormLabel>
+									<FormControl className={inputStyle}>
+										<Input
+											placeholder="Enter title"
+											{...field}
+										/>
 									</FormControl>
-									<SelectContent>
-										<SelectItem value="not-started">
-											Not started
-										</SelectItem>
-										<SelectItem value="in-progress">
-											In progress
-										</SelectItem>
-										<SelectItem value="completed">
-											Completed
-										</SelectItem>
-									</SelectContent>
-								</Select>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 
-					<FormField
-						control={form.control}
-						name="description"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Description</FormLabel>
-								<FormControl>
-									<Textarea
-										placeholder="Enter description"
-										{...field}
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-
-					<FormField
-						control={form.control}
-						name="assignee"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Asignee</FormLabel>
-								<Select
-									onValueChange={field.onChange}
-									defaultValue={
-										ticket.assignee || field.value
-									}
-								>
-									<FormControl>
-										<SelectTrigger>
-											<SelectValue placeholder="Select asignees" />
-										</SelectTrigger>
-									</FormControl>
-									<SelectContent>
-										{users &&
-											Object.values(users).map((user) => (
-												<SelectItem
-													key={user.id}
-													value={user.id || ""}
-												>
-													{user.fname} {user.lname}
-												</SelectItem>
-											))}
-									</SelectContent>
-								</Select>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name="updatedBy"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Updated By</FormLabel>
-								<Select
-									onValueChange={field.onChange}
-									defaultValue={
-										ticket.updatedBy || field.value
-									}
-								>
-									<FormControl>
-										<SelectTrigger>
-											<SelectValue placeholder="Select user" />
-										</SelectTrigger>
-									</FormControl>
-
-									<SelectContent>
-										{users &&
-											Object.values(users).map((user) => (
-												<SelectItem
-													key={user.id}
-													value={user.id || ""}
-												>
-													{user.fname} {user.lname}
-												</SelectItem>
-											))}
-									</SelectContent>
-								</Select>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-
-					<FormField
-						control={form.control}
-						name="project"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Project</FormLabel>
-
-								<Select
-									defaultValue={ticket.project || field.value}
-									onValueChange={field.onChange}
-								>
-									<FormControl>
-										<SelectTrigger>
-											<SelectValue placeholder="Select project" />
-										</SelectTrigger>
-									</FormControl>
-									<SelectContent>
-										{projects &&
-											Object.values(projects).map(
-												(project) => (
-													<SelectItem
-														key={project.id}
-														value={project.id || ""}
-													>
-														{project.name}
-													</SelectItem>
-												)
-											)}
-									</SelectContent>
-								</Select>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name="priority"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Priority</FormLabel>
-
-								<Select
-									defaultValue={
-										ticket.priority || field.value
-									}
-									onValueChange={field.onChange}
-								>
-									<FormControl>
-										<SelectTrigger>
-											<SelectValue placeholder="Select priority" />
-										</SelectTrigger>
-									</FormControl>
-									<SelectContent>
-										{Object.values(
-											TicketSchema.shape.priority.options
-										).map((priority) => (
-											<SelectItem
-												key={priority}
-												value={priority}
-											>
-												{priority}
+						<FormField
+							control={form.control}
+							name="status"
+							render={({ field }) => (
+								<FormItem className={itemStyle}>
+									<FormLabel>Status</FormLabel>
+									<Select
+										onValueChange={field.onChange}
+										value={field.value}
+									>
+										<FormControl className={selectStyle}>
+											<SelectTrigger>
+												<SelectValue placeholder="Select status" />
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent>
+											<SelectItem value="not-started">
+												Not started
 											</SelectItem>
-										))}
-									</SelectContent>
-								</Select>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
+											<SelectItem value="in-progress">
+												In progress
+											</SelectItem>
+											<SelectItem value="completed">
+												Completed
+											</SelectItem>
+										</SelectContent>
+									</Select>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 
-					<Button type="submit" disabled={updateTicket.isPending}>
-						{updateTicket.isPending ? "Submitting..." : "Submit"}
-					</Button>
-				</form>
-			</Form>
-		</>
+						<FormField
+							control={form.control}
+							name="description"
+							render={({ field }) => (
+								<FormItem className={itemStyle}>
+									<FormLabel>Description</FormLabel>
+									<FormControl className={inputStyle}>
+										<Textarea
+											placeholder="Enter description"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
+						<FormField
+							control={form.control}
+							name="assignee"
+							render={({ field }) => (
+								<FormItem className={itemStyle}>
+									<FormLabel>Assignee</FormLabel>
+									<Select
+										onValueChange={field.onChange}
+										value={field.value}
+									>
+										<FormControl className={selectStyle}>
+											<SelectTrigger>
+												<SelectValue placeholder="Select assignee" />
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent>
+											{users &&
+												Object.values(users).map(
+													(user) => (
+														<SelectItem
+															key={user.id}
+															value={
+																user.id || ""
+															}
+														>
+															{user.fname}{" "}
+															{user.lname}
+														</SelectItem>
+													)
+												)}
+										</SelectContent>
+									</Select>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
+						<FormField
+							control={form.control}
+							name="project"
+							render={({ field }) => (
+								<FormItem className={itemStyle}>
+									<FormLabel>Project</FormLabel>
+									<Select
+										onValueChange={field.onChange}
+										value={field.value}
+									>
+										<FormControl className={selectStyle}>
+											<SelectTrigger>
+												<SelectValue placeholder="Select project" />
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent>
+											{projects &&
+												Object.values(projects).map(
+													(project) => (
+														<SelectItem
+															key={project.id}
+															value={
+																project.id || ""
+															}
+														>
+															{project.name}
+														</SelectItem>
+													)
+												)}
+										</SelectContent>
+									</Select>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
+						<FormField
+							control={form.control}
+							name="priority"
+							render={({ field }) => (
+								<FormItem className={itemStyle}>
+									<FormLabel>Priority</FormLabel>
+									<Select
+										onValueChange={field.onChange}
+										value={field.value}
+									>
+										<FormControl className={selectStyle}>
+											<SelectTrigger>
+												<SelectValue placeholder="Select priority" />
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent>
+											{Object.values(
+												TicketSchema.shape.priority
+													.options
+											).map((priority) => (
+												<SelectItem
+													key={priority}
+													value={priority}
+												>
+													{priority}
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
+						<Button
+							type="submit"
+							disabled={updateTicket.isPending}
+							className="mx-[10px] rounded-full"
+						>
+							{updateTicket.isPending
+								? "Submitting..."
+								: "Submit"}
+						</Button>
+
+						<Link
+							to="/tickets/$ticketId"
+							params={{ ticketId: id }}
+							className="rounded-full bg-red-700 px-4 py-2 text-center font-semibold text-white hover:bg-red-800"
+						>
+							Cancel
+						</Link>
+					</form>
+				</Form>
+			</CardContent>
+		</Card>
 	);
 }

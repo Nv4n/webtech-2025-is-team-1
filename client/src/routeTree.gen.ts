@@ -17,6 +17,7 @@ import { Route as ProfileImport } from './routes/profile'
 import { Route as LoginImport } from './routes/login'
 import { Route as IndexImport } from './routes/index'
 import { Route as TicketsIndexImport } from './routes/tickets.index'
+import { Route as TicketsCreateImport } from './routes/tickets.create'
 import { Route as TicketsTicketIdImport } from './routes/tickets.$ticketId'
 import { Route as ProjectsCreateImport } from './routes/projects.create'
 import { Route as TicketsTicketIdEditImport } from './routes/tickets_.$ticketId.edit'
@@ -57,6 +58,12 @@ const IndexRoute = IndexImport.update({
 const TicketsIndexRoute = TicketsIndexImport.update({
   id: '/tickets/',
   path: '/tickets/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const TicketsCreateRoute = TicketsCreateImport.update({
+  id: '/tickets/create',
+  path: '/tickets/create',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -137,6 +144,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TicketsTicketIdImport
       parentRoute: typeof rootRoute
     }
+    '/tickets/create': {
+      id: '/tickets/create'
+      path: '/tickets/create'
+      fullPath: '/tickets/create'
+      preLoaderRoute: typeof TicketsCreateImport
+      parentRoute: typeof rootRoute
+    }
     '/tickets/': {
       id: '/tickets/'
       path: '/tickets'
@@ -171,6 +185,7 @@ export interface FileRoutesByFullPath {
   '/test': typeof TestRoute
   '/projects/create': typeof ProjectsCreateRoute
   '/tickets/$ticketId': typeof TicketsTicketIdRoute
+  '/tickets/create': typeof TicketsCreateRoute
   '/tickets': typeof TicketsIndexRoute
   '/projects/$projectId/edit': typeof ProjectsProjectIdEditRoute
   '/tickets/$ticketId/edit': typeof TicketsTicketIdEditRoute
@@ -184,6 +199,7 @@ export interface FileRoutesByTo {
   '/test': typeof TestRoute
   '/projects/create': typeof ProjectsCreateRoute
   '/tickets/$ticketId': typeof TicketsTicketIdRoute
+  '/tickets/create': typeof TicketsCreateRoute
   '/tickets': typeof TicketsIndexRoute
   '/projects/$projectId/edit': typeof ProjectsProjectIdEditRoute
   '/tickets/$ticketId/edit': typeof TicketsTicketIdEditRoute
@@ -198,6 +214,7 @@ export interface FileRoutesById {
   '/test': typeof TestRoute
   '/projects/create': typeof ProjectsCreateRoute
   '/tickets/$ticketId': typeof TicketsTicketIdRoute
+  '/tickets/create': typeof TicketsCreateRoute
   '/tickets/': typeof TicketsIndexRoute
   '/projects_/$projectId/edit': typeof ProjectsProjectIdEditRoute
   '/tickets_/$ticketId/edit': typeof TicketsTicketIdEditRoute
@@ -213,6 +230,7 @@ export interface FileRouteTypes {
     | '/test'
     | '/projects/create'
     | '/tickets/$ticketId'
+    | '/tickets/create'
     | '/tickets'
     | '/projects/$projectId/edit'
     | '/tickets/$ticketId/edit'
@@ -225,6 +243,7 @@ export interface FileRouteTypes {
     | '/test'
     | '/projects/create'
     | '/tickets/$ticketId'
+    | '/tickets/create'
     | '/tickets'
     | '/projects/$projectId/edit'
     | '/tickets/$ticketId/edit'
@@ -237,6 +256,7 @@ export interface FileRouteTypes {
     | '/test'
     | '/projects/create'
     | '/tickets/$ticketId'
+    | '/tickets/create'
     | '/tickets/'
     | '/projects_/$projectId/edit'
     | '/tickets_/$ticketId/edit'
@@ -251,6 +271,7 @@ export interface RootRouteChildren {
   TestRoute: typeof TestRoute
   ProjectsCreateRoute: typeof ProjectsCreateRoute
   TicketsTicketIdRoute: typeof TicketsTicketIdRoute
+  TicketsCreateRoute: typeof TicketsCreateRoute
   TicketsIndexRoute: typeof TicketsIndexRoute
   ProjectsProjectIdEditRoute: typeof ProjectsProjectIdEditRoute
   TicketsTicketIdEditRoute: typeof TicketsTicketIdEditRoute
@@ -264,6 +285,7 @@ const rootRouteChildren: RootRouteChildren = {
   TestRoute: TestRoute,
   ProjectsCreateRoute: ProjectsCreateRoute,
   TicketsTicketIdRoute: TicketsTicketIdRoute,
+  TicketsCreateRoute: TicketsCreateRoute,
   TicketsIndexRoute: TicketsIndexRoute,
   ProjectsProjectIdEditRoute: ProjectsProjectIdEditRoute,
   TicketsTicketIdEditRoute: TicketsTicketIdEditRoute,
@@ -286,6 +308,7 @@ export const routeTree = rootRoute
         "/test",
         "/projects/create",
         "/tickets/$ticketId",
+        "/tickets/create",
         "/tickets/",
         "/projects_/$projectId/edit",
         "/tickets_/$ticketId/edit"
@@ -311,6 +334,9 @@ export const routeTree = rootRoute
     },
     "/tickets/$ticketId": {
       "filePath": "tickets.$ticketId.tsx"
+    },
+    "/tickets/create": {
+      "filePath": "tickets.create.tsx"
     },
     "/tickets/": {
       "filePath": "tickets.index.tsx"
