@@ -18,7 +18,6 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 export function RegisterForm() {
 	const form = useForm<RegisterUser>({
