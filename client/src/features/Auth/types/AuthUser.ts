@@ -2,8 +2,8 @@ import { UserSchema } from "@/features/Profile/types/Profile";
 import { z } from "zod";
 
 export const LoginSchema = UserSchema.pick({
-	username:true,
-	password:true
+	username: true,
+	password: true,
 });
 
 export type LoginUser = z.infer<typeof LoginSchema>;
