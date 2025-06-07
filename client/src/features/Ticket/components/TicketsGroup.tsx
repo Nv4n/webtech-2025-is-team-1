@@ -5,10 +5,12 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { serverAddr } from "@/config/config";
 import { FakeProfileApi } from "@/features/Profile/service/profileApi";
 import { FakeProjectApi } from "@/features/Project/service/projectApi";
 import { TicketCard } from "@/features/Ticket/components/TicketCard";
 import { FakeTicketApi } from "@/features/Ticket/service/ticketApi";
+import { Ticket } from "@/features/Ticket/types/Ticket";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
@@ -77,8 +79,39 @@ function fetchTicketDetails() {
 	return ticketsWithDetails;
 }
 
+async function asyncFetchTicketDetails() {
+	const res = await fetch(`${serverAddr}/api/tickets`, {
+		method: "GET",
+		headers: {
+			"Content-Type": "application/json",
+		},
+	});
+	console.log(await res.json());
+
+	if (!res.ok) {
+		console.error("Fetch error:", res.status, res.statusText);
+		return;
+	}
+
+	const text = await res.text();
+
+	if (!text) {
+		console.log("Response is empty");
+		return null; 
+	}
+
+	try {
+		const data = JSON.parse(text);
+		console.log(data);
+		return data;
+	} catch (error) {
+		console.error("Failed to parse JSON:", error);
+		return null;
+	}
+}
+
 export function TicketsGroup({ status }: TicketStatus) {
-	const tickets = fetchTicketDetails();
+	const tickets = asyncFetchTicketDetails();
 	return (
 		<div className="flex w-1/3 flex-col space-y-4">
 			<div className="flex w-2xs items-center justify-between">
