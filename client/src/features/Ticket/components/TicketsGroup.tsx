@@ -11,7 +11,7 @@ import { FakeProfileApi } from "@/features/Profile/service/profileApi";
 import { FakeProjectApi } from "@/features/Project/service/projectApi";
 import { TicketCard } from "@/features/Ticket/components/TicketCard";
 import { FakeTicketApi } from "@/features/Ticket/service/ticketApi";
-import { Ticket, TicketSchema } from "@/features/Ticket/types/Ticket";
+import { TicketSchema } from "@/features/Ticket/types/Ticket";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
@@ -159,9 +159,7 @@ export function TicketsGroup({ status }: TicketStatus) {
 	return (
 		<div className="flex w-1/3 flex-col space-y-4">
 			<div className="flex w-2xs items-center justify-between">
-				{status === "Open" && <h1>Not Started</h1>}
-				{status === "InProgress" && <h1>In Progress</h1>}
-				{status === "Done" && <h1>Completed</h1>}
+				{<h1>{status.replace(/([a-z])([A-Z])/g, "$1 $2")}</h1>}
 				<TooltipProvider>
 					<Tooltip>
 						<TooltipTrigger asChild>
