@@ -1,23 +1,24 @@
 "use client";
 
 import { MultiSelect } from "@/components/ui/multi-select";
+import { FakeProjectApi } from "@/features/Project/service/projectApi";
+import { TicketStatuses } from "@/features/Ticket/types/Ticket";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { FolderDot, ListTodo } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
-import { FakeProjectApi } from "@/features/Project/service/projectApi";
-import { Ticket } from "@/features/Ticket/types/Ticket";
 
-const statusFiltersList = [
-	{ value: "not-started", label: "Not Started", icon: ListTodo },
-	{ value: "in-progress", label: "In Progress", icon: ListTodo },
-	{ value: "completed", label: "Completed", icon: ListTodo },
-];
-
-type TicketFilterProps = {
-	data: Ticket[];
-};
+function getStatusFilterList() {
+	return TicketStatuses.map((status) => {
+		return {
+			value: status,
+			label: status.replace(/([a-z])([A-Z])/g, "$1 $2").split(" "),
+			icon: ListTodo,
+		};
+	});
+}
+const statusFiltersList = getStatusFilterList();
 
 export const filtersSchema = z.object({
 	projectsFilters: z.array(z.string()).optional(),
