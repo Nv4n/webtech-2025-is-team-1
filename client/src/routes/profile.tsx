@@ -1,12 +1,10 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { ProfileData } from "@/features/Profile/pages/PreviewProfileData";
+import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/profile")({
-	beforeLoad: async () => {
-		throw redirect({ to: "/", replace: true });
-	},
-	component: RouteComponent,
+  component: ProfileDataWrapper,
 });
 
-function RouteComponent() {
-	return <div>Hello "/profile"!</div>;
+function ProfileDataWrapper() {
+  return <ProfileData id={"2"} />;
 }

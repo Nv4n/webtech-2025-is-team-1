@@ -62,30 +62,16 @@ export const Route = createRootRoute({
 							</Link>
 						</NavigationMenuItem>
 						<NavigationMenuItem>
-							<TooltipProvider>
-								<Tooltip>
-									<TooltipTrigger asChild>
-										<Link
-											to="/profile"
-											className={cn(
-												NavMenuLinkStyles,
-												navigationMenuTriggerStyle()
-											)}
-											data-slot="navigation-menu-link"
-											disabled
-										>
-											Profile
-										</Link>
-									</TooltipTrigger>
-									<TooltipContent className="rounded-md border bg-gray-100 p-2 text-gray-800 shadow-md">
-										<pre>
-											Profile access will be available
-											shortly. Thank you for your
-											patience.
-										</pre>
-									</TooltipContent>
-								</Tooltip>
-							</TooltipProvider>
+							<Link
+								to="/profile"
+								className={cn(
+									NavMenuLinkStyles,
+									navigationMenuTriggerStyle()
+								)}
+								data-slot="navigation-menu-link"
+							>
+								Profile
+							</Link>
 						</NavigationMenuItem>
 						<NavigationMenuItem>
 							<Link
