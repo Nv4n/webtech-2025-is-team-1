@@ -1,3 +1,4 @@
+import { CardBadge } from "@/components/CardBadge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -7,7 +8,11 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import {
+	HoverCard,
+	HoverCardContent,
+	HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { ProfileHoverCard } from "@/features/Profile/components/ProfileHoverCard";
 import { getInitials } from "@/features/Profile/utils/getInitials";
 import { _Date } from "@/features/Ticket/components/TicketDateBadge";
@@ -35,12 +40,6 @@ export function TicketCard({
 	updatedBy,
 	project,
 }: TicketCardProps) {
-	const statusBadgeStyles = {
-		"not-started": "bg-red-700 text-white dark:text-white",
-		"in-progress": "bg-amber-300 text-gray-900 dark:text-gray-900",
-		completed: "bg-green-900 text-white dark:text-white",
-	};
-
 	return (
 		<Card className="hover:bg-card-foreground/25 dark:hover:bg-card/55 relative flex h-[250px] w-2xs flex-col transition-all">
 			<Link
@@ -56,18 +55,7 @@ export function TicketCard({
 				</CardHeader>
 				<CardContent className="flex flex-1 flex-col gap-2 px-4">
 					<Badge variant="default">{project || "No Project"}</Badge>
-					{status && (
-						<Badge
-							variant="default"
-							className={
-								statusBadgeStyles[
-									status as keyof typeof statusBadgeStyles
-								]
-							}
-						>
-							{status}
-						</Badge>
-					)}
+					{status && <CardBadge content={status}></CardBadge>}
 				</CardContent>
 				<CardFooter className="flex flex-col items-start gap-4 px-4 pt-2 pb-4">
 					<_Date labelContent="Updated At" date={updatedAt} />
@@ -86,7 +74,9 @@ export function TicketCard({
 							<HoverCardContent className="z-10 max-w-80">
 								<div className="bg-card dark:bg-card rounded-lg border border-gray-300 px-3 py-2 transition-all dark:border-gray-600">
 									{updatedBy && (
-										<ProfileHoverCard id={updatedBy?.id ?? ""} />
+										<ProfileHoverCard
+											id={updatedBy?.id ?? ""}
+										/>
 									)}
 								</div>
 							</HoverCardContent>
