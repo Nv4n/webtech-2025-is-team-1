@@ -1,22 +1,59 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
+import { Skeleton } from "@/components/ui/skeleton";
+import { serverAddr } from "@/config/config";
 import { ProfileHoverCardProps } from "@/features/Profile/components/ProfileHoverCard";
 import { FakeFullProfileApi } from "@/features/Profile/service/fullProfileApi";
+import { ProfileSchema } from "@/features/Profile/types/Profile";
 import { getInitials } from "@/features/Profile/utils/getInitials";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { LogOut } from "lucide-react";
+import { toast } from "sonner";
 
-export function ProfileData({ id }: ProfileHoverCardProps) {
-	const { data: profileData } = useQuery({
+function getProfileDataWithFakeApi({ id }: ProfileHoverCardProps) {
+	const { data } = useQuery({
 		queryKey: ["fullDataUsers", id],
 		queryFn: () => FakeFullProfileApi().getFullProfileList(),
 		select: (data) =>
 			Object.entries(data).filter(([key]) => key === id)[0][1],
 	});
+	return { data };
+}
+
+export function ProfileData({ id }: ProfileHoverCardProps) {
+	const navigate = useNavigate();
+	const { data: profileData, isLoading: isProfileLoading } = useQuery({
+		queryKey: ["fullDataUsers", id],
+		queryFn: async () => {
+			const res = await fetch(`${serverAddr}/api/users/me`);
+			if (!(res.status >= 400)) {
+				navigate({ to: "/" });
+			}
+			const jsonedProfile = await res.json();
+			const parsedProfile = ProfileSchema.safeParse(jsonedProfile);
+			if (parsedProfile.success) {
+				return parsedProfile.data;
+			} else {
+				console.log(`${parsedProfile.error}`);
+			}
+		},
+	});
+
+	if (isProfileLoading) {
+		return (
+			<div className="mx-auto my-0 w-fit flex-col space-y-3">
+				<Skeleton className="h-[125px] w-[250px] rounded-xl" />
+				<div className="space-y-2">
+					<Skeleton className="h-4 w-[250px]" />
+					<Skeleton className="h-4 w-[200px]" />
+				</div>
+			</div>
+		);
+	}
 
 	if (!profileData) return null;
 

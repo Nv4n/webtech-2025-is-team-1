@@ -48,3 +48,4 @@ export const useUpdateUser = (id: string) => {
 	});
 	return { mutation };
 };
+
