@@ -12,7 +12,7 @@ export const TicketSchema = z.object({
 	priority: z.enum(["Low", "Medium", "High"]),
 	description: z.string().min(10),
 	assignee: UserSchema.shape.id,
-	project: z.string().min(3),
+	project: z.string().min(1),
 	// There were circular dependency between ticket and project schemas
 	//project: ProjectSchema.pick({id: true}).required().shape.id, 
 	author: UserSchema.shape.id,
