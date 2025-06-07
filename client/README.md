@@ -1,213 +1,234 @@
-# React + TypeScript + Vite
+# Документация на Front-end
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Архитектура на проекта
 
-Currently, two official plugins are available:
+### Структура на папките: Feature-Based Architecture
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Проектът е организиран по модела **Feature-Based Folder Architecture**. Това означава, че функционалностите са разделени в отделни директории (feature модули), като всяка папка съдържа собствените си компоненти, hook-ове, стилове, тестове и логика. Това спомага за по-добра модулност, мащабируемост и поддръжка на кода.
 
-## Expanding the ESLint configuration
+### Основни цели на подхода:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Разделяне на отговорностите по функционалности, а не по типове файлове
+- По-лесна навигация в проекта
+- Подобрена възможност за рефакторинe и мащабиране
 
-```js
-export default tseslint.config({
-	extends: [
-		// Remove ...tseslint.configs.recommended and replace with this
-		...tseslint.configs.recommendedTypeChecked,
-		// Alternatively, use this for stricter rules
-		...tseslint.configs.strictTypeChecked,
-		// Optionally, add this for stylistic rules
-		...tseslint.configs.stylisticTypeChecked,
-	],
-	languageOptions: {
-		// other options...
-		parserOptions: {
-			project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-			tsconfigRootDir: import.meta.dirname,
-		},
-	},
-});
+### Примерна структура:
+
+```
+src/
+│
+├── features/
+│ ├── Feature/
+│ │ ├── components/
+│ │ ├── hooks/
+│ │ ├── service/
+│ │ ├── types/
+│ │ └── utils/
+│
+├── components/
+│
+├── config/
+│
+├── hooks/
+│
+├── lib/
+│
+├── routes/
+│
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 📦 Технологии и инструменти
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
-
-export default tseslint.config({
-	plugins: {
-		// Add the react-x and react-dom plugins
-		"react-x": reactX,
-		"react-dom": reactDom,
-	},
-	rules: {
-		// other rules...
-		// Enable its recommended typescript rules
-		...reactX.configs["recommended-typescript"].rules,
-		...reactDom.configs.recommended.rules,
-	},
-});
-```
+Проектът е изграден с помощта на съвременен frontend стек с акцент върху модулност, бързина на разработка и добър DX (developer experience).
 
 ---
 
-# 📘 Part 1: Documentation for the Frontend Schemas
-## 📦 Frontend Schema Documentation
+### ⚛️ React
 
-> This document outlines the frontend schemas used in the ticketing system application.
+Използваме **React** като основна библиотека за изграждане на потребителския интерфейс. Компонентите са организирани по feature-based структура с цел по-добра мащабируемост и повторна използваемост.
+
+---
+
+### ⚡ Vite
+
+Проектът е създаден с **Vite**, модерен и бърз build tool, който предлага:
+- Мигновен стартиране на dev сървър
+- Поддръжка на ES модули
+- По-бързо hot module replacement (HMR)
+
+---
+
+### 🔄 TanStack Query
+
+Използваме **TanStack Query (react-query)** за управление на асинхронни заявки и кеширане на данни. Предимства:
+- Управление на състояние на заявки (loading, error, success)
+- Автоматично кеширане и повторно извличане на данни
+- Background refetching
+
+---
+
+### 🧭 TanStack Router
+
+Проектът използва **TanStack Router**, модерен и typesafe router за React. Предимства:
+- Type-safe маршрутизация
+- File-based или програмно дефиниране на маршрути
+- Интеграция с TanStack Query за data loading
+
+---
+
+### 🎨 ShadCN UI
+
+Използваме **shadcn/ui**, който предоставя:
+- Красиви и достъпни компоненти, базирани на Radix UI и TailwindCSS
+- Пълна персонализация чрез Tailwind теми
+- Консистентен UI/UX
+
+---
+
+### 💨 Tailwind CSS
+
+**Tailwind CSS** се използва за стилизиране:
+- Utility-first подход
+- Поддръжка на dark mode, responsive и hover състояния
+- Пълна интеграция със ShadCN UI
+
+---
+
+### 🧾 React Hook Form
+
+Използваме **React Hook Form** за валидиране и управление на формови състояния:
+- По-малко ререндери
+- Интеграция с Zod (ако се използва)
+- Подобрена производителност при големи форми
+
+---
+
+### 🧪 Zod
+
+В проекта използваме **Zod** като schema validation библиотека за типизация и валидация на входни данни. Zod предоставя декларативен начин за дефиниране на типове, които са едновременно runtime-валидатори и TypeScript типове:
+- **Type inference** – автоматично извеждане на TypeScript типове от схемите
+- **Runtime validation** – валидиране на външни данни (форми, API отговори и др.)
+- **Интеграция с React Hook Form** – чрез адаптери като `@hookform/resolvers/zod`
+
+---
+
+### 🧼 Prettier
+
+**Prettier** се използва за автоматично форматиране на кода:
+- Единен стил в целия кодовbase
+- Автоматично форматиране при запис чрез editor integration
+
+---
+
+### 🧹 ESLint
+
+**ESLint** се използва за анализ и поддържане на качеството на JavaScript/TypeScript кода:
+- Предотвратяване на често срещани грешки
+- Поддръжка на TypeScript и React плъгини
+- Съвместимост с Prettier чрез `eslint-config-prettier
+
+## 📦 Документация на схемите във фронтенда
 
 ### 👤 UserSchema
 
-> Schema for the full user object.
+> Схема за пълния потребителски обект.
 
 ```ts
 type User = {
-  id?: string;
-  fname: string;
-  lname: string;
-  username: string;
-  password: string;
-  createdAt: Date;
-  email: string;
-  role: string;
-}
+	id?: string;
+	fname: string;
+	lname: string;
+	username: string;
+	password: string;
+	createdAt: Date;
+	email: string;
+	role: string;
+};
 ```
 
 ### 🔐 LoginSchema
-> Login schema is used for user login form.
+
+> Схема за вход, използвана във формата за логване.
 
 ```ts
 type LoginUser = {
-  username: string;
-  password: string;
-}
+	username: string;
+	password: string;
+};
 ```
 
 ### 📝 RegisterSchema
-> Register schema is used for user registration form. Includes password confirmation validation.
+
+> Схема за регистрация, използвана във формата за регистрация на потребители. Включва валидация за потвърждение на парола.
 
 ```ts
 type RegisterUser = {
-  fname: string;
-  lname: string;
-  username: string;
-  password: string;
-  rePassword: string;
-  createdAt: Date;
-  email: string;
-  role: string;
-}
+	fname: string;
+	lname: string;
+	username: string;
+	password: string;
+	rePassword: string;
+	createdAt: Date;
+	email: string;
+	role: string;
+};
 ```
 
 ### 👤 ProfileSchema
-> Lightweight schema for profile view/edit UI.
+
+> Олекотена схема за визуализация/редакция на профил в интерфейса.
 
 ```ts
 type Profile = {
-  id?: string;
-  fname: string;
-  lname: string;
-  username: string;
-}
+	id?: string;
+	fname: string;
+	lname: string;
+	username: string;
+};
 ```
 
 ### 🧑‍💼 UserHoverCardProps
-> User hover card schema is used in UI components like user badges or popovers.
+
+> Схема за hover карта на потребител, използвана в UI компоненти като значки или popover-и.
 
 ```ts
 type UserHoverCardProps = {
-  labelContent: string;
-  initials: string;
-  fullName: string;
-  email: string;
-}
+	labelContent: string;
+	initials: string;
+	fullName: string;
+	email: string;
+};
 ```
 
 ### 🎫 TicketSchema
-> Ticket schema is for ticket object used in creation and editing.
+
+> Схема за тикет обекти, използвана при създаване и редактиране на тикети.
 
 ```ts
 type Ticket = {
-  id?: string;
-  title: string;
-  status: "not-started" | "in-progress" | "completed";
-  priority: "Low" | "Medium" | "High";
-  description: string;
-  assignee: string; // User ID
-  project: string; // Project ID
-  author: string;  // User ID
-  createdAt: Date;
-  updatedAt: Date;
-  updatedBy: string; // User ID
-}
+	id?: string;
+	title: string;
+	status: "not-started" | "in-progress" | "completed";
+	priority: "Low" | "Medium" | "High";
+	description: string;
+	assignee: string; // User ID
+	project: string; // Project ID
+	author: string; // User ID
+	createdAt: Date;
+	updatedAt: Date;
+	updatedBy: string; // User ID
+};
 ```
 
 ### 📅 TicketDate
-> Ticket date schema is used for displaying ticket creation or update metadata.
+
+> Схема за дата на тикета, използвана за показване на информация за създаване или актуализация.
 
 ```ts
 type TicketDate = {
-  labelContent: string;
-  date: Date;
-}
+	labelContent: string;
+	date: Date;
+};
 ```
 
 ---
-
-# 📊 Part 2: Backend & Data Analyst Requirements
-
-## 🔧 Backend Field Requirements
-
-> Based on our Zod schemas and ERD, here's what the backend needs to expect:
-
-### User Table (`users`)
-- `id` (int, PK)
-- `fname` (string)
-- `lname` (string)
-- `username` (varchar(50))
-- `password` (hashed)
-- `created_at` (timestamp)
-- `email` (varchar(100))
-- `role` (varchar(20))
-
-### Ticket Table (`tickets`)
-- `id` (int, PK)
-- `title` (varchar(200))
-- `status_id` (int, FK to `ticket_statuses.id`)
-- `priority` (varchar(20))
-- `description` (text)
-- `assignee_id` (int, FK to `users.id`)
-- `project_id` (int, FK to `projects.id`)
-- `author_id` (int, FK to `users.id`)
-- `created_at` (timestamp)
-- `updated_at` (timestamp)
-- `updated_by` (int, FK to `users.id`) ← **Missing in your ERD** but present in frontend schema
-
-### Additional Table Notes:
-- Consider adding `updated_by` in the `tickets` table to align with frontend schema.
-- The `status` and `priority` fields in the `tickets` table should either be plain string values (if treated as enumerations) or foreign keys referencing `ticket_statuses` and `ticket_priorities` tables (if treated as lookup tables).
-
-> **Note**: The types of the fields above are examples.
-
-## 📈 Data Analyst Needs
-
-> Here’s what analysts might want to ensure the database supports detailed insights:
-
-### Suggestions:
-1. **Audit Fields**:
-   - Add `updated_by` (as above) to track change responsibility.
-   - Consider `deleted_at` for soft deletes.
-
-2. **Historical Changes**:
-   - A `ticket_history` or `ticket_audit_log` table with changes over time (who changed what and when).
-
-3. **Metrics Support**:
-   - Keep timestamps accurate: `created_at`, `updated_at`
-   - Track status changes through the `workflow_transitions` table — this is a good structure already present.
-
-4. **Categorical Mapping**:
-   - Map frontend enums (`"not-started"`, `"in-progress"`, `"completed"` for `statuses` and `"Low"`, `"Medium"`, `"High"` for `priorities` fields) to fixed values or foreign keys for normalization.

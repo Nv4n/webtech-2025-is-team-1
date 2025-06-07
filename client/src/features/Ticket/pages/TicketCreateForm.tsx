@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
 	Form,
 	FormControl,
@@ -39,219 +40,251 @@ export function TicketCreateForm() {
 
 	return (
 		<>
-			<Form {...form}>
-				<form
-					onSubmit={form.handleSubmit(onSubmit)}
-					className="mx-auto max-w-xl space-y-6"
-				>
-					<FormField
-						control={form.control}
-						name="title"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Title</FormLabel>
-								<FormControl>
-									<Input
-										placeholder="Enter title"
-										{...field}
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-
-					<FormField
-						control={form.control}
-						name="status"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Status</FormLabel>
-								<Select
-									onValueChange={field.onChange}
-									value={field.value}
-								>
-									<FormControl>
-										<SelectTrigger>
-											<SelectValue placeholder="Select status" />
-										</SelectTrigger>
-									</FormControl>
-									<SelectContent>
-										<SelectItem value="not-started">
-											Not started
-										</SelectItem>
-										<SelectItem value="in-progress">
-											In progress
-										</SelectItem>
-										<SelectItem value="completed">
-											Completed
-										</SelectItem>
-									</SelectContent>
-								</Select>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-
-					<FormField
-						control={form.control}
-						name="description"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Description</FormLabel>
-								<FormControl>
-									<Textarea
-										placeholder="Enter description"
-										{...field}
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-
-					<FormField
-						control={form.control}
-						name="assignee"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Assignee</FormLabel>
-								<Select
-									onValueChange={field.onChange}
-									value={field.value}
-								>
-									<FormControl>
-										<SelectTrigger>
-											<SelectValue placeholder="Select assignee" />
-										</SelectTrigger>
-									</FormControl>
-									<SelectContent>
-										{users &&
-											Object.values(users).map((user) => (
-												<SelectItem
-													key={user.id}
-													value={user.id || ""}
-												>
-													{user.fname} {user.lname}
-												</SelectItem>
-											))}
-									</SelectContent>
-								</Select>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-
-					<FormField
-						control={form.control}
-						name="updatedBy"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Updated By</FormLabel>
-								<Select
-									onValueChange={field.onChange}
-									value={field.value}
-								>
-									<FormControl>
-										<SelectTrigger>
-											<SelectValue placeholder="Select user" />
-										</SelectTrigger>
-									</FormControl>
-									<SelectContent>
-										{users &&
-											Object.values(users).map((user) => (
-												<SelectItem
-													key={user.id}
-													value={user.id || ""}
-												>
-													{user.fname} {user.lname}
-												</SelectItem>
-											))}
-									</SelectContent>
-								</Select>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-
-					<FormField
-						control={form.control}
-						name="project"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Project</FormLabel>
-								<Select
-									onValueChange={field.onChange}
-									value={field.value}
-								>
-									<FormControl>
-										<SelectTrigger>
-											<SelectValue placeholder="Select project" />
-										</SelectTrigger>
-									</FormControl>
-									<SelectContent>
-										{projects &&
-											Object.values(projects).map(
-												(project) => (
-													<SelectItem
-														key={project.id}
-														value={project.id || ""}
-													>
-														{project.name}
-													</SelectItem>
-												)
-											)}
-									</SelectContent>
-								</Select>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-
-					<FormField
-						control={form.control}
-						name="priority"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Priority</FormLabel>
-								<Select
-									onValueChange={field.onChange}
-									value={field.value}
-								>
-									<FormControl>
-										<SelectTrigger>
-											<SelectValue placeholder="Select priority" />
-										</SelectTrigger>
-									</FormControl>
-									<SelectContent>
-										{Object.values(
-											TicketSchema.shape.priority.options
-										).map((priority) => (
-											<SelectItem
-												key={priority}
-												value={priority}
-											>
-												{priority}
-											</SelectItem>
-										))}
-									</SelectContent>
-								</Select>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-
-					<div className="flex gap-4">
-						<Button type="submit">Submit</Button>
-						<Link
-							to="/tickets"
-							className="inline-flex items-center justify-center rounded-md bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+			<Card className="mx-auto my-0 w-fit py-8">
+				<CardHeader>
+					<CardTitle>Create ticket</CardTitle>
+				</CardHeader>
+				<CardContent>
+					<Form {...form}>
+						<form
+							onSubmit={form.handleSubmit(onSubmit)}
+							className="mx-auto w-xl space-y-6"
 						>
-							Cancel
-						</Link>
-					</div>
-				</form>
-			</Form>
+							<FormField
+								control={form.control}
+								name="title"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Title</FormLabel>
+										<FormControl>
+											<Input
+												placeholder="Enter title"
+												{...field}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+							<FormField
+								control={form.control}
+								name="status"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Status</FormLabel>
+										<Select
+											onValueChange={field.onChange}
+											value={field.value}
+										>
+											<FormControl>
+												<SelectTrigger>
+													<SelectValue placeholder="Select status" />
+												</SelectTrigger>
+											</FormControl>
+											<SelectContent>
+												<SelectItem value="not-started">
+													Not started
+												</SelectItem>
+												<SelectItem value="in-progress">
+													In progress
+												</SelectItem>
+												<SelectItem value="completed">
+													Completed
+												</SelectItem>
+											</SelectContent>
+										</Select>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+							<FormField
+								control={form.control}
+								name="description"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Description</FormLabel>
+										<FormControl>
+											<Textarea
+												placeholder="Enter description"
+												{...field}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+							<FormField
+								control={form.control}
+								name="assignee"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Assignee</FormLabel>
+										<Select
+											onValueChange={field.onChange}
+											value={field.value}
+										>
+											<FormControl>
+												<SelectTrigger>
+													<SelectValue placeholder="Select assignee" />
+												</SelectTrigger>
+											</FormControl>
+											<SelectContent>
+												{users &&
+													Object.values(users).map(
+														(user) => (
+															<SelectItem
+																key={user.id}
+																value={
+																	user.id ||
+																	""
+																}
+															>
+																{user.fname}{" "}
+																{user.lname}
+															</SelectItem>
+														)
+													)}
+											</SelectContent>
+										</Select>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+							<FormField
+								control={form.control}
+								name="updatedBy"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Updated By</FormLabel>
+										<Select
+											onValueChange={field.onChange}
+											value={field.value}
+										>
+											<FormControl>
+												<SelectTrigger>
+													<SelectValue placeholder="Select user" />
+												</SelectTrigger>
+											</FormControl>
+											<SelectContent>
+												{users &&
+													Object.values(users).map(
+														(user) => (
+															<SelectItem
+																key={user.id}
+																value={
+																	user.id ||
+																	""
+																}
+															>
+																{user.fname}{" "}
+																{user.lname}
+															</SelectItem>
+														)
+													)}
+											</SelectContent>
+										</Select>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+							<FormField
+								control={form.control}
+								name="project"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Project</FormLabel>
+										<Select
+											onValueChange={field.onChange}
+											value={field.value}
+										>
+											<FormControl>
+												<SelectTrigger>
+													<SelectValue placeholder="Select project" />
+												</SelectTrigger>
+											</FormControl>
+											<SelectContent>
+												{projects &&
+													Object.values(projects).map(
+														(project) => (
+															<SelectItem
+																key={project.id}
+																value={
+																	project.id ||
+																	""
+																}
+															>
+																{project.name}
+															</SelectItem>
+														)
+													)}
+											</SelectContent>
+										</Select>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+							<FormField
+								control={form.control}
+								name="priority"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Priority</FormLabel>
+										<Select
+											onValueChange={field.onChange}
+											value={field.value}
+										>
+											<FormControl>
+												<SelectTrigger>
+													<SelectValue placeholder="Select priority" />
+												</SelectTrigger>
+											</FormControl>
+											<SelectContent>
+												{Object.values(
+													TicketSchema.shape.priority
+														.options
+												).map((priority) => (
+													<SelectItem
+														key={priority}
+														value={priority}
+													>
+														{priority}
+													</SelectItem>
+												))}
+											</SelectContent>
+										</Select>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+							<div className="flex gap-2">
+								<Button
+									type="submit"
+									variant="outline"
+									className="cursor-pointer"
+								>
+									Submit
+								</Button>
+
+								<Link to="/">
+									<Button
+										variant="default"
+										className="cursor-pointer"
+									>
+										Cancel
+									</Button>
+								</Link>
+							</div>
+						</form>
+					</Form>
+				</CardContent>
+			</Card>
 		</>
 	);
 }
