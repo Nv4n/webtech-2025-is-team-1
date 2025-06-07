@@ -29,8 +29,11 @@ export function RegisterForm() {
 		const send = RegisterSchemaPure.parse(data);
 		console.log(send);
 
-		const res = fetch(`${serverAddr}/api/auth/register`, {
+		const res = await fetch(`${serverAddr}/api/auth/register`, {
 			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
 			body: JSON.stringify(send),
 		});
 		console.log(res);
