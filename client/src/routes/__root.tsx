@@ -1,4 +1,3 @@
-import { Route as RegisterRoute } from "@/routes/register";
 import { ThemeButton } from "@/components/ThemeButton";
 import {
 	NavigationMenu,
@@ -6,15 +5,15 @@ import {
 	NavigationMenuList,
 	navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
+import {
+	CatchBoundary,
+	createRootRoute,
+	Link,
+	Outlet,
+} from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+import { toast, useSonner } from "sonner";
 
 const NavMenuLinkStyles =
 	"data-[active=true]:focus:bg-accent data-[active=true]:hover:bg-accent data-[active=true]:bg-accent/50 data-[active=true]:text-accent-foreground hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:ring-ring/50 [&_svg:not([class*='text-'])]:text-muted-foreground flex flex-col gap-1 rounded-sm p-2 text-sm transition-all outline-none focus-visible:ring-[3px] focus-visible:outline-1 [&_svg:not([class*='size-'])]:size-4";
@@ -94,7 +93,20 @@ export const Route = createRootRoute({
 					</NavigationMenuList>
 				</NavigationMenu>
 				<hr className="mb-4" />
-				<Outlet />
+				<CatchBoundary
+					getResetKey={() => "reset"}
+					onCatch={(error) => {
+						console.error(error);
+						toast.error(
+							error instanceof Error
+								? error.message
+								: String(error)
+						);
+					}}
+				>
+					<Outlet />
+				</CatchBoundary>
+
 				<TanStackRouterDevtools />
 			</>
 		);

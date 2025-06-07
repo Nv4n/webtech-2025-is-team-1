@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
 	Form,
 	FormControl,
@@ -10,36 +10,31 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { serverAddr } from "@/config/config";
-import { RegisterSchema } from "@/features/Auth/types/AuthUser";
+import { RegisterSchema, RegisterUser } from "@/features/Auth/types/AuthUser";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 
-type RegisterUser = z.infer<typeof RegisterSchema>;
-
-function RegisterForm() {
+export function RegisterForm() {
 	const form = useForm<RegisterUser>({
 		resolver: zodResolver(RegisterSchema),
 	});
 
 	async function onSubmit(data: RegisterUser) {
 		console.log(data);
-		const res = await fetch(`${serverAddr}/api/auth/register`, {
+		const res = fetch(`${serverAddr}/api/auth/register`, {
 			method: "POST",
 			body: JSON.stringify(data),
 		});
 		console.log(res);
-
-		// TODO: Call register API
 	}
 
 	return (
-		<>
-			<Card className="mx-auto my-0 w-fit min-w-[550px] py-4">
-				<CardHeader className="mx-auto my-0">
-					<CardTitle>Register</CardTitle>
-				</CardHeader>
+		<Card className="mx-auto my-0 w-fit min-w-[550px] py-4">
+			<CardHeader className="mx-auto my-0">
+				<CardTitle>Register</CardTitle>
+			</CardHeader>
+			<CardContent>
 				<Form {...form}>
 					<form
 						onSubmit={form.handleSubmit(onSubmit)}
@@ -53,7 +48,6 @@ function RegisterForm() {
 									<FormLabel>Username</FormLabel>
 									<FormControl>
 										<Input
-											type="text"
 											placeholder="Enter Username..."
 											{...field}
 										/>
@@ -134,9 +128,7 @@ function RegisterForm() {
 						</div>
 					</form>
 				</Form>
-			</Card>
-		</>
+			</CardContent>
+		</Card>
 	);
 }
-
-export default RegisterForm;
