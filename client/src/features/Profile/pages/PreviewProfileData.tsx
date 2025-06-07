@@ -1,47 +1,27 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { serverAddr } from "@/config/config";
-import { deleteCookie, getCookie } from "@/features/Auth/utils/cookies";
-import { ProfileHoverCardProps } from "@/features/Profile/components/ProfileHoverCard";
-import { FakeFullProfileApi } from "@/features/Profile/service/fullProfileApi";
-import { ProfileSchema } from "@/features/Profile/types/Profile";
+import { deleteCookie } from "@/features/Auth/utils/cookies";
+import { useGetApiProfile } from "@/features/Profile/service/profileApiQueries";
 import { getInitials } from "@/features/Profile/utils/getInitials";
 import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
-import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { LogOut } from "lucide-react";
 
-function getProfileDataWithFakeApi({ id }: ProfileHoverCardProps) {
-	const { data } = useQuery({
-		queryKey: ["fullDataUsers", id],
-		queryFn: () => FakeFullProfileApi().getFullProfileList(),
-		select: (data) =>
-			Object.entries(data).filter(([key]) => key === id)[0][1],
-	});
-	return { data };
-}
+// function getProfileDataWithFakeApi({ id }: ProfileHoverCardProps) {
+// 	const { data } = useQuery({
+// 		queryKey: ["fullDataUsers", id],
+// 		queryFn: () => FakeFullProfileApi().getFullProfileList(),
+// 		select: (data) =>
+// 			Object.entries(data).filter(([key]) => key === id)[0][1],
+// 	});
+// 	return { data };
+// }
 
-export function ProfileData({ id }: ProfileHoverCardProps) {
+export function ProfileData() {
 	const navigate = useNavigate();
-	const { data: profileData, isLoading: isProfileLoading } = useQuery({
-		queryKey: ["fullDataUsers", id],
-		queryFn: async () => {
-			const res = await fetch(`${serverAddr}/api/users/me`, {
-				headers: {
-					Authorization: `Bearer ${getCookie("authtoken")}`,
-				},
-			});
-
-			const jsonedProfile = await res.json();
-			const parsedProfile = ProfileSchema.safeParse(jsonedProfile);
-			if (parsedProfile.success) {
-				return parsedProfile.data;
-			} else {
-				console.log(`${parsedProfile.error}`);
-			}
-		},
-	});
+	const { data: profileData, isLoading: isProfileLoading } =
+		useGetApiProfile();
 
 	if (isProfileLoading) {
 		return (
@@ -113,7 +93,7 @@ export function ProfileData({ id }: ProfileHoverCardProps) {
 						</Button>
 					</Link>
 					<Link
-						to="/profile-edit"
+						to="/profile/edit"
 						className="bg-primary flex-1 rounded-full text-gray-600 dark:text-white"
 					>
 						<Button variant="outline" className="w-full flex-1">

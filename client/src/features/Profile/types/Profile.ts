@@ -18,6 +18,7 @@ export const ProfileSchema = UserSchema.pick({
 	firstName: true,
 	lastName: true,
 	username: true,
+	email: true,
 	// role: true,
 });
 export type Profile = z.infer<typeof ProfileSchema>;

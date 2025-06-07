@@ -9,11 +9,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import { serverAddr } from "@/config/config";
 import {
-	useGetUser,
-	useUpdateUser,
-} from "@/features/Profile/service/profileQueries";
+	useGetApiProfile,
+	useUpdateApiProfile,
+} from "@/features/Profile/service/profileApiQueries";
 import { Profile, ProfileSchema } from "@/features/Profile/types/Profile";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "@tanstack/react-router";
@@ -23,18 +22,18 @@ import { useForm } from "react-hook-form";
 const inputStyle = "mx-[10px] my-0 w-[460px]";
 const itemStyle = "mx-[10px]";
 
-export function ProfileEditForm({ id }: { id: string }) {
+export function ProfileEditForm() {
+	const { mutate: mutateUser } = useUpdateApiProfile();
 	const form = useForm<Profile>({
 		resolver: zodResolver(ProfileSchema),
 		defaultValues: {
-			id: id,
 			firstName: "",
 			lastName: "",
 			username: "",
+			email: "",
 		},
 	});
-	const { data: user, isLoading: isUserLoading } = useGetUser(id);
-	const { mutation: mutateUser } = useUpdateUser(id);
+	const { data: user, isLoading: isUserLoading } = useGetApiProfile();
 
 	useEffect(() => {
 		if (user) {
@@ -43,15 +42,7 @@ export function ProfileEditForm({ id }: { id: string }) {
 	}, [user]);
 
 	function onSubmit(data: Profile) {
-		mutateUser.mutate(data);
-		const res = fetch(`${serverAddr}/api/users/me`, {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(data),
-		});
-		console.log(res);
+		mutateUser(data);
 	}
 
 	if (isUserLoading) {
@@ -65,7 +56,6 @@ export function ProfileEditForm({ id }: { id: string }) {
 			</div>
 		);
 	}
-
 	return (
 		<Form {...form}>
 			<form
@@ -117,6 +107,19 @@ export function ProfileEditForm({ id }: { id: string }) {
 									placeholder="Enter username"
 									{...field}
 								/>
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name="email"
+					render={({ field }) => (
+						<FormItem className={itemStyle}>
+							<FormLabel>Email</FormLabel>
+							<FormControl className={inputStyle}>
+								<Input placeholder="Enter email" {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
