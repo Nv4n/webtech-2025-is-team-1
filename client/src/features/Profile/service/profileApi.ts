@@ -66,5 +66,21 @@ export const FakeProfileApi = () => {
 			}, 250);
 		});
 	};
-	return { getProfileList };
+	const updateProfile = async (profile: Profile) => {
+			if (!profile.id) {
+				return new Promise<Profile | undefined>((resolve) => {
+					setTimeout(() => {
+						resolve(undefined);
+					}, 250);
+				});
+			}
+	
+			users[profile.id] = profile;
+			return new Promise<Profile>((resolve) => {
+				setTimeout(() => {
+					resolve(profile);
+				}, 1000);
+			});
+		};
+	return { getProfileList, updateProfile: updateProfile };
 };
