@@ -20,10 +20,13 @@ export function RegisterForm() {
 		resolver: zodResolver(RegisterSchema),
 	});
 
-	function onSubmit(data: RegisterUser) {
+	async function onSubmit(data: RegisterUser) {
 		console.log(data);
-		const res = fetch(`${serverAddr}/api/auth/register`, {
+		const res = await fetch(`${serverAddr}/api/auth/register`, {
 			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
 			body: JSON.stringify(data),
 		});
 		console.log(res);
