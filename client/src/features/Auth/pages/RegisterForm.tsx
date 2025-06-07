@@ -38,12 +38,40 @@ function RegisterForm() {
       >
         <FormField
           control={form.control}
+          name="fname"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>First Name</FormLabel>
+              <FormControl>
+                <Input type="text" placeholder="Enter First Name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="lname"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Surname</FormLabel>
+              <FormControl>
+                <Input type="text" placeholder="Enter Surname" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
           name="username"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input type="text" placeholder="Enter Username..." {...field} />
+                <Input type="text" placeholder="Enter Username" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -57,7 +85,7 @@ function RegisterForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="Enter Email..." {...field} />
+                <Input type="email" placeholder="Enter Email" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -73,7 +101,7 @@ function RegisterForm() {
               <FormControl>
                 <Input
                   type="password"
-                  placeholder="Enter Password..."
+                  placeholder="Enter Password"
                   {...field}
                 />
               </FormControl>
@@ -91,7 +119,7 @@ function RegisterForm() {
               <FormControl>
                 <Input
                   type="password"
-                  placeholder="Re-Enter Password..."
+                  placeholder="Re-Enter Password"
                   {...field}
                 />
               </FormControl>

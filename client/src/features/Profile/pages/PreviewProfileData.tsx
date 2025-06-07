@@ -70,7 +70,14 @@ export function ProfileData({ id }: ProfileHoverCardProps) {
 							Change Password
 						</Button>
 					</Link>
-					<Button className="flex-1">Edit</Button>
+					<Link to="/profile-edit" className="flex-1 bg-primary text-gray-600 dark:text-white rounded-full">
+						<Button
+							variant="outline"
+							className="w-full flex-1"
+						>
+							Edit
+						</Button>
+					</Link>
 				</div>
 
 				<Link

@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as TestImport } from './routes/test'
 import { Route as RegisterImport } from './routes/register'
 import { Route as ProjectImport } from './routes/project'
+import { Route as ProfileEditImport } from './routes/profile-edit'
 import { Route as ProfileImport } from './routes/profile'
 import { Route as LoginImport } from './routes/login'
 import { Route as IndexImport } from './routes/index'
@@ -39,6 +40,12 @@ const RegisterRoute = RegisterImport.update({
 const ProjectRoute = ProjectImport.update({
   id: '/project',
   path: '/project',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ProfileEditRoute = ProfileEditImport.update({
+  id: '/profile-edit',
+  path: '/profile-edit',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -109,6 +116,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileImport
       parentRoute: typeof rootRoute
     }
+    '/profile-edit': {
+      id: '/profile-edit'
+      path: '/profile-edit'
+      fullPath: '/profile-edit'
+      preLoaderRoute: typeof ProfileEditImport
+      parentRoute: typeof rootRoute
+    }
     '/project': {
       id: '/project'
       path: '/project'
@@ -167,6 +181,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
+  '/profile-edit': typeof ProfileEditRoute
   '/project': typeof ProjectRoute
   '/register': typeof RegisterRoute
   '/test': typeof TestRoute
@@ -180,6 +195,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
+  '/profile-edit': typeof ProfileEditRoute
   '/project': typeof ProjectRoute
   '/register': typeof RegisterRoute
   '/test': typeof TestRoute
@@ -194,6 +210,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
+  '/profile-edit': typeof ProfileEditRoute
   '/project': typeof ProjectRoute
   '/register': typeof RegisterRoute
   '/test': typeof TestRoute
@@ -209,6 +226,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/profile'
+    | '/profile-edit'
     | '/project'
     | '/register'
     | '/test'
@@ -221,6 +239,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/profile'
+    | '/profile-edit'
     | '/project'
     | '/register'
     | '/test'
@@ -233,6 +252,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/profile'
+    | '/profile-edit'
     | '/project'
     | '/register'
     | '/test'
@@ -247,6 +267,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
+  ProfileEditRoute: typeof ProfileEditRoute
   ProjectRoute: typeof ProjectRoute
   RegisterRoute: typeof RegisterRoute
   TestRoute: typeof TestRoute
@@ -260,6 +281,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
+  ProfileEditRoute: ProfileEditRoute,
   ProjectRoute: ProjectRoute,
   RegisterRoute: RegisterRoute,
   TestRoute: TestRoute,
@@ -282,6 +304,7 @@ export const routeTree = rootRoute
         "/",
         "/login",
         "/profile",
+        "/profile-edit",
         "/project",
         "/register",
         "/test",
@@ -299,6 +322,9 @@ export const routeTree = rootRoute
     },
     "/profile": {
       "filePath": "profile.tsx"
+    },
+    "/profile-edit": {
+      "filePath": "profile-edit.tsx"
     },
     "/project": {
       "filePath": "project.tsx"
