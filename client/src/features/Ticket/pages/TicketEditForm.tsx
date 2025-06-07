@@ -88,6 +88,7 @@ export function TicketEditForm(id: string) {
 	if (!ticket) {
 		throw new Error("No such ticket");
 	}
+	form.setValue("project", ticket.project);
 
 	return (
 		<Card className="mx-auto my-0 w-fit py-8">
