@@ -11,6 +11,8 @@ type TicketDashboardProps = {
 };
 
 export function TicketsDashboard({ filter }: TicketDashboardProps) {
+	console.log(filter);
+
 	const { data: tickets, isLoading: isTicketsLoading } =
 		useGetApiTickets(filter);
 
@@ -43,7 +45,8 @@ export function TicketsDashboard({ filter }: TicketDashboardProps) {
 								return (
 									<TicketsGroup
 										key={status}
-										filter={{ statuses: [status] }}
+										status={status}
+										filter={filter}
 									/>
 								);
 							})
@@ -51,7 +54,7 @@ export function TicketsDashboard({ filter }: TicketDashboardProps) {
 								return (
 									<TicketsGroup
 										key={status}
-										filter={{ statuses: [status] }}
+										status={status}
 									/>
 								);
 							})}

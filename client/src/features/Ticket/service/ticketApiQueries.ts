@@ -2,29 +2,34 @@ import { serverAddr } from "@/config/config";
 import { getCookie } from "@/features/Auth/utils/cookies";
 import { Ticket, TicketSchema } from "@/features/Ticket/types/Ticket";
 import { TicketFilter } from "@/features/Ticket/types/TicketFilter";
+import { getFilterParams } from "@/features/Ticket/utils/filterParams";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 
 export function useGetApiTickets(filter?: TicketFilter) {
-	if (filter) {
-		return useGetApiFilteredTickets(filter);
-	}
+	// if (filter) {
+	// 	return useGetApiFilteredTickets(filter);
+	// }
 	return useGetApiAllTickets();
 }
 
 export function useGetApiFilteredTickets(filter: TicketFilter) {
+	const params = getFilterParams(filter);
 	const { data, isLoading } = useQuery({
 		queryKey: ["tickets", filter],
 		queryFn: async () => {
-			const res = await fetch(`${serverAddr}/api/tickets/`, {
-				method: "GET",
-				headers: {
-					Authorization: `Bearer ${getCookie("authtoken")}`,
-					"Content-Type": "application/json",
-				},
-			});
+			const res = await fetch(
+				`${serverAddr}/api/tickets/filter?${params.toString()}`,
+				{
+					method: "GET",
+					headers: {
+						Authorization: `Bearer ${getCookie("authtoken")}`,
+						"Content-Type": "application/json",
+					},
+				}
+			);
 
 			if (!res.ok) {
 				console.error("Fetch error:", res.status, res.statusText);
@@ -35,8 +40,6 @@ export function useGetApiFilteredTickets(filter: TicketFilter) {
 			const parsedTickets = z.array(TicketSchema).safeParse(ticketsResp);
 
 			if (parsedTickets.success) {
-				console.log(parsedTickets.data);
-
 				return parsedTickets.data;
 			} else {
 				console.error("Parse error:", parsedTickets.error.message);
@@ -64,12 +67,12 @@ export function useGetApiAllTickets() {
 				toast.error("Server error");
 			}
 			const ticketsResp = await res.json();
+			console.log(ticketsResp);
 
 			const parsedTickets = z.array(TicketSchema).safeParse(ticketsResp);
+			console.log(parsedTickets);
 
 			if (parsedTickets.success) {
-				console.log(parsedTickets.data);
-
 				return parsedTickets.data;
 			} else {
 				console.error("Parse error:", parsedTickets.error.message);
@@ -81,8 +84,6 @@ export function useGetApiAllTickets() {
 }
 
 export const useGetApiTicket = (id: string) => {
-	console.log(id);
-
 	const { data, isLoading } = useQuery({
 		queryKey: ["tickets", id],
 		queryFn: async () => {

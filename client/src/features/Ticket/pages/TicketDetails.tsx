@@ -21,9 +21,7 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { ProfileHoverCard } from "@/features/Profile/components/ProfileHoverCard";
-import {
-	useGetApiUser,
-} from "@/features/Profile/service/profileApiQueries";
+import { useGetApiUser } from "@/features/Profile/service/profileApiQueries";
 import { getInitials } from "@/features/Profile/utils/getInitials";
 import { useGetApiProject } from "@/features/Project/service/ProjectApiQueries";
 import { useGetApiTicket } from "@/features/Ticket/service/ticketApiQueries";
@@ -126,16 +124,16 @@ export const TicketDetails = (id: string) => {
 						<span className="text-muted-foreground text-sm">
 							project
 						</span>
-						{ticketData.project && (
-							<ProjectBadge id={ticketData.project} />
+						{ticketData.projectId && (
+							<ProjectBadge id={ticketData.projectId} />
 						)}
 					</div>
 					<p>{ticketData.description}</p>
 				</CardContent>
 				<CardFooter className="flex flex-col items-start gap-4">
-					{ticketData.assignee && (
+					{ticketData.assigneeId && (
 						<UserHoverCard
-							id={ticketData.assignee}
+							id={ticketData.assigneeId}
 							content={"is assigned to issue"}
 						/>
 					)}
