@@ -135,3 +135,34 @@ export const useUpdateApiTicket = (id: string) => {
 	});
 	return { mutate };
 };
+
+export const useCreateApiTicket = () => {
+	const navigate = useNavigate();
+	const queryClient = useQueryClient();
+	const { mutate } = useMutation({
+		mutationFn: async (data: Ticket) => {
+			console.log(data);
+			return await fetch(`${serverAddr}/api/tickets`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${getCookie("authtoken")}`,
+				},
+				body: JSON.stringify(data),
+			});
+		},
+		onSuccess: () => {
+			toast.success("Ticket updated successfully!");
+			queryClient.invalidateQueries({
+				queryKey: ["tickets"],
+			});
+			navigate({
+				to: "/tickets",
+			});
+		},
+		onError: () => {
+			toast.error("Failed to update ticket.");
+		},
+	});
+	return { mutate };
+};
