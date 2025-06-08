@@ -82,13 +82,18 @@ export function TicketsGroup({ filter, styles }: TicketCardProps) {
 							></TicketCard>
 						) : null
 					)}
-			<Link
-				to="/tickets/create"
-				className={cn(NavMenuLinkStyles, navigationMenuTriggerStyle())}
-				data-slot="navigation-menu-link"
-			>
-				<pre>Add Ticket</pre>
-			</Link>
+			{tickets && (
+				<Link
+					to="/tickets/create"
+					className={cn(
+						NavMenuLinkStyles,
+						navigationMenuTriggerStyle()
+					)}
+					data-slot="navigation-menu-link"
+				>
+					<pre>Add Ticket</pre>
+				</Link>
+			)}
 		</div>
 	);
 }
