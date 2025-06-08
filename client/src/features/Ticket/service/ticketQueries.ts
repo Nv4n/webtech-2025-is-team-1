@@ -38,3 +38,53 @@ export const useUpdateTicket = (id: string) => {
 	});
 	return { mutation };
 };
+
+function fetchTicketDetailsFakeApi() {
+	const { data: ticketList, isLoading: isLoadingTickets } = useQuery({
+		queryKey: ["tickets"],
+		queryFn: () => {
+			return FakeTicketApi().getTicketList();
+		},
+		select: (data) => {
+			return Object.values(data);
+		},
+	});
+	const { data: userList, isLoading: isLoadingUsers } = useQuery({
+		queryKey: ["users"],
+		queryFn: () => {
+			return FakeProfileApi().getProfileList();
+		},
+		select: (data) => {
+			return Object.values(data);
+		},
+	});
+	const { data: projectList, isLoading: isLoadingProjects } = useQuery({
+		queryKey: ["projects"],
+		queryFn: () => {
+			return FakeProjectApi().getProjectList();
+		},
+		select: (data) => {
+			return Object.values(data);
+		},
+	});
+	if (isLoadingProjects || isLoadingTickets || isLoadingUsers) {
+		return [];
+	}
+	if (!ticketList || !userList || !projectList) {
+		return [];
+	}
+	const ticketsWithDetails = ticketList.map((ticket) => {
+		const updatedBy = userList.find((user) => user.id === ticket.updatedBy);
+		const assignedTo = userList.find((user) => user.id === ticket.assignee);
+		const project = projectList.find((proj) => proj.id === ticket.project);
+
+		return {
+			...ticket,
+			updatedBy: updatedBy ?? fallBackProfile,
+			assignedTo: assignedTo ?? fallBackProfile,
+			project,
+		};
+	});
+
+	return ticketsWithDetails;
+}

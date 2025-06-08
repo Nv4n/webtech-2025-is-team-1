@@ -1,3 +1,4 @@
+import { NavMenuLinkStyles } from "@/components/NavMenuLinkStyles";
 import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 import {
 	Tooltip,
@@ -5,160 +6,19 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { serverAddr } from "@/config/config";
-import { deleteCookie, getCookie } from "@/features/Auth/utils/cookies";
-import { FakeProfileApi } from "@/features/Profile/service/profileApi";
-import { FakeProjectApi } from "@/features/Project/service/projectApi";
 import { TicketCard } from "@/features/Ticket/components/TicketCard";
-import { FakeTicketApi } from "@/features/Ticket/service/ticketApi";
-import { TicketSchema } from "@/features/Ticket/types/Ticket";
+import { useGetFilteredTickets } from "@/features/Ticket/service/ticketApiQueries";
+import { TicketFilter } from "@/features/Ticket/types/TicketFilter";
 import { cn } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
-import { Link, useNavigate } from "@tanstack/react-router";
-import z from "zod";
+import { Link } from "@tanstack/react-router";
+import { CirclePlus } from "lucide-react";
 
-type TicketStatus = {
-	status: string;
-};
+export function TicketsGroup(filter: TicketFilter = {}) {
+	const tickets = useGetFilteredTickets(filter);
+	console.log(tickets);
 
-const fallBackProfile = {
-	fname: "Unknown",
-	lname: "User",
-	username: "unknown",
-	id: "",
-};
-
-const NavMenuLinkStyles =
-	"data-[active=true]:focus:bg-accent data-[active=true]:hover:bg-accent data-[active=true]:bg-accent/50 data-[active=true]:text-accent-foreground hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:ring-ring/50 [&_svg:not([class*='text-'])]:text-muted-foreground flex flex-col gap-1 rounded-sm p-2 text-sm transition-all outline-none focus-visible:ring-[3px] focus-visible:outline-1 [&_svg:not([class*='size-'])]:size-4";
-
-function fetchTicketDetailsFakeApi() {
-	const { data: ticketList, isLoading: isLoadingTickets } = useQuery({
-		queryKey: ["tickets"],
-		queryFn: () => {
-			return FakeTicketApi().getTicketList();
-		},
-		select: (data) => {
-			return Object.values(data);
-		},
-	});
-	const { data: userList, isLoading: isLoadingUsers } = useQuery({
-		queryKey: ["users"],
-		queryFn: () => {
-			return FakeProfileApi().getProfileList();
-		},
-		select: (data) => {
-			return Object.values(data);
-		},
-	});
-	const { data: projectList, isLoading: isLoadingProjects } = useQuery({
-		queryKey: ["projects"],
-		queryFn: () => {
-			return FakeProjectApi().getProjectList();
-		},
-		select: (data) => {
-			return Object.values(data);
-		},
-	});
-	if (isLoadingProjects || isLoadingTickets || isLoadingUsers) {
-		return [];
-	}
-	if (!ticketList || !userList || !projectList) {
-		return [];
-	}
-	const ticketsWithDetails = ticketList.map((ticket) => {
-		const updatedBy = userList.find((user) => user.id === ticket.updatedBy);
-		const assignedTo = userList.find((user) => user.id === ticket.assignee);
-		const project = projectList.find((proj) => proj.id === ticket.project);
-
-		return {
-			...ticket,
-			updatedBy: updatedBy ?? fallBackProfile,
-			assignedTo: assignedTo ?? fallBackProfile,
-			project,
-		};
-	});
-
-	return ticketsWithDetails;
-}
-
-function fetchTicketDetails() {
-	const navigate = useNavigate();
-	const { data: ticketList, isLoading: isLoadingTickets } = useQuery({
-		queryKey: ["tickets"],
-		queryFn: async () => {
-			const res = await fetch(`${serverAddr}/api/tickets`, {
-				method: "GET",
-				headers: {
-					Authorization: `Bearer ${getCookie("authtoken")}`,
-					"Content-Type": "application/json",
-				},
-			});
-
-			if (!res.ok) {
-				console.error("Fetch error:", res.status, res.statusText);
-				deleteCookie("authtoken");
-				navigate({ to: "/login" });
-			}
-			const ticketsResp = await res.json();
-			console.log(ticketsResp);
-
-			const parsedTickets = z.array(TicketSchema).safeParse(ticketsResp);
-			console.log(parsedTickets);
-
-			if (parsedTickets.success) {
-				return parsedTickets.data;
-			} else {
-				console.error("Parse error:", parsedTickets.error.message);
-				// deleteCookie("authtoken");
-				// navigate({ to: "/login" });
-			}
-		},
-	});
-	//TODO ADOPT TO API
-	const { data: userList, isLoading: isLoadingUsers } = useQuery({
-		queryKey: ["users"],
-		queryFn: () => {
-			return FakeProfileApi().getProfileList();
-		},
-		select: (data) => {
-			return Object.values(data);
-		},
-	});
-	//TODO ADOPT TO API, EXPORT OUTSIDE
-	const { data: projectList, isLoading: isLoadingProjects } = useQuery({
-		queryKey: ["projects"],
-		queryFn: () => {
-			return FakeProjectApi().getProjectList();
-		},
-		select: (data) => {
-			return Object.values(data);
-		},
-	});
-	if (isLoadingProjects || isLoadingTickets || isLoadingUsers) {
-		return [];
-	}
-	if (!ticketList || !userList || !projectList) {
-		return [];
-	}
-	const ticketsWithDetails = ticketList.map((ticket) => {
-		const updatedBy = userList.find((user) => user.id === ticket.updatedBy);
-		const assignedTo = userList.find((user) => user.id === ticket.assignee);
-		const project = projectList.find((proj) => proj.id === ticket.project);
-
-		return {
-			...ticket,
-			updatedBy: updatedBy ?? fallBackProfile,
-			assignedTo: assignedTo ?? fallBackProfile,
-			project,
-		};
-	});
-
-	return ticketsWithDetails;
-}
-
-export function TicketsGroup({ status }: TicketStatus) {
-	//TODO FIX TO API
-	const tickets = fetchTicketDetails();
+	// console.log(status);
+	// console.log(tickets[1]?.status);
 
 	return (
 		<div className="flex w-1/3 flex-col space-y-4">
@@ -175,7 +35,8 @@ export function TicketsGroup({ status }: TicketStatus) {
 								)}
 								data-slot="navigation-menu-link"
 							>
-								<pre>Add Ticket</pre>
+								<CirclePlus></CirclePlus>
+								<span className="sr-only">Add Ticket</span>
 							</Link>
 						</TooltipTrigger>
 						<TooltipContent className="z-10 rounded-md border bg-gray-100 p-2 text-gray-800 shadow-md">

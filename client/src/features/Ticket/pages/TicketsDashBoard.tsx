@@ -8,7 +8,7 @@ export function TicketsDashboard() {
 			<TicketsFilter />
 			<div className="grid w-full columns-3 space-x-4 p-4">
 				{TicketStatuses.map((status) => {
-					console.log(status);
+					// console.log(status);
 
 					return <TicketsGroup key={status} status={status} />;
 				})}
