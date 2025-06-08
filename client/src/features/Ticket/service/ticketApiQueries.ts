@@ -7,8 +7,47 @@ import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 
-export function useGetFilteredApiTickets(filter: TicketFilter) {
-	const navigate = useNavigate();
+export function useGetApiTickets(filter?: TicketFilter) {
+	if (filter) {
+		return useGetApiFilteredTickets(filter);
+	}
+	return useGetApiAllTickets();
+}
+
+export function useGetApiFilteredTickets(filter: TicketFilter) {
+	const { data, isLoading } = useQuery({
+		queryKey: ["tickets", filter],
+		queryFn: async () => {
+			const res = await fetch(`${serverAddr}/api/tickets/`, {
+				method: "GET",
+				headers: {
+					Authorization: `Bearer ${getCookie("authtoken")}`,
+					"Content-Type": "application/json",
+				},
+			});
+
+			if (!res.ok) {
+				console.error("Fetch error:", res.status, res.statusText);
+				toast.error("Server error");
+			}
+			const ticketsResp = await res.json();
+
+			const parsedTickets = z.array(TicketSchema).safeParse(ticketsResp);
+
+			if (parsedTickets.success) {
+				console.log(parsedTickets.data);
+
+				return parsedTickets.data;
+			} else {
+				console.error("Parse error:", parsedTickets.error.message);
+				toast.error("Couldn't read tickets data");
+			}
+		},
+	});
+	return { data, isLoading };
+}
+
+export function useGetApiAllTickets() {
 	const { data, isLoading } = useQuery({
 		queryKey: ["tickets"],
 		queryFn: async () => {
@@ -18,30 +57,23 @@ export function useGetFilteredApiTickets(filter: TicketFilter) {
 					Authorization: `Bearer ${getCookie("authtoken")}`,
 					"Content-Type": "application/json",
 				},
-				// body: JSON.stringify(filter),
 			});
-			// console.log(res);
 
 			if (!res.ok) {
 				console.error("Fetch error:", res.status, res.statusText);
-				// deleteCookie("authtoken");
-				// navigate({ to: "/login" });
+				toast.error("Server error");
 			}
 			const ticketsResp = await res.json();
 
 			const parsedTickets = z.array(TicketSchema).safeParse(ticketsResp);
 
-			// console.log(parsedTickets);
-
 			if (parsedTickets.success) {
-				// console.log("success");
 				console.log(parsedTickets.data);
 
 				return parsedTickets.data;
 			} else {
 				console.error("Parse error:", parsedTickets.error.message);
-				// deleteCookie("authtoken");
-				// navigate({ to: "/login" });
+				toast.error("Couldn't read tickets data");
 			}
 		},
 	});

@@ -87,6 +87,3 @@ export const useGetApiUsers = () => {
 	});
 	return { data, isLoading };
 };
-
-// export const use
-//TODO useGetApiUsers

@@ -13,11 +13,10 @@ import {
 	Link,
 	Outlet,
 	useNavigate,
-	useRouter
+	useRouter,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { toast } from "sonner";
-
 
 export const Route = createRootRoute({
 	component: () => {
@@ -96,8 +95,10 @@ export const Route = createRootRoute({
 					</NavigationMenuList>
 				</NavigationMenu>
 				<hr className="mb-4" />
-				<CatchBoundary
-					getResetKey={() => "reset"}
+				{/* <CatchBoundary
+					getResetKey={() =>
+						router.state.resolvedLocation?.state.key!
+					}
 					onCatch={(error) => {
 						console.error(error);
 						toast.error(
@@ -106,9 +107,9 @@ export const Route = createRootRoute({
 								: String(error)
 						);
 					}}
-				>
-					<Outlet />
-				</CatchBoundary>
+				> */}
+				<Outlet />
+				{/* </CatchBoundary> */}
 
 				<TanStackRouterDevtools />
 			</>

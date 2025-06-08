@@ -88,3 +88,15 @@ function fetchTicketDetailsFakeApi() {
 
 	return ticketsWithDetails;
 }
+
+export const useGetTicketById(id:string){
+	const { data, isLoading } = useQuery({
+		queryKey: ["tickets", id],
+		queryFn: () => FakeTicketApi().getTicketList(),
+		select: (data) => {
+			return Object.entries(data).filter(([key, _]) => key === id)[0][1];
+		},
+	});
+
+	return{data,isLoading}
+}

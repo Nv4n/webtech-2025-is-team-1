@@ -37,13 +37,7 @@ const statusBadgeStyles = {
 };
 
 export const TicketDetails = (id: string) => {
-	const { data: ticket, isLoading } = useQuery({
-		queryKey: ["tickets", id],
-		queryFn: () => FakeTicketApi().getTicketList(),
-		select: (data) => {
-			return Object.entries(data).filter(([key, _]) => key === id)[0][1];
-		},
-	});
+	
 
 	if (isLoading) {
 		return (
