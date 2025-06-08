@@ -22,7 +22,7 @@ export function TicketsGroup({ filter }: TicketCardProps) {
 	const { data: tickets, isLoading: isTicketListLoading } =
 		useGetFilteredTickets(filter);
 
-	if (!isTicketListLoading) {
+	if (isTicketListLoading) {
 		return (
 			<div className="mx-auto my-0 w-fit flex-col space-y-3">
 				<Skeleton className="h-[125px] w-[250px] rounded-xl" />
@@ -33,10 +33,6 @@ export function TicketsGroup({ filter }: TicketCardProps) {
 			</div>
 		);
 	}
-	console.log(tickets);
-
-	// console.log(status);
-	// console.log(tickets[1]?.status);
 
 	return (
 		<div className="flex w-1/3 flex-col space-y-4">
@@ -67,15 +63,15 @@ export function TicketsGroup({ filter }: TicketCardProps) {
 					</Tooltip>
 				</TooltipProvider>
 			</div>
-			{/* {tickets &&
+			{tickets &&
 				tickets
-					.filter((ticket) => ticket.status === status)
+					.filter((ticket) => ticket.status === filter?.statuses?.[0])
 					.map((ticket) =>
-						ticket.id && ticket.project?.id ? (
+						ticket.id && ticket.project ? (
 							<TicketCard
 								updatedAt={ticket.updatedAt}
 								// updatedBy={ticket.updatedBy}
-								project={ticket.project.name}
+								project={ticket.project}
 								id={ticket.id}
 								title={ticket.title}
 								status={String(ticket.status)}
@@ -84,7 +80,7 @@ export function TicketsGroup({ filter }: TicketCardProps) {
 								// {...ticket}
 							></TicketCard>
 						) : null
-					)} */}
+					)}
 			<Link
 				to="/tickets/create"
 				className={cn(NavMenuLinkStyles, navigationMenuTriggerStyle())}

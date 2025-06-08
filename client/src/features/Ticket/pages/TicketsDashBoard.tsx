@@ -12,6 +12,7 @@ export function TicketsDashboard() {
 
 					return (
 						<TicketsGroup
+						
 							key={status}
 							filter={{ statuses: [status] }}
 						/>
