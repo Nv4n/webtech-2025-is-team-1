@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
-import { useGetApiUsers } from "@/features/Profile/service/profileApiQueries";
+import { useGetApiProfile, useGetApiUsers } from "@/features/Profile/service/profileApiQueries";
 import { useGetApiProjects } from "@/features/Project/service/ProjectApiQueries";
 import {
 	useGetApiTicket,
@@ -39,21 +39,14 @@ const itemStyle = "mx-[10px]";
 
 export function TicketEditForm(id: string) {
 	const { mutate: mutateTicket } = useUpdateApiTicket(id);
+	const { data: updatedBy } = useGetApiProfile();
 	const form = useForm<Ticket>({
 		resolver: zodResolver(TicketSchema),
 		defaultValues: {
-			title: "Default title",
-			status: "Open",
-			priority: "Low",
-			description: "Default description",
-			createdAt: new Date().toLocaleString(),
-			projectId: "1",
-			updatedAt: new Date().toLocaleString(),
-			updatedBy: "1",
-			id: id,
-			assigneeId: "1",
-			authorId: "1",
-		},
+			"createdAt": new Date().toLocaleString(),
+			"updatedAt": new Date().toLocaleString(),
+			"updatedBy": updatedBy?.id
+		}
 	});
 
 	const { data: ticket, isLoading: isTicketLoading } = useGetApiTicket(id);
@@ -91,9 +84,9 @@ export function TicketEditForm(id: string) {
 
 	form.setValue("title", ticket.title);
 	form.setValue("description", ticket.description);
-	form.setValue("project", ticket.projectId);
+	form.setValue("projectId", ticket.projectId);
 	form.setValue("status", ticket.status);
-	form.setValue("assignee", ticket.assigneeId);
+	form.setValue("assigneeId", ticket.assigneeId);
 	form.setValue("priority", ticket.priority);
 	console.log(ticket);
 

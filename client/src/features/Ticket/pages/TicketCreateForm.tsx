@@ -17,7 +17,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { useGetApiUsers } from "@/features/Profile/service/profileApiQueries";
+import { useGetApiProfile, useGetApiUsers } from "@/features/Profile/service/profileApiQueries";
 import { useGetApiProjects } from "@/features/Project/service/ProjectApiQueries";
 import { useCreateApiTicket } from "@/features/Ticket/service/ticketApiQueries";
 import {
@@ -38,27 +38,21 @@ export function TicketCreateForm() {
 	const { data: projects } = useGetProjectList();*/
 
 	const { mutate: mutateTicket } = useCreateApiTicket();
+	const { data: updatedBy } = useGetApiProfile();
 	const form = useForm<Ticket>({
 		resolver: zodResolver(TicketSchema),
 		defaultValues: {
-			title: "Default title",
-			status: "Open",
-			priority: "Low",
-			description: "Default description",
-			createdAt: new Date().toLocaleString(),
-			projectId: "1",
-			updatedAt: new Date().toLocaleString(),
-			updatedBy: "1",
-			id: undefined,
-			assigneeId: "1",
-			authorId: "1",
-		},
+			"createdAt": new Date().toLocaleString(),
+			"updatedAt": new Date().toLocaleString(),
+			"updatedBy": updatedBy?.id
+		}
 	});
 
 	const { data: users } = useGetApiUsers();
 	const { data: projects } = useGetApiProjects();
 
-	async function onSubmit(data: Ticket) {
+	function onSubmit(data: Ticket) {
+		console.log(data);
 		mutateTicket(data);
 	}
 
@@ -145,7 +139,7 @@ export function TicketCreateForm() {
 
 							<FormField
 								control={form.control}
-								name="assignee"
+								name="assigneeId"
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Assignee</FormLabel>
@@ -221,7 +215,7 @@ export function TicketCreateForm() {
 
 							<FormField
 								control={form.control}
-								name="project"
+								name="projectId"
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Project</FormLabel>

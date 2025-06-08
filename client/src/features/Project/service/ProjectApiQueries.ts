@@ -86,3 +86,33 @@ export const useUpdateApiProject = (id: string) => {
 	});
 	return { mutate };
 };
+
+export const useCreateApiProject = () => {
+	const navigate = useNavigate();
+	const queryClient = useQueryClient();
+	const { mutate } = useMutation({
+		mutationFn: async (data: Project) => {
+			return await fetch(`${serverAddr}/api/projects`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${getCookie("authtoken")}`,
+				},
+				body: JSON.stringify(data),
+			});
+		},
+		onSuccess: () => {
+			toast.success("Project created successfully!");
+			queryClient.invalidateQueries({
+				queryKey: ["projects"],
+			});
+			navigate({
+				to: "/tickets", // We do not have all projects view so we go to the dashboard of tickets
+			});
+		},
+		onError: () => {
+			toast.error("Failed to create project.");
+		},
+	});
+	return { mutate };
+};
