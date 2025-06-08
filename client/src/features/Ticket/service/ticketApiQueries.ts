@@ -1,5 +1,5 @@
 import { serverAddr } from "@/config/config";
-import { getCookie, deleteCookie } from "@/features/Auth/utils/cookies";
+import { getCookie } from "@/features/Auth/utils/cookies";
 import { Ticket, TicketSchema } from "@/features/Ticket/types/Ticket";
 import { TicketFilter } from "@/features/Ticket/types/TicketFilter";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";

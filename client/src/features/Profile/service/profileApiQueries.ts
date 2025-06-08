@@ -1,9 +1,15 @@
 import { serverAddr } from "@/config/config";
 import { getCookie } from "@/features/Auth/utils/cookies";
-import { Profile, ProfileSchema } from "@/features/Profile/types/Profile";
+import {
+	FetchingUserSchema,
+	Profile,
+	ProfileSchema,
+	UserSchema,
+} from "@/features/Profile/types/Profile";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
+import z from "zod";
 
 export const useGetApiProfile = () => {
 	const { data, isLoading } = useQuery({
@@ -55,6 +61,31 @@ export const useUpdateApiProfile = () => {
 		},
 	});
 	return { mutate };
+};
+
+export const useGetApiUsers = () => {
+	const { data, isLoading } = useQuery({
+		queryKey: ["users"],
+		queryFn: async () => {
+			const res = await fetch(`${serverAddr}/api/users`, {
+				headers: {
+					Authorization: `Bearer ${getCookie("authtoken")}`,
+				},
+			});
+			// console.log(res);
+
+			const jsonedUsers = await res.json();
+			const parsedUsers = z
+				.array(FetchingUserSchema)
+				.safeParse(jsonedUsers);
+			if (parsedUsers.success) {
+				return parsedUsers.data;
+			} else {
+				console.error(`Parsed users error: ${parsedUsers.error}`);
+			}
+		},
+	});
+	return { data, isLoading };
 };
 
 // export const use

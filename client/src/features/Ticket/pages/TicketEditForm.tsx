@@ -18,9 +18,17 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
+import { useGetApiUsers } from "@/features/Profile/service/profileApiQueries";
 import { useGetApiProjects } from "@/features/Project/service/ProjectApiQueries";
-import { useGetApiTicket, useUpdateApiTicket } from "@/features/Ticket/service/ticketApiQueries";
-import { Ticket, TicketSchema, TicketStatuses } from "@/features/Ticket/types/Ticket";
+import {
+	useGetApiTicket,
+	useUpdateApiTicket,
+} from "@/features/Ticket/service/ticketApiQueries";
+import {
+	Ticket,
+	TicketSchema,
+	TicketStatuses,
+} from "@/features/Ticket/types/Ticket";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "@tanstack/react-router";
 import { useEffect } from "react";
@@ -49,10 +57,11 @@ export function TicketEditForm(id: string) {
 		},
 	});
 
-	const { data: ticket, isLoading: isTicketLoading } = useGetApiTicket(id); 
-	const { data: users, isLoading: isUsersLoading } = useGetApiUsers(); // Ivan is implementing it now.
-	
-	const { data: projects, isLoading: isProjectsLoading } = useGetApiProjects();
+	const { data: ticket, isLoading: isTicketLoading } = useGetApiTicket(id);
+	const { data: users, isLoading: isUsersLoading } = useGetApiUsers();
+
+	const { data: projects, isLoading: isProjectsLoading } =
+		useGetApiProjects();
 
 	useEffect(() => {
 		if (ticket) {
@@ -79,9 +88,12 @@ export function TicketEditForm(id: string) {
 	if (!ticket) {
 		throw new Error("No such ticket");
 	}
+	console.log(ticket);
+
 	form.setValue("project", ticket.project);
 	form.setValue("status", ticket.status);
 	form.setValue("assignee", ticket.assignee);
+	console.log(ticket.assignee);
 
 	return (
 		<Card className="mx-auto my-0 w-fit py-8">
@@ -128,13 +140,13 @@ export function TicketEditForm(id: string) {
 										</FormControl>
 										<SelectContent>
 											{TicketStatuses.map((status) => {
-												console.log(status);
-
 												return (
 													<SelectItem
 														key={status}
 														value={status}
-													> {status} </SelectItem>
+													>
+														{status}
+													</SelectItem>
 												);
 											})}
 										</SelectContent>
@@ -178,19 +190,26 @@ export function TicketEditForm(id: string) {
 										</FormControl>
 										<SelectContent>
 											{users &&
-												Object.values(users).map(
-													(user) => (
-														<SelectItem
-															key={user.id}
-															value={
-																user.id
-															}
-														>
-															{user.firstName}{" "}
-															{user.lastName}
-														</SelectItem>
-													)
-												)}
+												users.map((user) => {
+													return (
+														<>
+															{user.id && (
+																<SelectItem
+																	key={
+																		user.id
+																	}
+																	value={
+																		user.id
+																	}
+																>
+																	{user.firstName +
+																		" " +
+																		user.lastName}
+																</SelectItem>
+															)}
+														</>
+													);
+												})}
 										</SelectContent>
 									</Select>
 									<FormMessage />

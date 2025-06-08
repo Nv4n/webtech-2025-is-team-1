@@ -6,10 +6,12 @@ export const UserSchema = z.object({
 	lastName: z.string().min(3),
 	username: z.string().min(3),
 	password: z.string().min(8).max(32),
-	createdAt: z.date().min(new Date("1900-01-01"), { message: "Too old" }),
+	createdAt: z.string(),
 	email: z.string().email().max(100),
 	role: z.string().min(3).max(20),
 });
+
+export const FetchingUserSchema = UserSchema.omit({ password: true });
 
 export type User = z.infer<typeof UserSchema>;
 
