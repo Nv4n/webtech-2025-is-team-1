@@ -7,9 +7,6 @@ import {
 	Connection,
 	useReactFlow,
 	ReactFlow,
-	Controls,
-	MiniMap,
-	Background,
 	Node,
 	ReactFlowProvider,
 } from "@xyflow/react";
