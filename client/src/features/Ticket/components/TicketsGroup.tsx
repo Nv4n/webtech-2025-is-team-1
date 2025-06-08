@@ -16,9 +16,10 @@ import { CirclePlus } from "lucide-react";
 
 type TicketCardProps = {
 	filter: TicketFilter;
+	styles?: string;
 };
 
-export function TicketsGroup({ filter }: TicketCardProps) {
+export function TicketsGroup({ filter, styles }: TicketCardProps) {
 	const { data: tickets, isLoading: isTicketListLoading } =
 		useGetFilteredTickets(filter);
 
@@ -35,7 +36,7 @@ export function TicketsGroup({ filter }: TicketCardProps) {
 	}
 
 	return (
-		<div className="flex w-1/3 flex-col space-y-4">
+		<div className={cn("flex w-1/3 flex-col space-y-4", styles)}>
 			<div className="flex w-2xs items-center justify-between">
 				{filter.statuses && (
 					<h1>

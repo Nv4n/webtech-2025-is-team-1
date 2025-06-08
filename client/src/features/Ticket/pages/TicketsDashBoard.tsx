@@ -12,7 +12,7 @@ export function TicketsDashboard() {
 
 					return (
 						<TicketsGroup
-						
+							styles="w-fit"
 							key={status}
 							filter={{ statuses: [status] }}
 						/>
