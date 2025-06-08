@@ -1,18 +1,16 @@
 import { FetchingUserSchema } from "@/features/Profile/types/Profile";
 import { Project } from "@/features/Project/types/Project";
 import { TicketStatuses } from "@/features/Ticket/types/Ticket";
-import { ListTodo } from "lucide-react";
 import z from "zod";
 
 export function getStatusFilterList() {
 	return Object.keys(TicketStatuses).map((key) => {
 		return {
-			value: key,
+			value: TicketStatuses[parseInt(key)],
 			label: TicketStatuses[parseInt(key)].replace(
 				/([a-z])([A-Z])/g,
 				"$1 $2"
 			),
-			icon: ListTodo,
 		};
 	});
 }
@@ -22,7 +20,6 @@ export function getProjectFilterList(projects: Project[]) {
 		return {
 			value: project.id || "",
 			label: project.name,
-			icon: ListTodo,
 		};
 	});
 }
@@ -34,7 +31,6 @@ export function getUsersFilterList(
 		return {
 			value: user.id || "",
 			label: user.username,
-			icon: ListTodo,
 		};
 	});
 }

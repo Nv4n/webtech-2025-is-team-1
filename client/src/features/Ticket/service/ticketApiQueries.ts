@@ -20,7 +20,11 @@ export function useGetApiTickets(filter?: TicketFilter) {
 }
 
 export function useGetApiFilteredTickets(filter: TicketFilter) {
+	console.log(`FILTER: ${filter}`);
+	
 	const params = getFilterParams(filter);
+	console.log(`SEARCH PARAMS: ${filter}`);
+
 	const { data, isLoading } = useQuery({
 		queryKey: ["tickets", filter],
 		queryFn: async () => {

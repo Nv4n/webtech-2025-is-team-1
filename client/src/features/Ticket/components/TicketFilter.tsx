@@ -9,18 +9,15 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { MultiSelect } from "@/components/ui/multi-select";
+import MultipleSelector from "@/components/ui/multiple-selector";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-	useGetApiFilteredUsers,
-	useGetApiUsers,
-} from "@/features/Profile/service/profileApiQueries";
+import { useGetApiUsers } from "@/features/Profile/service/profileApiQueries";
 import { useGetApiProjects } from "@/features/Project/service/ProjectApiQueries";
-import { Project } from "@/features/Project/types/Project";
 import {
 	TicketFilter,
-	TicketFilterSchema,
+	TicketFilterForm,
+	TicketFilterFormSchema,
+	TicketTransformSchema,
 } from "@/features/Ticket/types/TicketFilter";
 import {
 	getProjectFilterList,
@@ -29,8 +26,7 @@ import {
 } from "@/features/Ticket/utils/filterUtils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "@tanstack/react-router";
-import { ListTodo } from "lucide-react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 const statusFiltersList = getStatusFilterList();
 
@@ -42,8 +38,8 @@ export function TicketsFilter() {
 
 	const { data: users, isLoading: isUsersLoading } = useGetApiUsers();
 
-	const form = useForm<TicketFilter>({
-		resolver: zodResolver(TicketFilterSchema),
+	const form = useForm<TicketFilterForm>({
+		resolver: zodResolver(TicketFilterFormSchema),
 		defaultValues: {
 			projectIds: [],
 			assigneeIds: [],
@@ -51,10 +47,14 @@ export function TicketsFilter() {
 		},
 	});
 
-	const onSubmit = async (data: TicketFilter) => {
-		console.log(data);
+	const onSubmit = async (data: TicketFilterForm) => {
+		const filter = TicketTransformSchema.parse(data) as TicketFilter;
+		console.log(filter);
 
-		navigate({ to: "/tickets/filter", search: data });
+		navigate({
+			to: "/tickets/filter",
+			search: filter,
+		});
 	};
 
 	if (isProjectsLoading || isUsersLoading) {
@@ -75,50 +75,44 @@ export function TicketsFilter() {
 				<div className="flex flex-wrap gap-4">
 					<FormField
 						control={form.control}
-						name="projectIds"
+						name="statuses"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>
-									Select Filters By Projects
-								</FormLabel>
+								<FormLabel>Statuses</FormLabel>
 								<FormControl>
-									<MultiSelect
-										name={field.name}
-										options={getProjectFilterList(
-											projects || []
-										)}
-										// onError={}
-										onValueChange={field.onChange}
-										placeholder="Select Filters By Projects"
-										variant="inverted"
-										animation={2}
-										maxCount={3}
+									<MultipleSelector
+										{...field}
+										defaultOptions={statusFiltersList}
+										placeholder="Select statuses"
+										emptyIndicator={
+											<p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
+												no results found.
+											</p>
+										}
 									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
 						)}
 					/>
-
 					<FormField
 						control={form.control}
 						name="assigneeIds"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>
-									Select Filters By Assignee
-								</FormLabel>
+								<FormLabel>Assignees</FormLabel>
 								<FormControl>
-									<MultiSelect
-										name={field.name}
-										options={getUsersFilterList(
+									<MultipleSelector
+										{...field}
+										defaultOptions={getUsersFilterList(
 											users || []
 										)}
-										onValueChange={field.onChange}
-										placeholder="Select Filters By Assignee"
-										variant="inverted"
-										animation={2}
-										maxCount={3}
+										placeholder="Select assignees"
+										emptyIndicator={
+											<p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
+												no results found.
+											</p>
+										}
 									/>
 								</FormControl>
 								<FormMessage />
@@ -127,19 +121,22 @@ export function TicketsFilter() {
 					/>
 					<FormField
 						control={form.control}
-						name="statuses"
+						name="projectIds"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>First Name</FormLabel>
+								<FormLabel>Projects</FormLabel>
 								<FormControl>
-									<MultiSelect
-										name={field.name}
-										options={statusFiltersList}
-										onValueChange={field.onChange}
-										placeholder="Select Filters By Statuses"
-										variant="inverted"
-										animation={2}
-										maxCount={3}
+									<MultipleSelector
+										{...field}
+										defaultOptions={getProjectFilterList(
+											projects || []
+										)}
+										placeholder="Select projects"
+										emptyIndicator={
+											<p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
+												no results found.
+											</p>
+										}
 									/>
 								</FormControl>
 								<FormMessage />
