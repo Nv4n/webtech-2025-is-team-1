@@ -8,7 +8,7 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { TicketCard } from "@/features/Ticket/components/TicketCard";
-import { useGetFilteredTickets } from "@/features/Ticket/service/ticketApiQueries";
+import { useGetFilteredApiTickets } from "@/features/Ticket/service/ticketApiQueries";
 import { TicketFilter } from "@/features/Ticket/types/TicketFilter";
 import { cn } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
@@ -21,7 +21,7 @@ type TicketCardProps = {
 
 export function TicketsGroup({ filter, styles }: TicketCardProps) {
 	const { data: tickets, isLoading: isTicketListLoading } =
-		useGetFilteredTickets(filter);
+		useGetFilteredApiTickets(filter);
 
 	if (isTicketListLoading) {
 		return (
