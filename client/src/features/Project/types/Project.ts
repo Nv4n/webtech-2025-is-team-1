@@ -12,6 +12,7 @@ export const ProjectSchema = z.object({
 export type Project = z.infer<typeof ProjectSchema>;
 
 export const ProjectEditSchema = ProjectSchema.pick({
+	id: true,
 	name: true,
 	description: true,
 });

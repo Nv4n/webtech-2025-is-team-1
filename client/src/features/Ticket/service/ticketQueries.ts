@@ -91,7 +91,7 @@ function fetchTicketDetailsFakeApi() {
 	return ticketsWithDetails;
 }
 
-export const useGetTicketById(id:string){
+export const useGetTicketById(id:string) {
 	const { data, isLoading } = useQuery({
 		queryKey: ["tickets", id],
 		queryFn: () => FakeTicketApi().getTicketList(),

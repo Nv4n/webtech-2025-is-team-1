@@ -10,10 +10,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { serverAddr } from "@/config/config";
 import {
-	ProjectCreate,
-	ProjectCreateSchema,
-	ProjectEdit,
+	Project,
+	ProjectSchema,
 } from "@/features/Project/types/Project";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "@tanstack/react-router";
@@ -21,7 +21,7 @@ import "@xyflow/react/dist/style.css";
 import { useForm } from "react-hook-form";
 
 export const ProjectCreateForm = () => {
-	const form = useForm<ProjectCreate>({
+	/*const form = useForm<ProjectCreate>({
 		resolver: zodResolver(ProjectCreateSchema),
 		defaultValues: {
 			name: "",
@@ -31,7 +31,26 @@ export const ProjectCreateForm = () => {
 
 	const onSubmit = (data: ProjectEdit) => {
 		console.log("Form Submitted:", data);
-	};
+	};*/
+
+	const form = useForm<Project>({
+		resolver: zodResolver(ProjectSchema),
+	});
+
+	async function onSubmit(data: Project) {
+		console.log(data);
+		const send = ProjectSchema.parse(data);
+		console.log(send);
+
+		const res = await fetch(`${serverAddr}/api/projects`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(send),
+		});
+		console.log(res);
+	}
 
 	return (
 		<>

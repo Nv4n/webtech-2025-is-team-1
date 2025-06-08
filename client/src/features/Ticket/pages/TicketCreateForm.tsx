@@ -17,25 +17,42 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { useGetUserList } from "@/features/Profile/service/profileQueries";
-import { useGetProjectList } from "@/features/Project/service/projectQueries";
-import { Ticket, TicketSchema } from "@/features/Ticket/types/Ticket";
+import { serverAddr } from "@/config/config";
+import { useGetApiUsers } from "@/features/Profile/service/profileApiQueries";
+import { useGetApiProjects } from "@/features/Project/service/ProjectApiQueries";
+import { Ticket, TicketSchema, TicketStatuses } from "@/features/Ticket/types/Ticket";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 
 export function TicketCreateForm() {
-	const form = useForm<Ticket>({
+	/*const form = useForm<Ticket>({
 		resolver: zodResolver(TicketSchema),
 	});
 
 	const { data: users } = useGetUserList();
-	const { data: projects } = useGetProjectList();
+	const { data: projects } = useGetProjectList();*/
 
-	function onSubmit(data: Ticket) {
+	const form = useForm<Ticket>({
+		resolver: zodResolver(TicketSchema),
+	});
+
+	const { data: users } = useGetApiUsers();
+	const { data: projects } = useGetApiProjects();
+
+	async function onSubmit(data: Ticket) {
 		console.log(data);
+		const send = TicketSchema.parse(data);
+		console.log(send);
 
-		// TODO: To send post request to the API.
+		const res = await fetch(`${serverAddr}/api/tickets`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(send),
+		});
+		console.log(res);
 	}
 
 	return (
@@ -83,15 +100,18 @@ export function TicketCreateForm() {
 												</SelectTrigger>
 											</FormControl>
 											<SelectContent>
-												<SelectItem value="not-started">
-													Not started
-												</SelectItem>
-												<SelectItem value="in-progress">
-													In progress
-												</SelectItem>
-												<SelectItem value="completed">
-													Completed
-												</SelectItem>
+												{TicketStatuses.map(
+													(status) => {
+														return (
+															<SelectItem
+																key={status}
+																value={status}
+															>
+																{status}
+															</SelectItem>
+														);
+													}
+												)}
 											</SelectContent>
 										</Select>
 										<FormMessage />
