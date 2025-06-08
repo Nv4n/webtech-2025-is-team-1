@@ -6,7 +6,6 @@ import {
 	ProfileSchema,
 	UserSchema,
 } from "@/features/Profile/types/Profile";
-import { TicketFilter } from "@/features/Ticket/types/TicketFilter";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
@@ -27,7 +26,7 @@ export const useGetApiProfile = () => {
 			if (parsedProfile.success) {
 				return parsedProfile.data;
 			} else {
-				console.log(`${parsedProfile.error}`);
+				console.error(`${parsedProfile.error}`);
 			}
 		},
 	});
@@ -73,7 +72,6 @@ export const useGetApiUsers = () => {
 					Authorization: `Bearer ${getCookie("authtoken")}`,
 				},
 			});
-			// console.log(res);
 
 			const jsonedUsers = await res.json();
 			const parsedUsers = z
@@ -101,11 +99,10 @@ export const useGetApiUser = (id: string) => {
 
 			const jsonedUser = await res.json();
 			const parsedUser = UserSchema.safeParse(jsonedUser);
-			// console.log("PARSED TICKET: ", parsedTicket.data);
 			if (parsedUser.success) {
 				return parsedUser.data;
 			} else {
-				console.log(`${parsedUser.error}`);
+				console.error(`${parsedUser.error}`);
 			}
 		},
 	});

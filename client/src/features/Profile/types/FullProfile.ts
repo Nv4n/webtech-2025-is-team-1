@@ -1,8 +1,5 @@
 import { UserSchema } from "@/features/Profile/types/Profile";
-import { IdSchema } from "@/types/ZodId";
 import { z } from "zod";
-
-export const UserIdSchema = IdSchema;
 
 export type User = z.infer<typeof UserSchema>;
 
