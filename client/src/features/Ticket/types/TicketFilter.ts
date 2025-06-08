@@ -48,7 +48,7 @@ export const TicketTransformSchema = z.object({
 	projectIds: z
 		.array(optionSchema)
 		.transform((opts) => {
-			return opts.map((opt) => opt.value);
+			return opts.map((opt) => Number(opt.value));
 		})
 		.optional(),
 });
