@@ -6,6 +6,7 @@ import {
 	ProfileSchema,
 	UserSchema,
 } from "@/features/Profile/types/Profile";
+import { TicketFilter } from "@/features/Ticket/types/TicketFilter";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
@@ -99,7 +100,7 @@ export const useGetApiUser = (id: string) => {
 			});
 
 			const jsonedUser = await res.json();
-			const parsedUser = (UserSchema).safeParse(jsonedUser);
+			const parsedUser = UserSchema.safeParse(jsonedUser);
 			// console.log("PARSED TICKET: ", parsedTicket.data);
 			if (parsedUser.success) {
 				return parsedUser.data;
@@ -110,6 +111,3 @@ export const useGetApiUser = (id: string) => {
 	});
 	return { data, isLoading };
 };
-
-// export const use
-//TODO useGetApiUsers

@@ -48,12 +48,12 @@ export function TicketEditForm(id: string) {
 			priority: "Low",
 			description: "Default description",
 			createdAt: new Date().toLocaleString(),
-			project: "1",
+			projectId: "1",
 			updatedAt: new Date().toLocaleString(),
 			updatedBy: "1",
 			id: id,
-			assignee: "1",
-			author: "1",
+			assigneeId: "1",
+			authorId: "1",
 		},
 	});
 
@@ -92,9 +92,9 @@ export function TicketEditForm(id: string) {
 
 	form.setValue("title", ticket.title);
 	form.setValue("description", ticket.description);
-	form.setValue("project", ticket.project);
+	form.setValue("project", ticket.projectId);
 	form.setValue("status", ticket.status);
-	form.setValue("assignee", ticket.assignee);
+	form.setValue("assignee", ticket.assigneeId);
 	form.setValue("priority", ticket.priority);
 	console.log(ticket);
 

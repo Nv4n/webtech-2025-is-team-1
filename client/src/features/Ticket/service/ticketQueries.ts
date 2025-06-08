@@ -77,8 +77,8 @@ function fetchTicketDetailsFakeApi() {
 	}
 	const ticketsWithDetails = ticketList.map((ticket) => {
 		const updatedBy = userList.find((user) => user.id === ticket.updatedBy);
-		const assignedTo = userList.find((user) => user.id === ticket.assignee);
-		const project = projectList.find((proj) => proj.id === ticket.project);
+		const assignedTo = userList.find((user) => user.id === ticket.assigneeId);
+		const project = projectList.find((proj) => proj.id === ticket.projectId);
 
 		return {
 			...ticket,

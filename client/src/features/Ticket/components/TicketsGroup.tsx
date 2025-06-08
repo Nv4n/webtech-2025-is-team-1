@@ -15,11 +15,12 @@ import { Link } from "@tanstack/react-router";
 import { CirclePlus } from "lucide-react";
 
 type TicketCardProps = {
-	filter: TicketFilter;
+	status: string;
+	filter?: TicketFilter;
 	styles?: string;
 };
 
-export function TicketsGroup({ filter, styles }: TicketCardProps) {
+export function TicketsGroup({ status, filter, styles }: TicketCardProps) {
 	const { data: tickets, isLoading: isTicketListLoading } =
 		useGetApiTickets(filter);
 
@@ -38,11 +39,7 @@ export function TicketsGroup({ filter, styles }: TicketCardProps) {
 	return (
 		<div className={cn("flex w-1/3 flex-col space-y-4", styles)}>
 			<div className="flex w-2xs items-center justify-between">
-				{filter.statuses && (
-					<h1>
-						{filter.statuses[0].replace(/([a-z])([A-Z])/g, "$1 $2")}
-					</h1>
-				)}
+				<h1>{status}</h1>
 				<TooltipProvider>
 					<Tooltip>
 						<TooltipTrigger asChild>
@@ -66,22 +63,23 @@ export function TicketsGroup({ filter, styles }: TicketCardProps) {
 			</div>
 			{tickets &&
 				tickets
-					.filter((ticket) => ticket.status === filter?.statuses?.[0])
-					.map((ticket) =>
-						ticket.id && ticket.project ? (
+					.filter((ticket) => ticket.status === status)
+					.map((ticket) => {
+						console.log(ticket.projectId);
+
+						return ticket.id && ticket.projectId ? (
 							<TicketCard
 								updatedAt={ticket.updatedAt}
 								// updatedBy={ticket.updatedBy}
-								project={ticket.project}
+								project={ticket.projectId}
 								id={ticket.id}
 								title={ticket.title}
 								status={String(ticket.status)}
 								key={ticket.id}
-								//TODO NOT SURE WHAT IS THIS
-								// {...ticket}
 							></TicketCard>
-						) : null
-					)}
+						) : null;
+					})}
+
 			{tickets && (
 				<Link
 					to="/tickets/create"
