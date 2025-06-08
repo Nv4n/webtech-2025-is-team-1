@@ -7,6 +7,7 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useGetApiProject } from "@/features/Project/service/ProjectApiQueries";
 import { TicketCard } from "@/features/Ticket/components/TicketCard";
 import { useGetApiTickets } from "@/features/Ticket/service/ticketApiQueries";
 import { TicketFilter } from "@/features/Ticket/types/TicketFilter";

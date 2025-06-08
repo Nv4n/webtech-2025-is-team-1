@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/hover-card";
 import { ProfileHoverCard } from "@/features/Profile/components/ProfileHoverCard";
 import { getInitials } from "@/features/Profile/utils/getInitials";
+import { useGetApiProject } from "@/features/Project/service/ProjectApiQueries";
 import { _Date } from "@/features/Ticket/components/TicketDateBadge";
 import { Link } from "@tanstack/react-router";
 
@@ -40,6 +41,7 @@ export function TicketCard({
 	// updatedBy,
 	project,
 }: TicketCardProps) {
+	const { data: currentProject, isLoading: isProjectLoading} = useGetApiProject(project);
 	return (
 		<Card className="hover:bg-card-foreground/25 dark:hover:bg-card/55 relative flex h-[250px] w-2xs flex-col transition-all">
 			<Link
@@ -54,7 +56,7 @@ export function TicketCard({
 					<CardTitle className="pb-4">{title}</CardTitle>
 				</CardHeader>
 				<CardContent className="flex flex-1 flex-col gap-2 px-4">
-					<Badge variant="default">{project || "No Project"}</Badge>
+					<Badge variant="default">{currentProject?.name || "No Project"}</Badge>
 					{status && <CardBadge content={status}></CardBadge>}
 				</CardContent>
 				<CardFooter className="flex flex-col items-start gap-4 px-4 pt-2 pb-4">
