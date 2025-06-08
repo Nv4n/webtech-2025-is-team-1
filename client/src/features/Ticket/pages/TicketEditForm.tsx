@@ -18,14 +18,9 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
-import { serverAddr } from "@/config/config";
-import { useGetUserList } from "@/features/Profile/service/profileQueries";
-import { useGetProjectList } from "@/features/Project/service/projectQueries";
-import {
-	useGetTicket,
-	useUpdateTicket,
-} from "@/features/Ticket/service/ticketQueries";
-import { Ticket, TicketSchema } from "@/features/Ticket/types/Ticket";
+import { useGetApiProjects } from "@/features/Project/service/ProjectApiQueries";
+import { useGetApiTicket, useUpdateApiTicket } from "@/features/Ticket/service/ticketApiQueries";
+import { Ticket, TicketSchema, TicketStatuses } from "@/features/Ticket/types/Ticket";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "@tanstack/react-router";
 import { useEffect } from "react";
@@ -36,16 +31,17 @@ const selectStyle = "mx-[10px] my-0 w-[150px]";
 const itemStyle = "mx-[10px]";
 
 export function TicketEditForm(id: string) {
+	const { mutate: mutateTicket } = useUpdateApiTicket(id);
 	const form = useForm<Ticket>({
 		resolver: zodResolver(TicketSchema),
 		defaultValues: {
 			title: "Default title",
-			status: "not-started",
+			status: "Open",
 			priority: "Low",
 			description: "Default description",
-			createdAt: new Date(),
+			createdAt: new Date().toLocaleString(),
 			project: "1",
-			updatedAt: new Date(),
+			updatedAt: new Date().toLocaleString(),
 			updatedBy: "1",
 			id: id,
 			assignee: "1",
@@ -53,11 +49,10 @@ export function TicketEditForm(id: string) {
 		},
 	});
 
-	const { data: ticket, isLoading: isTicketLoading } = useGetTicket(id);
-	const { data: users, isLoading: isUsersLoading } = useGetUserList();
-	const { data: projects, isLoading: isProjectsLoading } =
-		useGetProjectList();
-	const { mutation: updateTicket } = useUpdateTicket(id);
+	const { data: ticket, isLoading: isTicketLoading } = useGetApiTicket(id); 
+	const { data: users, isLoading: isUsersLoading } = useGetApiUsers(); // Ivan is implementing it now.
+	
+	const { data: projects, isLoading: isProjectsLoading } = useGetApiProjects();
 
 	useEffect(() => {
 		if (ticket) {
@@ -66,15 +61,7 @@ export function TicketEditForm(id: string) {
 	}, [ticket]);
 
 	async function onSubmit(data: Ticket) {
-		console.log(data);
-		const res = await fetch(`${serverAddr}/api/tickets/${id}`);
-		
-		data.updatedAt = new Date();
-		if (!data.assignee) data.assignee = ticket?.assignee || data.assignee;
-		if (!data.id) data.id = id;
-		if (!data.project) data.project = ticket?.project || data.project;
-
-		updateTicket.mutate(data);
+		mutateTicket(data);
 	}
 
 	if (isTicketLoading || isUsersLoading || isProjectsLoading) {
@@ -140,15 +127,16 @@ export function TicketEditForm(id: string) {
 											</SelectTrigger>
 										</FormControl>
 										<SelectContent>
-											<SelectItem value="not-started">
-												Not started
-											</SelectItem>
-											<SelectItem value="in-progress">
-												In progress
-											</SelectItem>
-											<SelectItem value="completed">
-												Completed
-											</SelectItem>
+											{TicketStatuses.map((status) => {
+												console.log(status);
+
+												return (
+													<SelectItem
+														key={status}
+														value={status}
+													> {status} </SelectItem>
+												);
+											})}
 										</SelectContent>
 									</Select>
 									<FormMessage />
@@ -195,7 +183,7 @@ export function TicketEditForm(id: string) {
 														<SelectItem
 															key={user.id}
 															value={
-																user.id || ""
+																user.id
 															}
 														>
 															{user.firstName}{" "}
@@ -284,12 +272,9 @@ export function TicketEditForm(id: string) {
 							<Button
 								type="submit"
 								variant="outline"
-								disabled={updateTicket.isPending}
 								className="cursor-pointer"
 							>
-								{updateTicket.isPending
-									? "Submitting..."
-									: "Submit"}
+								{"Submit"}
 							</Button>
 
 							<Link

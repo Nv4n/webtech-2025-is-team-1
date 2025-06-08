@@ -1,12 +1,13 @@
 import { serverAddr } from "@/config/config";
 import { getCookie, deleteCookie } from "@/features/Auth/utils/cookies";
-import { TicketSchema } from "@/features/Ticket/types/Ticket";
+import { Ticket, TicketSchema } from "@/features/Ticket/types/Ticket";
 import { TicketFilter } from "@/features/Ticket/types/TicketFilter";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { z } from "zod";
 
-export function useGetFilteredTickets(filter: TicketFilter) {
+export function useGetFilteredApiTickets(filter: TicketFilter) {
 	const navigate = useNavigate();
 	const { data, isLoading } = useQuery({
 		queryKey: ["tickets"],
@@ -46,3 +47,56 @@ export function useGetFilteredTickets(filter: TicketFilter) {
 	});
 	return { data, isLoading };
 }
+
+export const useGetApiTicket = (id: string) => {
+	const { data, isLoading } = useQuery({
+		queryKey: ["tickets", id],
+		queryFn: async () => {
+			const res = await fetch(`${serverAddr}/api/tickets/${id}`, {
+				headers: {
+					Authorization: `Bearer ${getCookie("authtoken")}`,
+				},
+			});
+
+			const jsonedTicket = await res.json();
+			const parsedTicket = TicketSchema.safeParse(jsonedTicket);
+			if (parsedTicket.success) {
+				return parsedTicket.data;
+			} else {
+				console.log(`${parsedTicket.error}`);
+			}
+		},
+	});
+	return { data, isLoading };
+};
+
+export const useUpdateApiTicket = (id: string) => {
+	const navigate = useNavigate();
+	const queryClient = useQueryClient();
+	const { mutate } = useMutation({
+		mutationFn: async (data: Ticket) => {
+			return await fetch(`${serverAddr}/api/tickets/${id}`, {
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${getCookie("authtoken")}`,
+				},
+				body: JSON.stringify(data),
+			});
+		},
+		onSuccess: () => {
+			toast.success("Ticket updated successfully!");
+			queryClient.invalidateQueries({
+				queryKey: ["tickets", id],
+			});
+			navigate({
+				to: "/tickets/$ticketId",
+				params: { ticketId: id },
+			});
+		},
+		onError: () => {
+			toast.error("Failed to update ticket.");
+		},
+	});
+	return { mutate };
+};
