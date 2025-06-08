@@ -89,21 +89,28 @@ export const useGetApiUsers = () => {
 
 export const useGetApiUser = (id: string) => {
 	const { data, isLoading } = useQuery({
-		queryKey: ["users", id],
+		queryKey: ["users"],
 		queryFn: async () => {
-			const res = await fetch(`${serverAddr}/api/users/${id}`, {
+			const res = await fetch(`${serverAddr}/api/users`, {
 				headers: {
 					Authorization: `Bearer ${getCookie("authtoken")}`,
 				},
 			});
 
-			const jsonedUser = await res.json();
-			const parsedUser = UserSchema.safeParse(jsonedUser);
-			if (parsedUser.success) {
-				return parsedUser.data;
+			const jsonedUsers = await res.json();
+			const parsedUsers = z
+				.array(FetchingUserSchema)
+				.safeParse(jsonedUsers);
+			if (parsedUsers.success) {
+				return parsedUsers.data;
 			} else {
-				console.error(`${parsedUser.error}`);
+				console.error(`Parsed users error: ${parsedUsers.error}`);
 			}
+		},
+		select: (users) => {
+			users?.find((user) => {
+				user.id === id;
+			});
 		},
 	});
 	return { data, isLoading };

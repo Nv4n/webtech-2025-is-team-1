@@ -18,7 +18,10 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
-import { useGetApiProfile, useGetApiUsers } from "@/features/Profile/service/profileApiQueries";
+import {
+	useGetApiProfile,
+	useGetApiUsers,
+} from "@/features/Profile/service/profileApiQueries";
 import { useGetApiProjects } from "@/features/Project/service/ProjectApiQueries";
 import {
 	useGetApiTicket,
@@ -31,6 +34,7 @@ import {
 } from "@/features/Ticket/types/Ticket";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 const inputStyle = "mx-[10px] my-0 w-[460px]";
@@ -43,10 +47,10 @@ export function TicketEditForm(id: string) {
 	const form = useForm<Ticket>({
 		resolver: zodResolver(TicketSchema),
 		defaultValues: {
-			"createdAt": new Date().toLocaleString(),
-			"updatedAt": new Date().toLocaleString(),
-			"updatedBy": updatedBy?.id
-		}
+			createdAt: "2025-06-04 20:01:45.301996",
+			updatedAt: "2025-06-04 20:01:45.301996",
+			updatedBy: updatedBy?.id,
+		},
 	});
 
 	const { data: ticket, isLoading: isTicketLoading } = useGetApiTicket(id);
@@ -55,13 +59,17 @@ export function TicketEditForm(id: string) {
 	const { data: projects, isLoading: isProjectsLoading } =
 		useGetApiProjects();
 
-	/*useEffect(() => {
+	useEffect(() => {
 		if (ticket) {
 			form.reset({ ...ticket });
 		}
-	}, [ticket]);*/
+	}, [ticket, projects, users]);
 
 	async function onSubmit(data: Ticket) {
+		console.log(data);
+		data.updatedAt = data.updatedAt.replace("T", " ");
+		data.createdAt = data.updatedAt.replace("T", " ");
+
 		mutateTicket(data);
 	}
 
@@ -80,7 +88,6 @@ export function TicketEditForm(id: string) {
 	if (!ticket) {
 		throw new Error("No such ticket");
 	}
-	console.log(ticket);
 
 	form.setValue("title", ticket.title);
 	form.setValue("description", ticket.description);
@@ -88,7 +95,6 @@ export function TicketEditForm(id: string) {
 	form.setValue("status", ticket.status);
 	form.setValue("assigneeId", ticket.assigneeId);
 	form.setValue("priority", ticket.priority);
-	console.log(ticket);
 
 	return (
 		<Card className="mx-auto my-0 w-fit py-8">
@@ -137,7 +143,7 @@ export function TicketEditForm(id: string) {
 											{TicketStatuses.map((status) => {
 												return (
 													<SelectItem
-														key={status}
+														key={`status-${status}`}
 														value={status}
 													>
 														{status}
@@ -170,7 +176,7 @@ export function TicketEditForm(id: string) {
 
 						<FormField
 							control={form.control}
-							name="assignee"
+							name="assigneeId"
 							render={({ field }) => (
 								<FormItem className={itemStyle}>
 									<FormLabel>Assignee</FormLabel>
@@ -183,16 +189,14 @@ export function TicketEditForm(id: string) {
 												<SelectValue placeholder="Select assignee" />
 											</SelectTrigger>
 										</FormControl>
-										<SelectContent>
+										<SelectContent key="assignee-select-content">
 											{users &&
 												users.map((user) => {
 													return (
 														<>
 															{user.id && (
 																<SelectItem
-																	key={
-																		user.id
-																	}
+																	key={`user-${user.id}`}
 																	value={
 																		user.id
 																	}
@@ -214,7 +218,7 @@ export function TicketEditForm(id: string) {
 
 						<FormField
 							control={form.control}
-							name="project"
+							name="projectId"
 							render={({ field }) => (
 								<FormItem className={itemStyle}>
 									<FormLabel>Project</FormLabel>
@@ -232,7 +236,7 @@ export function TicketEditForm(id: string) {
 												Object.values(projects).map(
 													(project) => (
 														<SelectItem
-															key={project.id}
+															key={`project-${project.id}`}
 															value={
 																project.id || ""
 															}
@@ -269,7 +273,7 @@ export function TicketEditForm(id: string) {
 													.options
 											).map((priority) => (
 												<SelectItem
-													key={priority}
+													key={`priority-${priority}`}
 													value={priority}
 												>
 													{priority}

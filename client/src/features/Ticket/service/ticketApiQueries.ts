@@ -20,10 +20,7 @@ export function useGetApiTickets(filter?: TicketFilter) {
 }
 
 export function useGetApiFilteredTickets(filter: TicketFilter) {
-	console.log(`FILTER: ${filter}`);
-
 	const params = getFilterParams(filter);
-	console.log(`SEARCH PARAMS: ${filter}`);
 
 	const { data, isLoading } = useQuery({
 		queryKey: ["tickets", filter],
@@ -44,6 +41,7 @@ export function useGetApiFilteredTickets(filter: TicketFilter) {
 				toast.error("Server error");
 			}
 			const ticketsResp = await res.json();
+			console.log(ticketsResp);
 
 			const parsedTickets = z.array(TicketSchema).safeParse(ticketsResp);
 
@@ -127,7 +125,7 @@ export const useUpdateApiTicket = (id: string) => {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${getCookie("authtoken")}`,
 				},
-				body: JSON.stringify(parsedDATA),
+				body: JSON.stringify({ id: id, ticket: parsedDATA }),
 			});
 		},
 		onSuccess: () => {
