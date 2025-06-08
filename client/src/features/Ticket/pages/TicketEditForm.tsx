@@ -63,11 +63,11 @@ export function TicketEditForm(id: string) {
 	const { data: projects, isLoading: isProjectsLoading } =
 		useGetApiProjects();
 
-	useEffect(() => {
+	/*useEffect(() => {
 		if (ticket) {
 			form.reset({ ...ticket });
 		}
-	}, [ticket]);
+	}, [ticket]);*/
 
 	async function onSubmit(data: Ticket) {
 		mutateTicket(data);
@@ -90,10 +90,13 @@ export function TicketEditForm(id: string) {
 	}
 	console.log(ticket);
 
+	form.setValue("title", ticket.title);
+	form.setValue("description", ticket.description);
 	form.setValue("project", ticket.project);
 	form.setValue("status", ticket.status);
 	form.setValue("assignee", ticket.assignee);
-	console.log(ticket.assignee);
+	form.setValue("priority", ticket.priority);
+	console.log(ticket);
 
 	return (
 		<Card className="mx-auto my-0 w-fit py-8">

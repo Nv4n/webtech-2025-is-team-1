@@ -21,12 +21,13 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { ProfileHoverCard } from "@/features/Profile/components/ProfileHoverCard";
-import { FakeProfileApi } from "@/features/Profile/service/profileApi";
+import {
+	useGetApiUser,
+} from "@/features/Profile/service/profileApiQueries";
 import { getInitials } from "@/features/Profile/utils/getInitials";
-import { FakeProjectApi } from "@/features/Project/service/projectApi";
-import { FakeTicketApi } from "@/features/Ticket/service/ticketApi";
+import { useGetApiProject } from "@/features/Project/service/ProjectApiQueries";
+import { useGetApiTicket } from "@/features/Ticket/service/ticketApiQueries";
 
-import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { Pencil, Trash2 } from "lucide-react";
 
@@ -37,28 +38,22 @@ const statusBadgeStyles = {
 };
 
 export const TicketDetails = (id: string) => {
-	const { data: ticket, isLoading } = useQuery({
-		queryKey: ["tickets", id],
-		queryFn: () => FakeTicketApi().getTicketList(),
-		select: (data) => {
-			return Object.entries(data).filter(([key, _]) => key === id)[0][1];
-		},
-	});
+	const { data: ticketData, isLoading: isTicketLoading } =
+		useGetApiTicket(id);
 
-	if (isLoading) {
+	if (isTicketLoading) {
 		return (
-			<>
-				<div className="mx-auto my-0 w-fit flex-col space-y-3">
-					<Skeleton className="h-[125px] w-[250px] rounded-xl" />
-					<div className="space-y-2">
-						<Skeleton className="h-4 w-[250px]" />
-						<Skeleton className="h-4 w-[200px]" />
-					</div>
+			<div className="mx-auto my-0 w-fit flex-col space-y-3">
+				<Skeleton className="h-[125px] w-[250px] rounded-xl" />
+				<div className="space-y-2">
+					<Skeleton className="h-4 w-[250px]" />
+					<Skeleton className="h-4 w-[200px]" />
 				</div>
-			</>
+			</div>
 		);
 	}
-	if (!ticket) {
+
+	if (!ticketData) {
 		return (
 			<>
 				<p className="text-muted-foreground text-center text-xl">
@@ -109,19 +104,19 @@ export const TicketDetails = (id: string) => {
 							</TooltipContent>
 						</Tooltip>
 					</div>
-					<CardTitle>{ticket.title}</CardTitle>
+					<CardTitle>{ticketData.title}</CardTitle>
 					<CardDescription className="flex gap-2">
 						<span>status</span>
-						{ticket.status && (
+						{ticketData.status && (
 							<Badge
 								variant="default"
 								className={
 									statusBadgeStyles[
-										ticket.status as keyof typeof statusBadgeStyles
+										ticketData.status as keyof typeof statusBadgeStyles
 									]
 								}
 							>
-								{ticket.status}
+								{ticketData.status}
 							</Badge>
 						)}
 					</CardDescription>
@@ -131,26 +126,28 @@ export const TicketDetails = (id: string) => {
 						<span className="text-muted-foreground text-sm">
 							project
 						</span>
-						<ProjectBadge id={ticket.project} />
+						{ticketData.project && (
+							<ProjectBadge id={ticketData.project} />
+						)}
 					</div>
-					<p>{ticket.description}</p>
+					<p>{ticketData.description}</p>
 				</CardContent>
 				<CardFooter className="flex flex-col items-start gap-4">
-					{ticket.assignee && (
+					{ticketData.assignee && (
 						<UserHoverCard
-							id={ticket.assignee}
+							id={ticketData.assignee}
 							content={"is assigned to issue"}
 						/>
 					)}
-					{ticket.assignee && (
+					{ticketData.updatedBy && (
 						<UserHoverCard
-							id={ticket.updatedBy}
+							id={ticketData.updatedBy}
 							content={"last updated issue"}
-							date={ticket.updatedAt}
+							date={new Date(ticketData.updatedAt)}
 						/>
 					)}
 					<span className="text-muted-foreground text-sm">
-						Created at {ticket.createdAt.toLocaleDateString()}
+						Created at {ticketData.createdAt}
 					</span>
 				</CardFooter>
 			</Card>
@@ -158,21 +155,20 @@ export const TicketDetails = (id: string) => {
 	);
 };
 
-type UserHoverCard = { id: string; content: string; date?: Date };
+type UserHoverCardProps = { id: string; content: string; date?: Date };
 
-function UserHoverCard({ id, content, date }: UserHoverCard) {
-	const { data: assignee, isLoading } = useQuery({
-		queryKey: ["users", id],
-		queryFn: () => FakeProfileApi().getProfileList(),
-		select: (data) => {
-			return Object.entries(data).filter(([key, _]) => key === id)[0][1];
-		},
-	});
-	if (isLoading) {
+function UserHoverCard({ id, content, date }: UserHoverCardProps) {
+	const { data: assignee, isLoading: isProfileLoading } = useGetApiUser(id);
+
+	if (isProfileLoading) {
 		return (
-			<>
-				<Skeleton className="h-[20px] w-[35px] rounded-xl" />
-			</>
+			<div className="mx-auto my-0 w-fit flex-col space-y-3">
+				<Skeleton className="h-[125px] w-[250px] rounded-xl" />
+				<div className="space-y-2">
+					<Skeleton className="h-4 w-[250px]" />
+					<Skeleton className="h-4 w-[200px]" />
+				</div>
+			</div>
 		);
 	}
 
@@ -212,20 +208,19 @@ type ProjectBadgeProps = {
 };
 
 function ProjectBadge({ id }: ProjectBadgeProps) {
-	const { data: project, isLoading } = useQuery({
-		queryKey: ["projects", id],
-		queryFn: () => FakeProjectApi().getProjectList(),
-		select: (data) => {
-			return Object.entries(data).filter(([key, _]) => key === id)[0][1];
-		},
-	});
-	if (isLoading) {
+	const { data: project, isLoading: isProfileLoading } = useGetApiProject(id);
+
+	if (isProfileLoading) {
 		return (
-			<>
+			<div className="mx-auto my-0 w-fit flex-col space-y-3">
 				<Skeleton className="h-[125px] w-[250px] rounded-xl" />
-			</>
+				<div className="space-y-2">
+					<Skeleton className="h-4 w-[250px]" />
+					<Skeleton className="h-4 w-[200px]" />
+				</div>
+			</div>
 		);
 	}
 
-	return <Badge variant="default">{project?.name || "No Project"}</Badge>;
+	return <Badge variant="default">{project && project.name}</Badge>;
 }

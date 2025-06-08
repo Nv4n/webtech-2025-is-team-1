@@ -1,3 +1,5 @@
+import { FakeProfileApi } from "@/features/Profile/service/profileApi";
+import { FakeProjectApi } from "@/features/Project/service/projectApi";
 import { FakeTicketApi } from "@/features/Ticket/service/ticketApi";
 import { Ticket } from "@/features/Ticket/types/Ticket";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -80,8 +82,8 @@ function fetchTicketDetailsFakeApi() {
 
 		return {
 			...ticket,
-			updatedBy: updatedBy ?? fallBackProfile,
-			assignedTo: assignedTo ?? fallBackProfile,
+			updatedBy: updatedBy, //?? fallBackProfile,
+			assignedTo: assignedTo, //?? fallBackProfile,
 			project,
 		};
 	});

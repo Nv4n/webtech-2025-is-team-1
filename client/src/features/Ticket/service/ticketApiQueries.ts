@@ -49,6 +49,8 @@ export function useGetFilteredApiTickets(filter: TicketFilter) {
 }
 
 export const useGetApiTicket = (id: string) => {
+	console.log(id);
+
 	const { data, isLoading } = useQuery({
 		queryKey: ["tickets", id],
 		queryFn: async () => {
@@ -60,6 +62,7 @@ export const useGetApiTicket = (id: string) => {
 
 			const jsonedTicket = await res.json();
 			const parsedTicket = TicketSchema.safeParse(jsonedTicket);
+			// console.log("PARSED TICKET: ", parsedTicket.data);
 			if (parsedTicket.success) {
 				return parsedTicket.data;
 			} else {

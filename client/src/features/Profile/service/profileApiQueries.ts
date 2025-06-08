@@ -88,5 +88,28 @@ export const useGetApiUsers = () => {
 	return { data, isLoading };
 };
 
+export const useGetApiUser = (id: string) => {
+	const { data, isLoading } = useQuery({
+		queryKey: ["users", id],
+		queryFn: async () => {
+			const res = await fetch(`${serverAddr}/api/users/${id}`, {
+				headers: {
+					Authorization: `Bearer ${getCookie("authtoken")}`,
+				},
+			});
+
+			const jsonedUser = await res.json();
+			const parsedUser = (UserSchema).safeParse(jsonedUser);
+			// console.log("PARSED TICKET: ", parsedTicket.data);
+			if (parsedUser.success) {
+				return parsedUser.data;
+			} else {
+				console.log(`${parsedUser.error}`);
+			}
+		},
+	});
+	return { data, isLoading };
+};
+
 // export const use
 //TODO useGetApiUsers

@@ -12,6 +12,9 @@ export const UserSchema = z.object({
 });
 
 export const FetchingUserSchema = UserSchema.omit({ password: true });
+export const UpdateUserSchema = UserSchema.omit({id : true }).extend({
+	id: z.coerce.string(),
+});
 
 export type User = z.infer<typeof UserSchema>;
 

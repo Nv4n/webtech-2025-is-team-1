@@ -29,3 +29,28 @@ export const useGetApiProjects = () => {
 	});
 	return { data, isLoading };
 };
+
+export const useGetApiProject = (id: string) => {
+	const { data, isLoading } = useQuery({
+		queryKey: ["projects", id],
+		queryFn: async () => {
+			const res = await fetch(`${serverAddr}/api/projects/${id}`, {
+				headers: {
+					Authorization: `Bearer ${getCookie("authtoken")}`,
+				},
+			});
+
+			const jsonedProject = await res.json();
+			const parsedProject = (ProjectSchema).safeParse(jsonedProject);
+			console.log("PARSED PROJECT: ", parsedProject);
+			console.log("PARSED PROJECT DATA: ", parsedProject.data);
+			// console.log("PARSED TICKET: ", parsedTicket.data);
+			if (parsedProject.success) {
+				return parsedProject.data;
+			} else {
+				console.log(`${parsedProject.error}`);
+			}
+		},
+	});
+	return { data, isLoading };
+};
