@@ -1,7 +1,7 @@
 import { ProjectEditForm } from "@/features/Project/pages/ProjectEditForm";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/projects_/$projectId/edit")({
+export const Route = createFileRoute("/_auth/projects_/$projectId/edit")({
 	component: ProjectEditComponent,
 });
 
