@@ -20,12 +20,10 @@ export const useGetApiProjects = () => {
 			const parsedProjects = z
 				.array(ProjectSchema)
 				.safeParse(jsonedProjects);
-			// console.log("PARSED PROJECTS = ", parsedProjects);
-			// console.log("PARSED PROJECTS DATA = ", parsedProjects.data);
 			if (parsedProjects.success) {
 				return parsedProjects.data;
 			} else {
-				console.log(`${parsedProjects.error}`);
+				console.error(`${parsedProjects.error}`);
 			}
 		},
 	});
@@ -44,13 +42,10 @@ export const useGetApiProject = (id: string) => {
 
 			const jsonedProject = await res.json();
 			const parsedProject = (ProjectSchema).safeParse(jsonedProject);
-			console.log("PARSED PROJECT: ", parsedProject);
-			console.log("PARSED PROJECT DATA: ", parsedProject.data);
-			// console.log("PARSED TICKET: ", parsedTicket.data);
 			if (parsedProject.success) {
 				return parsedProject.data;
 			} else {
-				console.log(`${parsedProject.error}`);
+				console.error(`${parsedProject.error}`);
 			}
 		},
 	});
