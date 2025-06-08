@@ -1,6 +1,10 @@
 import { serverAddr } from "@/config/config";
 import { getCookie } from "@/features/Auth/utils/cookies";
-import { Ticket, TicketSchema } from "@/features/Ticket/types/Ticket";
+import {
+	ChangeTicketSchema,
+	Ticket,
+	TicketSchema,
+} from "@/features/Ticket/types/Ticket";
 import { TicketFilter } from "@/features/Ticket/types/TicketFilter";
 import { getFilterParams } from "@/features/Ticket/utils/filterParams";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -111,13 +115,15 @@ export const useUpdateApiTicket = (id: string) => {
 	const queryClient = useQueryClient();
 	const { mutate } = useMutation({
 		mutationFn: async (data: Ticket) => {
+			const parsedDATA = ChangeTicketSchema.parse(data);
+			console.log(parsedDATA);
 			return await fetch(`${serverAddr}/api/tickets/${id}`, {
 				method: "PUT",
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${getCookie("authtoken")}`,
 				},
-				body: JSON.stringify(data),
+				body: JSON.stringify(parsedDATA),
 			});
 		},
 		onSuccess: () => {
@@ -142,18 +148,18 @@ export const useCreateApiTicket = () => {
 	const queryClient = useQueryClient();
 	const { mutate } = useMutation({
 		mutationFn: async (data: Ticket) => {
-			console.log(data);
+			const parsedDATA = ChangeTicketSchema.parse(data);
 			return await fetch(`${serverAddr}/api/tickets`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${getCookie("authtoken")}`,
 				},
-				body: JSON.stringify(data),
+				body: JSON.stringify(parsedDATA),
 			});
 		},
 		onSuccess: () => {
-			toast.success("Ticket updated successfully!");
+			toast.success("Ticket created successfully!");
 			queryClient.invalidateQueries({
 				queryKey: ["tickets"],
 			});
@@ -162,7 +168,7 @@ export const useCreateApiTicket = () => {
 			});
 		},
 		onError: () => {
-			toast.error("Failed to update ticket.");
+			toast.error("Failed to create ticket.");
 		},
 	});
 	return { mutate };
