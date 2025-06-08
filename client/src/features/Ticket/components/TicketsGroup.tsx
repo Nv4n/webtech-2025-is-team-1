@@ -7,7 +7,6 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useGetApiProject } from "@/features/Project/service/ProjectApiQueries";
 import { TicketCard } from "@/features/Ticket/components/TicketCard";
 import { useGetApiTickets } from "@/features/Ticket/service/ticketApiQueries";
 import { TicketFilter } from "@/features/Ticket/types/TicketFilter";
@@ -66,8 +65,6 @@ export function TicketsGroup({ status, filter, styles }: TicketCardProps) {
 				tickets
 					.filter((ticket) => ticket.status === status)
 					.map((ticket) => {
-						console.log(ticket.projectId);
-
 						return ticket.id && ticket.projectId ? (
 							<TicketCard
 								updatedAt={ticket.updatedAt}

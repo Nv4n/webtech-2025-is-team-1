@@ -11,8 +11,6 @@ type TicketDashboardProps = {
 };
 
 export function TicketsDashboard({ filter }: TicketDashboardProps) {
-	console.log(filter);
-
 	const { data: tickets, isLoading: isTicketsLoading } =
 		useGetApiTickets(filter);
 
@@ -29,6 +27,7 @@ export function TicketsDashboard({ filter }: TicketDashboardProps) {
 			</>
 		);
 	}
+
 	return (
 		<div>
 			<div className="flex w-2xl px-8">
@@ -40,7 +39,7 @@ export function TicketsDashboard({ filter }: TicketDashboardProps) {
 					orientation="horizontal"
 				/>
 				<div className="flex gap-16">
-					{filter?.statuses
+					{filter?.statuses && filter.statuses.length > 0
 						? filter.statuses.map((status) => {
 								return (
 									<TicketsGroup
@@ -55,6 +54,7 @@ export function TicketsDashboard({ filter }: TicketDashboardProps) {
 									<TicketsGroup
 										key={status}
 										status={status}
+										filter={filter}
 									/>
 								);
 							})}

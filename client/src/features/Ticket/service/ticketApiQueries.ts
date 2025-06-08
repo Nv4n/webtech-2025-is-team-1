@@ -41,7 +41,6 @@ export function useGetApiFilteredTickets(filter: TicketFilter) {
 				toast.error("Server error");
 			}
 			const ticketsResp = await res.json();
-			console.log(ticketsResp);
 
 			const parsedTickets = z.array(TicketSchema).safeParse(ticketsResp);
 
@@ -73,10 +72,8 @@ export function useGetApiAllTickets() {
 				toast.error("Server error");
 			}
 			const ticketsResp = await res.json();
-			console.log(ticketsResp);
 
 			const parsedTickets = z.array(TicketSchema).safeParse(ticketsResp);
-			console.log(parsedTickets);
 
 			if (parsedTickets.success) {
 				return parsedTickets.data;
@@ -105,7 +102,7 @@ export const useGetApiTicket = (id: string) => {
 			if (parsedTicket.success) {
 				return parsedTicket.data;
 			} else {
-				console.log(`${parsedTicket.error}`);
+				console.error(`${parsedTicket.error}`);
 			}
 		},
 	});
@@ -118,7 +115,6 @@ export const useUpdateApiTicket = (id: string) => {
 	const { mutate } = useMutation({
 		mutationFn: async (data: Ticket) => {
 			const parsedDATA = ChangeTicketSchema.parse(data);
-			console.log(parsedDATA);
 			return await fetch(`${serverAddr}/api/tickets/${id}`, {
 				method: "PUT",
 				headers: {
