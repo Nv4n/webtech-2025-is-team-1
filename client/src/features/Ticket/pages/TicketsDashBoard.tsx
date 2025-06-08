@@ -10,24 +10,29 @@ export function TicketsDashboard() {
 				{TicketStatuses.map((status) => {
 					// console.log(status);
 
-					return <TicketsGroup key={status} status={status} />;
+					return (
+						<TicketsGroup
+							key={status}
+							filter={{ statuses: [status] }}
+						/>
+					);
 				})}
 			</div>
 		</div>
 	);
 }
 
-export function TicketsDashboardWithFilter() {
-	return (
-		<div>
-			<TicketsFilter />
-			<div className="flex w-full justify-center space-x-4 p-4">
-				{TicketStatuses.map((status) => {
-					// console.log(status);
+// export function TicketsDashboardWithFilter() {
+// 	return (
+// 		<div>
+// 			<TicketsFilter />
+// 			<div className="flex w-full justify-center space-x-4 p-4">
+// 				{TicketStatuses.map((status) => {
+// 					// console.log(status);
 
-					return <TicketsGroup status={status} />;
-				})}
-			</div>
-		</div>
-	);
-}
+// 					return <TicketsGroup />;
+// 				})}
+// 			</div>
+// 		</div>
+// 	);
+// }

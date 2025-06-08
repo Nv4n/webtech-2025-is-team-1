@@ -1,5 +1,6 @@
 import { NavMenuLinkStyles } from "@/components/NavMenuLinkStyles";
 import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
 	Tooltip,
 	TooltipContent,
@@ -13,8 +14,25 @@ import { cn } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
 import { CirclePlus } from "lucide-react";
 
-export function TicketsGroup(filter: TicketFilter = {}) {
-	const tickets = useGetFilteredTickets(filter);
+type TicketCardProps = {
+	filter: TicketFilter;
+};
+
+export function TicketsGroup({ filter }: TicketCardProps) {
+	const { data: tickets, isLoading: isTicketListLoading } =
+		useGetFilteredTickets(filter);
+
+	if (!isTicketListLoading) {
+		return (
+			<div className="mx-auto my-0 w-fit flex-col space-y-3">
+				<Skeleton className="h-[125px] w-[250px] rounded-xl" />
+				<div className="space-y-2">
+					<Skeleton className="h-4 w-[250px]" />
+					<Skeleton className="h-4 w-[200px]" />
+				</div>
+			</div>
+		);
+	}
 	console.log(tickets);
 
 	// console.log(status);
@@ -23,7 +41,11 @@ export function TicketsGroup(filter: TicketFilter = {}) {
 	return (
 		<div className="flex w-1/3 flex-col space-y-4">
 			<div className="flex w-2xs items-center justify-between">
-				{<h1>{status.replace(/([a-z])([A-Z])/g, "$1 $2")}</h1>}
+				{filter.statuses && (
+					<h1>
+						{filter.statuses[0].replace(/([a-z])([A-Z])/g, "$1 $2")}
+					</h1>
+				)}
 				<TooltipProvider>
 					<Tooltip>
 						<TooltipTrigger asChild>
@@ -45,7 +67,7 @@ export function TicketsGroup(filter: TicketFilter = {}) {
 					</Tooltip>
 				</TooltipProvider>
 			</div>
-			{tickets.length > 0 ? (
+			{/* {tickets &&
 				tickets
 					.filter((ticket) => ticket.status === status)
 					.map((ticket) =>
@@ -62,10 +84,7 @@ export function TicketsGroup(filter: TicketFilter = {}) {
 								// {...ticket}
 							></TicketCard>
 						) : null
-					)
-			) : (
-				<div>Loading tickets...</div>
-			)}
+					)} */}
 			<Link
 				to="/tickets/create"
 				className={cn(NavMenuLinkStyles, navigationMenuTriggerStyle())}
