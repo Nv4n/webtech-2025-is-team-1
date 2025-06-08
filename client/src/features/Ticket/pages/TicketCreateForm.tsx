@@ -20,7 +20,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { useGetApiUsers } from "@/features/Profile/service/profileApiQueries";
 import { useGetApiProjects } from "@/features/Project/service/ProjectApiQueries";
 import { useCreateApiTicket } from "@/features/Ticket/service/ticketApiQueries";
-import { Ticket, TicketSchema, TicketStatuses } from "@/features/Ticket/types/Ticket";
+import {
+	Ticket,
+	TicketSchema,
+	TicketStatuses,
+} from "@/features/Ticket/types/Ticket";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
@@ -42,12 +46,12 @@ export function TicketCreateForm() {
 			priority: "Low",
 			description: "Default description",
 			createdAt: new Date().toLocaleString(),
-			project: "1",
+			projectId: "1",
 			updatedAt: new Date().toLocaleString(),
 			updatedBy: "1",
 			id: undefined,
-			assignee: "1",
-			author: "1",
+			assigneeId: "1",
+			authorId: "1",
 		},
 	});
 
