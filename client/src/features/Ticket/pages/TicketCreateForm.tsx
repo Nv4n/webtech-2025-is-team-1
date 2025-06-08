@@ -17,9 +17,9 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { serverAddr } from "@/config/config";
 import { useGetApiUsers } from "@/features/Profile/service/profileApiQueries";
 import { useGetApiProjects } from "@/features/Project/service/ProjectApiQueries";
+import { useCreateApiTicket } from "@/features/Ticket/service/ticketApiQueries";
 import { Ticket, TicketSchema, TicketStatuses } from "@/features/Ticket/types/Ticket";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "@tanstack/react-router";
@@ -33,26 +33,29 @@ export function TicketCreateForm() {
 	const { data: users } = useGetUserList();
 	const { data: projects } = useGetProjectList();*/
 
+	const { mutate: mutateTicket } = useCreateApiTicket();
 	const form = useForm<Ticket>({
 		resolver: zodResolver(TicketSchema),
+		defaultValues: {
+			title: "Default title",
+			status: "Open",
+			priority: "Low",
+			description: "Default description",
+			createdAt: new Date().toLocaleString(),
+			project: "1",
+			updatedAt: new Date().toLocaleString(),
+			updatedBy: "1",
+			id: undefined,
+			assignee: "1",
+			author: "1",
+		},
 	});
 
 	const { data: users } = useGetApiUsers();
 	const { data: projects } = useGetApiProjects();
 
 	async function onSubmit(data: Ticket) {
-		console.log(data);
-		const send = TicketSchema.parse(data);
-		console.log(send);
-
-		const res = await fetch(`${serverAddr}/api/tickets`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(send),
-		});
-		console.log(res);
+		mutateTicket(data);
 	}
 
 	return (
