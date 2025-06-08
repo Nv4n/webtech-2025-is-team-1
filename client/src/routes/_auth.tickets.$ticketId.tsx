@@ -1,7 +1,7 @@
 import { TicketDetails } from "@/features/Ticket/pages/TicketDetails";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/tickets/$ticketId")({
+export const Route = createFileRoute("/_auth/tickets/$ticketId")({
 	component: TicketDetailsComponent,
 });
 

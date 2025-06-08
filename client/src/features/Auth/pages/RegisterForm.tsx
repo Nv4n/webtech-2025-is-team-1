@@ -16,10 +16,12 @@ import {
 	RegisterUser,
 } from "@/features/Auth/types/AuthUser";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export function RegisterForm() {
+	const navigate = useNavigate();
 	const form = useForm<RegisterUser>({
 		resolver: zodResolver(RegisterSchema),
 	});
@@ -34,6 +36,11 @@ export function RegisterForm() {
 			},
 			body: JSON.stringify(send),
 		});
+		if (res.status >= 400) {
+			toast.error("Error registering");
+		} else {
+			navigate({ to: "/login" });
+		}
 	}
 
 	return (

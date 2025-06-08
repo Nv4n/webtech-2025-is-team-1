@@ -1,11 +1,15 @@
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { deleteCookie } from "@/features/Auth/utils/cookies";
 import { useGetApiProfile } from "@/features/Profile/service/profileApiQueries";
 import { getInitials } from "@/features/Profile/utils/getInitials";
-import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@radix-ui/react-tooltip";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { LogOut } from "lucide-react";
 

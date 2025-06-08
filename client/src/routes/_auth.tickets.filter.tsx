@@ -5,7 +5,7 @@ import {
 import { createFileRoute } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";
 
-export const Route = createFileRoute("/tickets/filter")({
+export const Route = createFileRoute("/_auth/tickets/filter")({
 	validateSearch: zodValidator(TicketFilterSchema),
 	component: () => {
 		return <RouteComponent></RouteComponent>;
