@@ -11,12 +11,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
+import { useGetApiProject, useUpdateApiProject } from "@/features/Project/service/ProjectApiQueries";
 import {
-	useGetProject,
-	useUpdateProject,
-} from "@/features/Project/service/projectQueries";
-import {
-	Project,
 	ProjectEdit,
 	ProjectEditSchema,
 } from "@/features/Project/types/Project";
@@ -26,6 +22,7 @@ import "@xyflow/react/dist/style.css";
 import { useForm } from "react-hook-form";
 
 export function ProjectEditForm(id: string) {
+	const { mutate: mutateProject } = useUpdateApiProject(id);
 	const form = useForm<ProjectEdit>({
 		resolver: zodResolver(ProjectEditSchema),
 		defaultValues: {
@@ -33,8 +30,20 @@ export function ProjectEditForm(id: string) {
 			description: "",
 		},
 	});
-	const { data: project, isLoading: isProjectLoading } = useGetProject(id);
-	const { isPending: updateProject } = useUpdateProject(id);
+	//const { data: project, isLoading: isProjectLoading } = useGetProject(id);
+	//const { isPending: updateProject } = useUpdateProject(id);
+
+	const { data: project, isLoading: isProjectLoading } = useGetApiProject(id);
+
+	/*useEffect(() => {
+			if (ticket) {
+				form.reset({ ...ticket });
+			}
+		}, [ticket]);*/
+
+	async function onSubmit(data: ProjectEdit) {
+		mutateProject(data);
+	}
 
 	if (isProjectLoading) {
 		return (
@@ -53,7 +62,7 @@ export function ProjectEditForm(id: string) {
 		throw new Error("No such project");
 	}
 
-	const onSubmit = (data: ProjectEdit) => {
+	/*const onSubmit = (data: ProjectEdit) => {
 		console.log("Form Submitted:", data);
 		const resProject: Project = {
 			id: project?.id,
@@ -64,7 +73,7 @@ export function ProjectEditForm(id: string) {
 			ownerId: project.ownerId,
 		};
 		console.log(resProject);
-	};
+	};*/
 
 	form.setValue("name", project.name);
 	form.setValue("description", project.description);
@@ -121,9 +130,8 @@ export function ProjectEditForm(id: string) {
 									type="submit"
 									className="cursor-pointer"
 									variant="outline"
-									disabled={updateProject}
 								>
-									{updateProject ? "Submitting..." : "Submit"}
+									{"Submit"}
 								</Button>
 
 								<Link to="/">

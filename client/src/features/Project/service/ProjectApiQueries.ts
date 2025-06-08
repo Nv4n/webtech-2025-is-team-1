@@ -1,7 +1,9 @@
 import { serverAddr } from "@/config/config";
 import { getCookie } from "@/features/Auth/utils/cookies";
-import { ProjectSchema } from "@/features/Project/types/Project";
-import { useQuery } from "@tanstack/react-query";
+import { Project, ProjectEdit, ProjectSchema } from "@/features/Project/types/Project";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
+import { toast } from "sonner";
 import z from "zod";
 
 export const useGetApiProjects = () => {
@@ -53,4 +55,34 @@ export const useGetApiProject = (id: string) => {
 		},
 	});
 	return { data, isLoading };
+};
+
+export const useUpdateApiProject = (id: string) => {
+	const navigate = useNavigate();
+	const queryClient = useQueryClient();
+	const { mutate } = useMutation({
+		mutationFn: async (data: ProjectEdit) => {
+			return await fetch(`${serverAddr}/api/projects/${id}`, {
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${getCookie("authtoken")}`,
+				},
+				body: JSON.stringify(data),
+			});
+		},
+		onSuccess: () => {
+			toast.success("Project updated successfully!");
+			queryClient.invalidateQueries({
+				queryKey: ["projects", id],
+			});
+			navigate({
+				to: "/tickets", // we do not have view for project's details
+			});
+		},
+		onError: () => {
+			toast.error("Failed to update project.");
+		},
+	});
+	return { mutate };
 };

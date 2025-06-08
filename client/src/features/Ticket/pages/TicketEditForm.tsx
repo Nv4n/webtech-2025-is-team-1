@@ -31,7 +31,6 @@ import {
 } from "@/features/Ticket/types/Ticket";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "@tanstack/react-router";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 const inputStyle = "mx-[10px] my-0 w-[460px]";
