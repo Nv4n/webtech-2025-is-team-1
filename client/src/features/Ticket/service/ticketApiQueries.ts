@@ -21,7 +21,7 @@ export function useGetApiTickets(filter?: TicketFilter) {
 
 export function useGetApiFilteredTickets(filter: TicketFilter) {
 	console.log(`FILTER: ${filter}`);
-	
+
 	const params = getFilterParams(filter);
 	console.log(`SEARCH PARAMS: ${filter}`);
 
