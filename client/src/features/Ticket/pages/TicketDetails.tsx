@@ -20,6 +20,7 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { serverAddr } from "@/config/config";
 import { ProfileHoverCard } from "@/features/Profile/components/ProfileHoverCard";
 import { useGetApiUser } from "@/features/Profile/service/profileApiQueries";
 import { getInitials } from "@/features/Profile/utils/getInitials";
@@ -38,6 +39,23 @@ const statusBadgeStyles = {
 export const TicketDetails = (id: string) => {
 	const { data: ticketData, isLoading: isTicketLoading } =
 		useGetApiTicket(id);
+
+	function onSubmit(ticketId: string) {
+		fetch(`${serverAddr}/api/tickets/${ticketId}`, {
+			method: "DELETE",
+		})
+			.then((res) => {
+				if (!res.ok) {
+					throw new Error(
+						`Failed to delete ticket ${ticketId}: ${res.status}`
+					);
+				}
+				console.log(`Ticket ${ticketId} deleted successfully.`);
+			})
+			.catch((error) => {
+				console.error("Error deleting ticket:", error);
+			});
+	}
 
 	if (isTicketLoading) {
 		return (
@@ -89,6 +107,7 @@ export const TicketDetails = (id: string) => {
 								<Button
 									type="submit"
 									className="w-fit cursor-pointer rounded"
+									onSubmit={onSubmit}
 								>
 									<Trash2>
 										<span className="sr-only">
