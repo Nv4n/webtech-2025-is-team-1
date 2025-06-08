@@ -8,16 +8,6 @@ import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { LogOut } from "lucide-react";
 
-// function getProfileDataWithFakeApi({ id }: ProfileHoverCardProps) {
-// 	const { data } = useQuery({
-// 		queryKey: ["fullDataUsers", id],
-// 		queryFn: () => FakeFullProfileApi().getFullProfileList(),
-// 		select: (data) =>
-// 			Object.entries(data).filter(([key]) => key === id)[0][1],
-// 	});
-// 	return { data };
-// }
-
 export function ProfileData() {
 	const navigate = useNavigate();
 	const { data: profileData, isLoading: isProfileLoading } =

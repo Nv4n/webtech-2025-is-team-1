@@ -1,9 +1,32 @@
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Skeleton } from "@/components/ui/skeleton";
 import { TicketsFilter } from "@/features/Ticket/components/TicketFilter";
 import { TicketsGroup } from "@/features/Ticket/components/TicketsGroup";
+import { useGetApiTickets } from "@/features/Ticket/service/ticketApiQueries";
 import { TicketStatuses } from "@/features/Ticket/types/Ticket";
+import { TicketFilter } from "@/features/Ticket/types/TicketFilter";
 
-export function TicketsDashboard() {
+type TicketDashboardProps = {
+	filter?: TicketFilter;
+};
+
+export function TicketsDashboard({ filter }: TicketDashboardProps) {
+	const { data: tickets, isLoading: isTicketsLoading } =
+		useGetApiTickets(filter);
+
+	if (isTicketsLoading) {
+		return (
+			<>
+				<div className="mx-auto my-0 w-fit flex-col space-y-3">
+					<Skeleton className="h-[125px] w-[250px] rounded-xl" />
+					<div className="space-y-2">
+						<Skeleton className="h-4 w-[250px]" />
+						<Skeleton className="h-4 w-[200px]" />
+					</div>
+				</div>
+			</>
+		);
+	}
 	return (
 		<div>
 			<div className="flex w-2xl px-8">
@@ -15,16 +38,23 @@ export function TicketsDashboard() {
 					orientation="horizontal"
 				/>
 				<div className="flex gap-16">
-					{TicketStatuses.map((status) => {
-						// console.log(status);
-
-						return (
-							<TicketsGroup
-								key={status}
-								filter={{ statuses: [status] }}
-							/>
-						);
-					})}
+					{filter?.statuses
+						? filter.statuses.map((status) => {
+								return (
+									<TicketsGroup
+										key={status}
+										filter={{ statuses: [status] }}
+									/>
+								);
+							})
+						: TicketStatuses.map((status) => {
+								return (
+									<TicketsGroup
+										key={status}
+										filter={{ statuses: [status] }}
+									/>
+								);
+							})}
 				</div>
 			</ScrollArea>
 		</div>
