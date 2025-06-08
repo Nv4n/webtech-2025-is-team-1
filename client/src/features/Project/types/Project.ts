@@ -3,10 +3,10 @@ import { z } from "zod";
 export const ProjectSchema = z.object({
 	id: z.coerce.string().optional(),
 	name: z.string().min(3).max(100),
-	description: z.string().min(10),
-	createdAt: z.string(),
-	workflowId: z.coerce.string(),
-	ownerId: z.coerce.string(),
+	description: z.string().min(10).optional(),
+	createdAt: z.string().optional(),
+	workflowId: z.coerce.string().optional(),
+	ownerId: z.coerce.string().optional(),
 });
 
 export type Project = z.infer<typeof ProjectSchema>;
