@@ -61,9 +61,6 @@ export const ProjectCreateFormWithFlow = () => {
 	const onNodesChange = useCallback(
 		(changes: NodeChange<Node>[]) => {
 			setNodes((nds) => {
-				console.log(nds);
-				console.log(changes);
-
 				return applyNodeChanges(changes, nds);
 			});
 			form.setValue("nodes", z.array(NodeSchema).parse(initialNodes));
@@ -82,7 +79,6 @@ export const ProjectCreateFormWithFlow = () => {
 	form.setValue("nodes", z.array(NodeSchema).parse(initialNodes));
 
 	const onSubmit = (data: unknown) => {
-		console.log("Form Submitted:", data);
 	};
 
 	return (

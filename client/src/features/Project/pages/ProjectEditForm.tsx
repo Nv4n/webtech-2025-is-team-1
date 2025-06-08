@@ -30,16 +30,8 @@ export function ProjectEditForm(id: string) {
 			description: "",
 		},
 	});
-	//const { data: project, isLoading: isProjectLoading } = useGetProject(id);
-	//const { isPending: updateProject } = useUpdateProject(id);
 
 	const { data: project, isLoading: isProjectLoading } = useGetApiProject(id);
-
-	/*useEffect(() => {
-			if (ticket) {
-				form.reset({ ...ticket });
-			}
-		}, [ticket]);*/
 
 	async function onSubmit(data: ProjectEdit) {
 		mutateProject(data);
@@ -61,19 +53,6 @@ export function ProjectEditForm(id: string) {
 	if (!project) {
 		throw new Error("No such project");
 	}
-
-	/*const onSubmit = (data: ProjectEdit) => {
-		console.log("Form Submitted:", data);
-		const resProject: Project = {
-			id: project?.id,
-			name: data.name,
-			description: data.description,
-			createdAt: project.createdAt,
-			workflowId: project.workflowId,
-			ownerId: project.ownerId,
-		};
-		console.log(resProject);
-	};*/
 
 	form.setValue("name", project.name);
 	form.setValue("description", project.description);
