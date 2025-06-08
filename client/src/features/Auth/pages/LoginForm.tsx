@@ -28,7 +28,6 @@ export function LoginForm() {
 	});
 
 	async function onSubmit(data: LoginUser) {
-		console.log(data);
 		const res = await fetch(`${serverAddr}/api/auth/login`, {
 			method: "POST",
 			headers: {
@@ -37,7 +36,6 @@ export function LoginForm() {
 			body: JSON.stringify(data),
 		});
 		const deseril = await res.json();
-		console.log(deseril);
 
 		const authResp = AuthResponseSchema.safeParse(deseril);
 

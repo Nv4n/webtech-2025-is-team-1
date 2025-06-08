@@ -25,9 +25,7 @@ export function RegisterForm() {
 	});
 
 	async function onSubmit(data: RegisterUser) {
-		console.log(data);
 		const send = RegisterSchemaPure.parse(data);
-		console.log(send);
 
 		const res = await fetch(`${serverAddr}/api/auth/register`, {
 			method: "POST",
@@ -36,7 +34,6 @@ export function RegisterForm() {
 			},
 			body: JSON.stringify(send),
 		});
-		console.log(res);
 	}
 
 	return (

@@ -1,5 +1,5 @@
 import { UserSchema } from "@/features/Profile/types/Profile";
-import { string, z } from "zod";
+import { z } from "zod";
 
 export const LoginSchema = UserSchema.pick({
 	username: true,
