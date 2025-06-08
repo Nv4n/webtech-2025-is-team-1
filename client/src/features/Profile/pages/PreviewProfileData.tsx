@@ -5,6 +5,7 @@ import { deleteCookie } from "@/features/Auth/utils/cookies";
 import { useGetApiProfile } from "@/features/Profile/service/profileApiQueries";
 import { getInitials } from "@/features/Profile/utils/getInitials";
 import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@radix-ui/react-tooltip";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { LogOut } from "lucide-react";
 
@@ -75,12 +76,20 @@ export function ProfileData() {
 			<div className="w-full space-y-2">
 				<div className="mb-2 flex space-x-2">
 					<Link to="/profile" className="flex-1">
-						<Button
-							variant="outline"
-							className="w-full text-gray-600 dark:text-white"
-						>
-							Change Password
-						</Button>
+						<Tooltip>
+							<TooltipTrigger asChild>
+								<Button
+									variant="outline"
+									className="w-full text-gray-600 dark:text-white"
+									disabled
+								>
+									Change Password
+								</Button>
+							</TooltipTrigger>
+							<TooltipContent>
+								<pre>This action is currently disabled.</pre>
+							</TooltipContent>
+						</Tooltip>
 					</Link>
 					<Link
 						to="/profile/edit"
