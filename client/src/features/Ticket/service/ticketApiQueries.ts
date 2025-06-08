@@ -9,9 +9,9 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 export function useGetApiTickets(filter?: TicketFilter) {
-	// if (filter) {
-	// 	return useGetApiFilteredTickets(filter);
-	// }
+	if (filter) {
+		return useGetApiFilteredTickets(filter);
+	}
 	return useGetApiAllTickets();
 }
 

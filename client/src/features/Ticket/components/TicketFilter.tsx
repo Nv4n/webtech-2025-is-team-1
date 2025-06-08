@@ -87,6 +87,7 @@ export function TicketsFilter() {
 										options={getProjectFilterList(
 											projects || []
 										)}
+										// onError={}
 										onValueChange={field.onChange}
 										placeholder="Select Filters By Projects"
 										variant="inverted"
