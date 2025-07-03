@@ -115,13 +115,15 @@ export const useUpdateApiTicket = (id: string) => {
 	const { mutate } = useMutation({
 		mutationFn: async (data: Ticket) => {
 			const parsedDATA = ChangeTicketSchema.parse(data);
+			parsedDATA.createdAt=undefined;
+			parsedDATA.updatedAt=undefined;
 			return await fetch(`${serverAddr}/api/tickets/${id}`, {
 				method: "PUT",
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${getCookie("authtoken")}`,
 				},
-				body: JSON.stringify({ id: id, ticket: parsedDATA }),
+				body: JSON.stringify(parsedDATA),
 			});
 		},
 		onSuccess: () => {

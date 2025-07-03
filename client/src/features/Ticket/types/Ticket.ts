@@ -22,8 +22,8 @@ export const TicketSchema = z.object({
 	assigneeId: z.coerce.string(),
 	projectId: z.coerce.string(),
 	authorId: z.coerce.string(),
-	createdAt: z.string(),
-	updatedAt: z.string(),
+	createdAt: z.string().optional(),
+	updatedAt: z.string().optional(),
 	updatedBy: z.coerce.string().optional(),
 });
 
